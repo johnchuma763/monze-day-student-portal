@@ -1,0 +1,2130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Dashboard | Monze Day Secondary School</title>
+
+<style>
+
+*{box-sizing:border-box}
+:root{
+ --navy:#102b50;
+ --navy-light:#1d4978;
+ --gold:#d9ad45;
+ --background:#f3f6fb;
+ --text:#26364b;
+ --muted:#718096;
+ --white:#fff;
+}
+body{
+ margin:0;
+ font-family:Arial,Helvetica,sans-serif;
+ background:var(--background);
+ color:var(--text);
+}
+button{font:inherit}
+.layout{display:flex;min-height:100vh}
+.sidebar{
+ width:260px;
+ background:var(--navy);
+ color:white;
+ position:fixed;
+ top:0;bottom:0;left:0;
+ padding:25px 16px;
+ z-index:20;
+ transition:transform .3s ease;
+ box-shadow:4px 0 18px #102b5015;
+}
+.brand{
+ display:flex;align-items:center;gap:13px;
+ padding:5px 10px 25px;
+ border-bottom:1px solid #ffffff25;
+}
+.logo{
+ background:var(--gold);color:var(--navy);
+ width:43px;height:43px;
+ display:flex;align-items:center;justify-content:center;
+ border-radius:10px;font-weight:bold;font-size:17px;
+}
+.brand h3{font-size:13px;line-height:1.5;margin:0}
+.menu-label{
+ font-size:10px;color:#aebfd3;
+ padding:27px 12px 12px;
+ letter-spacing:1.5px;font-weight:bold;
+}
+.nav-item{
+ width:100%;display:flex;align-items:center;gap:13px;
+ padding:13px 14px;margin:5px 0;
+ border:0;border-radius:9px;
+ background:transparent;color:#dce5f0;
+ text-align:left;cursor:pointer;font-size:14px;
+ transition:.2s;
+}
+.nav-item:hover,.nav-item.active{
+ background:var(--gold);color:var(--navy);
+ font-weight:bold;
+}
+.sidebar-bottom{
+ position:absolute;bottom:20px;left:16px;right:16px;
+ border-top:1px solid #ffffff25;padding-top:12px;
+}
+.main-area{
+ margin-left:260px;width:calc(100% - 260px);
+ min-width:0;display:flex;flex-direction:column;
+}
+.topbar{
+ height:72px;background:white;
+ display:flex;align-items:center;justify-content:space-between;
+ padding:0 32px;
+ box-shadow:0 2px 12px #102b500b;
+ position:sticky;top:0;z-index:10;
+}
+.topbar-title{font-weight:bold;color:var(--navy);font-size:16px}
+.menu-toggle{
+ display:none;border:0;background:var(--navy);color:white;
+ padding:9px 13px;border-radius:8px;font-size:21px;cursor:pointer;
+}
+.logout{
+ background:var(--navy);color:white;border:0;
+ padding:11px 18px;border-radius:8px;cursor:pointer;
+ font-weight:bold;transition:.2s;
+}
+.logout:hover{background:var(--navy-light)}
+.content{
+ padding:32px;max-width:1250px;width:100%;
+ margin:0 auto;flex:1;
+}
+.welcome{
+ background:linear-gradient(120deg,var(--navy),var(--navy-light));
+ color:white;padding:36px;
+ border-radius:15px;margin-bottom:30px;
+ box-shadow:0 8px 22px #102b5020;
+ position:relative;overflow:hidden;
+}
+.welcome:after{
+ content:"";position:absolute;
+ width:190px;height:190px;border:30px solid #ffffff0d;
+ border-radius:50%;right:-45px;top:-65px;
+}
+.welcome h1{margin:0 0 12px;font-size:27px}
+.welcome p{margin:0;color:#e0e8f2;line-height:1.7;max-width:650px}
+.section-title{color:var(--navy);margin:0 0 22px;font-size:21px}
+.page{display:none}
+.page.active{display:block;animation:fade .2s ease}
+@keyframes fade{
+ from{opacity:0;transform:translateY(5px)}
+ to{opacity:1;transform:translateY(0)}
+}
+.panel{
+ background:white;padding:28px;border-radius:13px;
+ margin-bottom:24px;box-shadow:0 4px 18px #102b5009;
+ border:1px solid #e9eef5;
+}
+.profile-grid{
+ display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+ gap:15px;
+}
+.profile-item{
+ background:#f7f9fc;padding:18px;border-radius:9px;
+ border:1px solid #e9eef5;
+}
+.profile-item small{display:block;color:var(--muted);margin-bottom:9px;font-size:12px}
+.profile-item strong{color:var(--navy);overflow-wrap:anywhere;font-size:14px}
+.cards{
+ display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+ gap:20px;
+}
+.card{
+ background:white;padding:25px;border-radius:13px;
+ border:1px solid #e9eef5;border-top:4px solid var(--gold);
+ box-shadow:0 4px 15px #102b5009;
+ transition:transform .2s,box-shadow .2s;
+}
+.card:hover{transform:translateY(-3px);box-shadow:0 8px 22px #102b5015}
+.card h3{color:var(--navy);margin:0 0 12px;font-size:17px}
+.card p{color:var(--muted);line-height:1.7;font-size:14px;min-height:48px}
+.action{
+ display:inline-block;background:var(--navy);color:white;
+ text-decoration:none;padding:12px 17px;border-radius:8px;
+ font-size:13px;font-weight:bold;border:0;cursor:pointer;
+ transition:.2s;
+}
+.action:hover{background:var(--navy-light);transform:translateY(-1px)}
+.announcement-item{
+ padding:22px;border-left:5px solid var(--gold);
+ border-radius:10px;margin-bottom:17px;background:white;
+ box-shadow:0 4px 15px #102b5009;
+}
+.announcement-item h3{color:var(--navy);margin:0 0 12px}
+.announcement-item p{line-height:1.8;white-space:pre-wrap;overflow-wrap:anywhere}
+.announcement-item small{color:var(--muted)}
+.status{text-align:center;color:var(--muted);padding:15px}
+footer{
+ text-align:center;padding:25px;color:var(--muted);
+ font-size:12px;line-height:1.8;
+ border-top:1px solid #e7edf4;background:white;
+}
+.overlay{display:none}
+.student-photo-area{
+ text-align:center;margin-bottom:28px;padding-bottom:28px;
+ border-bottom:1px solid #e8edf3;
+}
+#studentPhoto,#studentPhotoPlaceholder{
+ width:130px;height:130px;border-radius:50%;
+ border:4px solid var(--gold);margin:0 auto 15px;
+}
+#studentPhoto{object-fit:cover}
+#studentPhotoPlaceholder{
+ display:flex;align-items:center;justify-content:center;
+ background:#edf1f7;font-size:55px;
+}
+.student-photo-area h3{color:var(--navy);margin-bottom:8px}
+.student-photo-area p{color:var(--muted);font-size:13px}
+.student-photo-area .action{border:0;cursor:pointer}
+@media(max-width:900px){
+ .content{padding:24px}
+ .cards{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+}
+@media(max-width:750px){
+ .sidebar{transform:translateX(-100%)}
+ .sidebar.open{transform:translateX(0)}
+ .main-area{margin-left:0;width:100%}
+ .menu-toggle{display:block}
+ .topbar{padding:0 15px;height:65px}
+ .content{padding:18px}
+ .welcome{padding:26px 22px}
+ .welcome h1{font-size:23px}
+ .panel{padding:20px}
+ .overlay.show{
+  display:block;position:fixed;inset:0;
+  background:#0008;z-index:15;
+ }
+}
+@media(max-width:420px){
+ .cards{grid-template-columns:1fr}
+ .topbar-title{font-size:14px}
+ .logout{padding:9px 12px;font-size:12px}
+}
+
+
+/* NOTIFICATION CENTRE */
+.notification-wrap {
+    position: relative;
+    margin-left: auto;
+    margin-right: 14px;
+}
+.notification-bell {
+    position: relative;
+    border: 1px solid #e5e9f0;
+    background: white;
+    color: #102b50;
+    border-radius: 10px;
+    padding: 10px 13px;
+    font-size: 21px;
+    cursor: pointer;
+}
+.notification-bell:hover { background: #f5f7fb; }
+.notification-badge {
+    position: absolute;
+    top: -7px;
+    right: -7px;
+    background: #d9ad45;
+    color: #102b50;
+    border-radius: 20px;
+    min-width: 19px;
+    height: 19px;
+    padding: 0 4px;
+    font-size: 11px;
+    font-weight: bold;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+.notification-panel {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 48px;
+    width: min(360px, calc(100vw - 30px));
+    max-height: 430px;
+    overflow-y: auto;
+    background: white;
+    border: 1px solid #e5e9f0;
+    border-radius: 13px;
+    box-shadow: 0 12px 35px #102b5025;
+    z-index: 100;
+    color: #102b50;
+}
+.notification-panel.open { display: block; }
+.notification-heading {
+    padding: 15px;
+    border-bottom: 1px solid #edf0f5;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+.notification-heading h3 { margin: 0; font-size: 16px; }
+.notification-heading button {
+    border: 0;
+    background: #102b50;
+    color: white;
+    padding: 7px 10px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 11px;
+}
+.notification-item {
+    padding: 13px 15px;
+    border-bottom: 1px solid #edf0f5;
+}
+.notification-item.unread { background: #fff9e9; }
+.notification-item h4 { margin: 0 0 6px; font-size: 14px; }
+.notification-item p {
+    margin: 0 0 8px;
+    color: #536174;
+    font-size: 13px;
+    line-height: 1.5;
+}
+.notification-item small { color: #778397; font-size: 11px; }
+.notification-item button {
+    display: block;
+    margin-top: 8px;
+    border: 0;
+    background: transparent;
+    color: #9a741b;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0;
+}
+.notification-empty {
+    padding: 25px 15px;
+    text-align: center;
+    color: #778397;
+    font-size: 13px;
+}
+@media(max-width:500px) {
+    .notification-wrap { margin-right: 8px; }
+    .notification-panel { position: fixed; top: 70px; right: 10px; }
+}
+
+
+/* PROFESSIONAL STUDENT ATTENDANCE DESIGN */
+.attendance-intro{
+    background:linear-gradient(120deg,#102b50,#1d4978);
+    color:white;
+    padding:28px;
+    border-radius:15px;
+    margin-bottom:25px;
+    box-shadow:0 8px 22px #102b5018;
+}
+.attendance-intro h2{
+    margin:0 0 9px;
+    font-size:23px;
+}
+.attendance-intro p{
+    margin:0;
+    color:#e0e8f2;
+    line-height:1.7;
+}
+.attendance-summary{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:17px;
+    margin-bottom:25px;
+}
+.attendance-stat{
+    background:white;
+    padding:22px;
+    border:1px solid #e6ebf2;
+    border-radius:13px;
+    box-shadow:0 4px 15px #102b5009;
+    position:relative;
+    overflow:hidden;
+}
+.attendance-stat:before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:0;
+    bottom:0;
+    width:4px;
+    background:var(--gold);
+}
+.attendance-stat small{
+    display:block;
+    color:#718096;
+    font-size:12px;
+    font-weight:bold;
+    margin-bottom:13px;
+    text-transform:uppercase;
+    letter-spacing:.6px;
+}
+.attendance-stat strong{
+    display:block;
+    color:var(--navy);
+    font-size:30px;
+}
+.attendance-stat.present:before{background:#16a36a}
+.attendance-stat.absent:before{background:#dc5656}
+.attendance-stat.late:before{background:#d9ad45}
+.attendance-stat.total:before{background:#1d4978}
+.attendance-history{
+    background:white;
+    border:1px solid #e6ebf2;
+    border-radius:14px;
+    overflow:hidden;
+    box-shadow:0 4px 18px #102b5009;
+}
+.attendance-history-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    padding:22px 25px;
+    border-bottom:1px solid #e9eef5;
+}
+.attendance-history-header h3{
+    margin:0;
+    color:#102b50;
+    font-size:17px;
+}
+.attendance-refresh{
+    background:#102b50;
+    color:white;
+    border:0;
+    border-radius:8px;
+    padding:10px 14px;
+    font-weight:bold;
+    cursor:pointer;
+}
+.attendance-refresh:hover{background:#1d4978}
+.attendance-table-wrap{overflow-x:auto}
+.attendance-table{
+    width:100%;
+    min-width:480px;
+    border-collapse:collapse;
+}
+.attendance-table th{
+    background:#f5f7fb;
+    color:#64748b;
+    padding:15px 20px;
+    text-align:left;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.7px;
+}
+.attendance-table td{
+    padding:17px 20px;
+    border-top:1px solid #edf0f5;
+    font-size:13px;
+    color:#34445a;
+}
+.attendance-table tbody tr:hover{background:#fafbfd}
+.attendance-badge{
+    display:inline-block;
+    padding:6px 11px;
+    border-radius:20px;
+    font-size:11px;
+    font-weight:bold;
+}
+.attendance-badge.present{background:#e6f7ef;color:#138452}
+.attendance-badge.absent{background:#fdecec;color:#c23e3e}
+.attendance-badge.late{background:#fff5dc;color:#946600}
+.attendance-empty{
+    text-align:center;
+    padding:35px 15px;
+    color:#718096;
+    font-size:13px;
+}
+@media(max-width:900px){
+    .attendance-summary{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:520px){
+    .attendance-summary{gap:11px}
+    .attendance-stat{padding:17px}
+    .attendance-stat strong{font-size:25px}
+    .attendance-intro{padding:23px}
+    .attendance-history-header{padding:18px}
+}
+
+
+/* ATTENDANCE PERCENTAGE INDICATOR */
+.attendance-progress-card{
+    background:white;
+    border:1px solid #e6ebf2;
+    border-radius:14px;
+    padding:23px;
+    margin-bottom:25px;
+    box-shadow:0 4px 18px #102b5009;
+}
+.attendance-progress-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    margin-bottom:16px;
+}
+.attendance-progress-top h3{
+    margin:0;
+    color:#102b50;
+    font-size:16px;
+}
+.attendance-progress-top strong{
+    color:#102b50;
+    font-size:27px;
+}
+.attendance-progress-track{
+    height:13px;
+    background:#edf1f6;
+    border-radius:20px;
+    overflow:hidden;
+}
+.attendance-progress-fill{
+    width:0%;
+    height:100%;
+    background:linear-gradient(90deg,#16a36a,#35c58a);
+    border-radius:20px;
+    transition:width .6s ease;
+}
+.attendance-progress-note{
+    color:#718096;
+    font-size:12px;
+    margin:12px 0 0;
+}
+
+
+/* PROFESSIONAL MY SUBJECTS DESIGN */
+.subjects-intro{
+    background:linear-gradient(120deg,#091d38,#102b50,#1d4978);
+    color:white;
+    padding:27px;
+    border-radius:15px;
+    margin-bottom:24px;
+    box-shadow:0 8px 22px #102b5018;
+}
+.subjects-intro h2{
+    margin:0 0 8px;
+    font-size:24px;
+}
+.subjects-intro p{
+    margin:0;
+    color:#e0e8f2;
+    line-height:1.7;
+}
+.professional-subject-card{
+    background:white;
+    border:1px solid #e6ebf2;
+    border-radius:15px;
+    padding:22px;
+    box-shadow:0 5px 18px #102b5009;
+    transition:transform .2s,box-shadow .2s;
+    position:relative;
+    overflow:hidden;
+}
+.professional-subject-card:hover{
+    transform:translateY(-3px);
+    box-shadow:0 10px 25px #102b5018;
+}
+.subject-card-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    margin-bottom:19px;
+}
+.subject-icon{
+    width:49px;
+    height:49px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#fff6df;
+    border:1px solid #f0dfb3;
+    border-radius:13px;
+    font-size:24px;
+}
+.subject-number{
+    background:#edf2f8;
+    color:#102b50;
+    border-radius:20px;
+    padding:6px 11px;
+    font-size:11px;
+    font-weight:800;
+}
+.professional-subject-card h3{
+    color:#102b50;
+    font-size:19px;
+    margin:0 0 17px;
+    font-weight:800;
+}
+.subject-teacher-box{
+    background:#f6f8fb;
+    border:1px solid #edf0f5;
+    padding:13px;
+    border-radius:10px;
+}
+.subject-teacher-label{
+    display:block;
+    color:#718096;
+    font-size:10px;
+    font-weight:800;
+    text-transform:uppercase;
+    letter-spacing:.7px;
+    margin-bottom:5px;
+}
+.subject-teacher-name{
+    color:#34445a;
+    font-size:13px;
+    font-weight:700;
+    margin:0;
+}
+@media(max-width:520px){
+    .subjects-intro{padding:22px}
+    .professional-subject-card{padding:18px}
+}
+
+
+/* STUDENT TIMETABLE */
+.student-timetable-intro {
+    background: linear-gradient(120deg,#102b50,#091d38);
+    color: white;
+    padding: 27px;
+    border-radius: 16px;
+    margin-bottom: 22px;
+}
+.student-timetable-intro h2 {
+    margin: 0 0 9px;
+    font-size: 25px;
+}
+.student-timetable-intro p {
+    margin: 0;
+    color: #dce6f2;
+    line-height: 1.6;
+}
+.timetable-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+}
+.timetable-toolbar span {
+    color: #102b50;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+.timetable-toolbar button {
+    background: #102b50;
+    color: white;
+    border: 0;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-weight: 700;
+}
+.student-timetable-days {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+    gap: 17px;
+}
+.student-day-card {
+    background: white;
+    border: 1px solid #e4eaf1;
+    border-radius: 14px;
+    padding: 18px;
+    box-shadow: 0 5px 18px rgba(16,43,80,.06);
+}
+.student-day-heading {
+    color: #102b50;
+    font-size: 18px;
+    font-weight: 800;
+    padding-bottom: 13px;
+    border-bottom: 2px solid #d9ad45;
+    margin-bottom: 13px;
+}
+.student-lesson {
+    border: 1px solid #edf0f4;
+    border-left: 4px solid #d9ad45;
+    border-radius: 9px;
+    padding: 12px;
+    margin-bottom: 11px;
+    background: #fafbfd;
+}
+.student-lesson strong {
+    display: block;
+    color: #102b50;
+    font-size: 15px;
+    margin-bottom: 7px;
+}
+.student-lesson small {
+    color: #64748b;
+    display: block;
+    line-height: 1.6;
+}
+.student-timetable-empty {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    color: #64748b;
+    text-align: center;
+    border: 1px solid #e4eaf1;
+}
+
+
+/* PREMIUM STUDENT TIMETABLE DESIGN */
+.student-timetable-intro {
+    position: relative;
+    overflow: hidden;
+    padding: 32px 27px;
+    border: 1px solid rgba(217,173,69,.35);
+    box-shadow: 0 12px 30px rgba(9,29,56,.15);
+}
+
+.student-timetable-intro::after {
+    content: "📅";
+    position: absolute;
+    right: 24px;
+    bottom: -15px;
+    font-size: 95px;
+    opacity: .10;
+}
+
+.student-timetable-intro h2 {
+    font-size: 27px;
+    font-weight: 800;
+    letter-spacing: -.5px;
+}
+
+.student-timetable-intro p {
+    max-width: 430px;
+    font-size: 14px;
+}
+
+.timetable-toolbar {
+    background: white;
+    border: 1px solid #e8edf3;
+    border-radius: 12px;
+    padding: 14px 16px;
+    box-shadow: 0 4px 14px rgba(16,43,80,.04);
+}
+
+.timetable-toolbar span {
+    font-size: 11px;
+    letter-spacing: 1.3px;
+}
+
+.timetable-toolbar button {
+    background: #102b50;
+    border: 1px solid #d9ad45;
+    padding: 10px 17px;
+    transition: .2s ease;
+}
+
+.timetable-toolbar button:hover {
+    background: #d9ad45;
+    color: #102b50;
+}
+
+.student-timetable-days {
+    align-items: start;
+    gap: 20px;
+}
+
+.student-day-card {
+    position: relative;
+    overflow: hidden;
+    padding: 20px;
+    border-radius: 16px;
+    border: 1px solid #e5eaf1;
+    box-shadow: 0 7px 22px rgba(16,43,80,.07);
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.student-day-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px rgba(16,43,80,.12);
+}
+
+.student-day-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 19px;
+    font-weight: 800;
+    padding-bottom: 15px;
+    margin-bottom: 16px;
+    border-bottom: 2px solid #d9ad45;
+}
+
+.student-lesson {
+    position: relative;
+    padding: 15px;
+    margin-bottom: 12px;
+    border: 1px solid #e8edf3;
+    border-left: 4px solid #d9ad45;
+    border-radius: 11px;
+    background: linear-gradient(135deg,#fff,#f8fafc);
+    transition: background .2s ease;
+}
+
+.student-lesson:last-child {
+    margin-bottom: 0;
+}
+
+.student-lesson strong {
+    color: #102b50;
+    font-size: 16px;
+    font-weight: 800;
+    margin-bottom: 9px;
+}
+
+.student-lesson small {
+    font-size: 12px;
+    font-weight: 600;
+    color: #64748b;
+}
+
+.student-timetable-empty {
+    grid-column: 1 / -1;
+    padding: 35px 20px;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(16,43,80,.05);
+}
+
+@media(max-width:600px) {
+    .student-timetable-intro {
+        padding: 25px 19px;
+    }
+
+    .student-timetable-intro h2 {
+        font-size: 23px;
+    }
+
+    .student-timetable-days {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .student-day-card {
+        padding: 17px;
+    }
+
+    .timetable-toolbar {
+        align-items: stretch;
+    }
+}
+
+
+/* PROFESSIONAL WEEKLY TIMETABLE */
+.weekly-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(16,43,80,.07);
+    -webkit-overflow-scrolling: touch;
+}
+
+.professional-weekly-table {
+    width: 100%;
+    min-width: 760px;
+    border-collapse: separate;
+    border-spacing: 0;
+    text-align: center;
+}
+
+.professional-weekly-table th {
+    background: #102b50;
+    color: #fff;
+    padding: 17px 12px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .7px;
+    border-right: 1px solid rgba(255,255,255,.12);
+    border-bottom: 3px solid #d9ad45;
+}
+
+.professional-weekly-table th:first-child {
+    border-radius: 14px 0 0 0;
+    min-width: 105px;
+}
+
+.professional-weekly-table th:last-child {
+    border-radius: 0 14px 0 0;
+}
+
+.professional-weekly-table td {
+    padding: 15px 10px;
+    border-right: 1px solid #edf0f4;
+    border-bottom: 1px solid #edf0f4;
+    min-width: 125px;
+    vertical-align: middle;
+}
+
+.professional-weekly-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.professional-weekly-table td:last-child,
+.professional-weekly-table th:last-child {
+    border-right: 0;
+}
+
+.period-number-cell {
+    background: #f1f5f9;
+    color: #102b50;
+    font-weight: 800;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.weekly-lesson-cell {
+    background: #fff;
+    transition: background .2s ease;
+}
+
+.weekly-lesson-cell:hover {
+    background: #fffaf0;
+}
+
+.weekly-subject {
+    display: block;
+    color: #102b50;
+    font-size: 14px;
+    font-weight: 800;
+    margin-bottom: 7px;
+}
+
+.weekly-time {
+    display: inline-block;
+    color: #64748b;
+    background: #f1f5f9;
+    padding: 5px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.empty-lesson {
+    color: #cbd5e1;
+    background: #fafbfd;
+    font-size: 18px;
+}
+
+@media(max-width:600px) {
+    .weekly-table-wrapper {
+        border-radius: 11px;
+    }
+
+    .professional-weekly-table th {
+        padding: 14px 10px;
+    }
+
+    .professional-weekly-table td {
+        padding: 13px 9px;
+    }
+}
+
+
+.break-time-row td {
+    background: #fff8e6 !important;
+    border-top: 2px solid #d9ad45 !important;
+    border-bottom: 2px solid #d9ad45 !important;
+    text-align: center;
+    padding: 15px 10px !important;
+}
+
+.break-time-label {
+    color: #102b50 !important;
+    font-weight: 800;
+    letter-spacing: .5px;
+    white-space: nowrap;
+}
+
+.break-time-cell strong {
+    display: block;
+    color: #102b50;
+    font-size: 13px;
+    margin-bottom: 5px;
+}
+
+.break-time-cell span {
+    display: block;
+    color: #80621d;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+
+/* MONZE DAY PROFESSIONAL DESIGN V2 */
+
+:root {
+    --navy: #102b50;
+    --navy-dark: #071a35;
+    --navy-light: #1d4978;
+    --gold: #d9ad45;
+    --background: #f3f6fa;
+}
+
+body {
+    background: var(--background);
+    color: #243247;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.main-area {
+    background: var(--background);
+}
+
+.content {
+    max-width: 1500px;
+    margin: auto;
+    padding: 28px;
+}
+
+.sidebar {
+    background: linear-gradient(180deg, #071a35, #102b50);
+    color: white;
+    box-shadow: 5px 0 25px rgba(7,26,53,.12);
+}
+
+.brand {
+    border-bottom: 1px solid rgba(255,255,255,.12);
+}
+
+.brand .logo {
+    background: var(--gold);
+    color: var(--navy-dark);
+    font-weight: 900;
+    border-radius: 12px;
+}
+
+.brand h3 {
+    color: white;
+    font-weight: 800;
+    letter-spacing: .5px;
+}
+
+.menu-label {
+    color: var(--gold);
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.nav-item {
+    border-radius: 10px;
+    transition: .2s ease;
+}
+
+.nav-item:hover {
+    background: rgba(217,173,69,.15);
+    color: var(--gold);
+}
+
+.nav-item.active {
+    background: var(--gold);
+    color: var(--navy-dark);
+    font-weight: 800;
+}
+
+.topbar {
+    background: white;
+    border-bottom: 1px solid #e5eaf0;
+    box-shadow: 0 3px 15px rgba(16,43,80,.05);
+    min-height: 75px;
+}
+
+.topbar-title {
+    color: var(--navy);
+    font-weight: 800;
+}
+
+.menu-toggle {
+    background: var(--navy);
+    color: var(--gold);
+    border-radius: 9px;
+}
+
+.logout {
+    background: var(--navy);
+    color: white;
+    border-radius: 9px;
+    font-weight: 700;
+}
+
+.logout:hover {
+    background: var(--gold);
+    color: var(--navy-dark);
+}
+
+.welcome {
+    background: linear-gradient(120deg, #071a35, #174477);
+    color: white;
+    border-radius: 18px;
+    padding: 35px;
+    border-bottom: 5px solid var(--gold);
+    box-shadow: 0 12px 30px rgba(16,43,80,.16);
+}
+
+.welcome h1 {
+    color: white;
+    font-weight: 900;
+}
+
+.welcome p {
+    color: #dce7f5;
+    line-height: 1.7;
+}
+
+.section-title {
+    color: var(--navy);
+    font-weight: 900;
+}
+
+.section-title::after {
+    content: "";
+    display: block;
+    width: 50px;
+    height: 4px;
+    background: var(--gold);
+    border-radius: 5px;
+    margin-top: 9px;
+}
+
+.card {
+    background: white;
+    border: 1px solid #e7edf4;
+    border-top: 4px solid var(--gold);
+    border-radius: 15px;
+    padding: 24px;
+    box-shadow: 0 5px 18px rgba(16,43,80,.055);
+    transition: .2s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 25px rgba(16,43,80,.11);
+}
+
+.card h3 {
+    color: var(--navy);
+    font-weight: 850;
+}
+
+.card p {
+    color: #64748b;
+    line-height: 1.7;
+}
+
+.action {
+    background: var(--navy);
+    color: white;
+    border: 1px solid var(--navy);
+    border-radius: 9px;
+    font-weight: 800;
+    transition: .2s ease;
+}
+
+.action:hover {
+    background: var(--gold);
+    color: var(--navy-dark);
+    border-color: var(--gold);
+}
+
+.panel {
+    background: white;
+    border: 1px solid #e7edf4;
+    border-radius: 15px;
+    box-shadow: 0 5px 18px rgba(16,43,80,.05);
+}
+
+.profile-item {
+    background: #f8fafc;
+    border: 1px solid #e8edf3;
+    border-left: 3px solid var(--gold);
+    border-radius: 10px;
+    padding: 16px;
+}
+
+.profile-item small {
+    color: #64748b;
+    font-weight: 700;
+}
+
+.profile-item strong {
+    color: var(--navy);
+}
+
+.notification-bell {
+    background: #fff8e8;
+    color: var(--navy);
+    border: 1px solid #f0dfb5;
+    border-radius: 10px;
+}
+
+.attendance-history,
+.attendance-progress-card,
+.weekly-table-wrapper {
+    box-shadow: 0 6px 20px rgba(16,43,80,.06);
+}
+
+.attendance-refresh,
+.timetable-toolbar button {
+    background: var(--navy);
+    color: white;
+    border-radius: 8px;
+    font-weight: 700;
+}
+
+footer {
+    background: white;
+    color: #64748b;
+    border-top: 1px solid #e5eaf0;
+    text-align: center;
+    padding: 22px 15px;
+    line-height: 1.8;
+}
+
+@media(max-width:768px) {
+    .content {
+        padding: 17px;
+    }
+
+    .topbar {
+        padding: 12px 15px;
+        min-height: 65px;
+    }
+
+    .welcome {
+        padding: 25px 20px;
+        border-radius: 14px;
+    }
+
+    .card {
+        padding: 20px;
+    }
+
+    .panel {
+        padding: 18px;
+    }
+}
+
+@media(max-width:420px) {
+    .content {
+        padding: 13px;
+    }
+
+    .welcome h1 {
+        font-size: 24px;
+    }
+
+    .topbar-title {
+        font-size: 15px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+<div class="overlay" id="overlay" onclick="closeMenu()"></div>
+
+<div class="layout">
+
+<aside class="sidebar" id="sidebar">
+<div class="brand">
+<div class="logo">MD</div>
+<h3>MONZE DAY<br>SECONDARY SCHOOL</h3>
+</div>
+
+<div class="menu-label">STUDENT MENU</div>
+
+<button class="nav-item active" onclick="showTab('overview',this)">🏠 Overview</button>
+<button class="nav-item" onclick="showTab('profile',this)">👤 My Profile</button>
+<button class="nav-item" onclick="showTab('results',this)">📊 Academic Results</button>
+<button class="nav-item" onclick="showTab('subjects',this)">📚 My Subjects</button>
+<button class="nav-item" onclick="showTab('student-timetable',this)">📅 My Timetable</button>
+<button class="nav-item" onclick="showTab('attendance',this)">📅 My Attendance</button>
+<button class="nav-item" onclick="showTab('announcements',this)">📢 Announcements</button>
+<button class="nav-item" onclick="location.href='student-assignments.html'">📝 Assignments</button>
+<button class="nav-item" onclick="location.href='student-library.html'">📚 Digital Library</button>
+<button class="nav-item" onclick="location.href='student-support.html'">🛟 Help &amp; Support</button>
+<button class="nav-item" onclick="showTab('password',this)">🔒 Change Password</button>
+
+<div class="sidebar-bottom">
+<button class="nav-item" onclick="logout()">🚪 Logout</button>
+</div>
+</aside>
+
+<div class="main-area">
+
+<header class="topbar">
+<div style="display:flex;align-items:center;gap:14px">
+<button class="menu-toggle" onclick="toggleMenu()">☰</button>
+<div class="topbar-title">Student Portal</div>
+</div>
+
+<div class="notification-wrap">
+    <button class="notification-bell" id="notificationBell"
+        type="button" aria-label="Notifications"
+        aria-expanded="false" onclick="toggleNotifications()">
+        🔔
+        <span class="notification-badge" id="notificationBadge">0</span>
+    </button>
+    <div class="notification-panel" id="notificationPanel">
+        <div class="notification-heading">
+            <h3>Notifications</h3>
+            <button type="button" onclick="markAllNotificationsRead()">
+                Mark all read
+            </button>
+        </div>
+        <div id="notificationList">
+            <div class="notification-empty">Loading notifications...</div>
+        </div>
+    </div>
+</div>
+
+<button class="logout" onclick="logout()">Logout</button>
+</header>
+
+<main class="content">
+
+<section class="page active" id="overview">
+<div class="welcome">
+<h1>Welcome, <span id="welcomeName">Student</span>!</h1>
+<p>Welcome to Monze Day Secondary School. Access your academic information and school updates in one place.</p>
+</div>
+
+<h2 class="section-title">Your Dashboard</h2>
+
+<div class="cards">
+<div class="card">
+<h3>📊 Academic Results</h3>
+<p>View your examination results and academic performance.</p>
+<button class="action" onclick="showTab('results')">View Results →</button>
+</div>
+<div class="card">
+<h3>📖 Digital Library</h3>
+<p>Access learning materials, revision notes and past examination papers.</p>
+<button class="action" onclick="location.href='student-library.html'">Open Digital Library →</button>
+</div>
+<div class="card">
+<h3>📚 My Subjects</h3>
+<p>Access your school subjects.</p>
+<button class="action" onclick="showTab('subjects')">View Subjects →</button>
+</div>
+<div class="card">
+<h3>📢 Announcements</h3>
+<p>Read important school announcements and notices.</p>
+<button class="action" onclick="showTab('announcements')">View Notices →</button>
+</div>
+<div class="card">
+<h3>👤 My Profile</h3>
+<p>View your personal student information.</p>
+<button class="action" onclick="showTab('profile')">View Profile →</button>
+</div>
+</div>
+</section>
+
+<section class="page" id="profile">
+<h2 class="section-title">My Profile</h2>
+<div class="panel">
+<div class="student-photo-area">
+    <img id="studentPhoto" alt="Student profile picture"
+         style="display:none">
+
+    <div id="studentPhotoPlaceholder">👤</div>
+
+    <h3>Student Profile Picture</h3>
+    <p>Upload a JPG, PNG or WEBP image (maximum 2 MB).</p>
+
+    <input type="file" id="studentPhotoInput"
+           accept="image/jpeg,image/png,image/webp"
+           hidden>
+
+    <button type="button" class="action"
+            onclick="document.getElementById('studentPhotoInput').click()">
+        📷 Choose Profile Picture
+    </button>
+
+    <p id="photoStatus" class="status"></p>
+</div>
+
+<div class="profile-grid">
+<div class="profile-item"><small>Full Name</small><strong id="fullName">Loading...</strong></div>
+<div class="profile-item"><small>Student Number</small><strong id="studentNumber">Loading...</strong></div>
+<div class="profile-item"><small>Class</small><strong id="className">Loading...</strong></div>
+<div class="profile-item"><small>Email Address</small><strong id="email">Loading...</strong></div>
+</div>
+</div>
+</section>
+
+<section class="page" id="results">
+<h2 class="section-title">Academic Results</h2>
+<div class="panel">
+<p>View your examination results and academic performance.</p>
+<a class="action" href="academic-results.html">Open Academic Results →</a>
+<a class="action" href="student-analytics.html" style="margin-top:12px">📊 View Performance Analytics →</a>
+<a class="action" href="student-report-card.html" style="margin-top:12px">📄 View / Download Report Card →</a>
+</div>
+</section>
+
+<section class="page" id="subjects">
+<div class="subjects-intro"><h2>📚 My Subjects</h2><p>Explore the subjects assigned to your class and the teachers guiding your learning.</p></div>
+
+<div id="studentSubjectsList" class="cards">
+<p class="status">Loading your subjects...</p>
+</div>
+</section>
+
+
+
+
+<section class="page" id="student-timetable">
+    <div class="student-timetable-intro">
+        <h2>📅 My Timetable</h2>
+        <p>View your weekly lesson schedule, subjects and class periods.</p>
+    </div>
+
+    <div class="timetable-toolbar">
+        <span>WEEKLY CLASS SCHEDULE</span>
+        <button type="button" onclick="loadStudentTimetable()">↻ Refresh</button>
+    </div>
+
+    <div id="studentTimetableList" class="student-timetable-days">
+        <p class="status">Loading your timetable...</p>
+    </div>
+</section>
+
+<section class="page" id="attendance">
+
+    <div class="attendance-intro">
+        <h2>My Attendance</h2>
+        <p>Monitor your attendance record and keep track of your school participation.</p>
+    </div>
+
+    <div class="attendance-summary">
+        <div class="attendance-stat present">
+            <small>Present</small>
+            <strong id="attendancePresent">0</strong>
+        </div>
+
+        <div class="attendance-stat absent">
+            <small>Absent</small>
+            <strong id="attendanceAbsent">0</strong>
+        </div>
+
+        <div class="attendance-stat late">
+            <small>Late</small>
+            <strong id="attendanceLate">0</strong>
+        </div>
+
+        <div class="attendance-stat total">
+            <small>Total Marked</small>
+            <strong id="attendanceTotal">0</strong>
+        </div>
+    </div>
+
+
+    <div class="attendance-progress-card">
+        <div class="attendance-progress-top">
+            <h3>Overall Attendance</h3>
+            <strong id="attendancePercentage">0%</strong>
+        </div>
+        <div
+            class="attendance-progress-track"
+            role="progressbar"
+            aria-label="Overall attendance"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-valuenow="0"
+            id="attendanceProgressBar"
+        >
+            <div class="attendance-progress-fill"
+                 id="attendanceProgressFill"></div>
+        </div>
+        <p class="attendance-progress-note" id="attendanceProgressNote">
+            Your attendance percentage will appear here.
+        </p>
+    </div>
+
+    <div class="attendance-history">
+        <div class="attendance-history-header">
+            <h3>Attendance History</h3>
+            <button class="attendance-refresh" type="button"
+                    onclick="loadStudentAttendance()">
+                ↻ Refresh
+            </button>
+        </div>
+
+        <p id="attendanceStatus" class="status">Loading attendance...</p>
+
+        <div class="attendance-table-wrap">
+            <table class="attendance-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Class</th>
+                        <th>Attendance Status</th>
+                    </tr>
+                </thead>
+                <tbody id="attendanceTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+</section>
+
+
+<section class="page" id="announcements">
+<h2 class="section-title">📢 School Announcements</h2>
+<div id="studentAnnouncementList">
+<p class="status">Loading announcements...</p>
+</div>
+</section>
+
+<section class="page" id="password">
+<h2 class="section-title">Change Password</h2>
+<div class="panel">
+<p>Update your student account password securely.</p>
+<a class="action" href="student-change-password.html">Open Change Password →</a>
+</div>
+</section>
+
+<p class="status" id="status"></p>
+</main>
+
+<footer>© Monze Day Secondary School · Student Portal<br>Knowledge • Discipline • Excellence</footer>
+
+</div>
+</div>
+
+<script>
+function showTab(id,button){
+document.querySelectorAll(".page").forEach(page=>page.classList.remove("active"));
+const target=document.getElementById(id);
+if(!target)return;
+target.classList.add("active");
+
+document.querySelectorAll(".nav-item").forEach(item=>item.classList.remove("active"));
+if(button)button.classList.add("active");
+else{
+const item=[...document.querySelectorAll(".sidebar > .nav-item")].find(el=>el.getAttribute("onclick")?.includes("'"+id+"'"));
+if(item)item.classList.add("active");
+}
+closeMenu();
+if(id === "attendance") loadStudentAttendance();
+if(id === "student-timetable") loadStudentTimetable();
+}
+
+function toggleMenu(){
+document.getElementById("sidebar").classList.toggle("open");
+document.getElementById("overlay").classList.toggle("show");
+}
+function closeMenu(){
+document.getElementById("sidebar").classList.remove("open");
+document.getElementById("overlay").classList.remove("show");
+}
+
+
+
+async function loadStudentTimetable() {
+    const list = document.getElementById("studentTimetableList");
+    if (!list) return;
+
+    list.textContent = "Loading your timetable...";
+
+    try {
+        const response = await fetch("/api/student/timetable");
+
+        if (response.status === 401) {
+            window.location.href = "student-login.html";
+            return;
+        }
+
+        const data = await response.json();
+
+        if (response.status === 403 && data.mustChangePassword) {
+            window.location.href = "student-change-password.html";
+            return;
+        }
+
+        if (!response.ok) {
+            throw new Error(data.message || "Unable to load timetable.");
+        }
+
+        const lessons = Array.isArray(data.lessons) ? data.lessons : [];
+        const settings = data.settings || null;
+
+        if (lessons.length === 0 && !settings) {
+            list.innerHTML =
+                '<div class="student-timetable-empty">' +
+                '<h3>No timetable available</h3>' +
+                '<p>Your class timetable has not been published yet.</p>' +
+                '</div>';
+            return;
+        }
+
+        const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+
+        const periods = [...new Set(
+            lessons.map(item => Number(item.period_number))
+        )].sort((a, b) => a - b);
+
+        const wrapper = document.createElement("div");
+        wrapper.className = "weekly-table-wrapper";
+
+        const table = document.createElement("table");
+        table.className = "professional-weekly-table";
+
+        const thead = document.createElement("thead");
+        const headerRow = document.createElement("tr");
+
+        const periodHeader = document.createElement("th");
+        periodHeader.textContent = "PERIOD";
+        headerRow.appendChild(periodHeader);
+
+        days.forEach(day => {
+            const th = document.createElement("th");
+            th.textContent = day.toUpperCase();
+            headerRow.appendChild(th);
+        });
+
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+
+        const tbody = document.createElement("tbody");
+
+        let breakAdded = false;
+
+        function addBreakRow() {
+            if (breakAdded || !settings ||
+                !settings.break_start || !settings.break_end) {
+                return;
+            }
+
+            const row = document.createElement("tr");
+            row.className = "break-time-row";
+
+            const label = document.createElement("td");
+            label.className = "break-time-label";
+            label.textContent = "☕ BREAK TIME";
+            row.appendChild(label);
+
+            days.forEach(() => {
+                const cell = document.createElement("td");
+                cell.className = "break-time-cell";
+
+                const title = document.createElement("strong");
+                title.textContent = "BREAK";
+
+                const time = document.createElement("span");
+                time.textContent =
+                    settings.break_start + " – " + settings.break_end;
+
+                cell.append(title, time);
+                row.appendChild(cell);
+            });
+
+            tbody.appendChild(row);
+            breakAdded = true;
+        }
+
+        periods.forEach(periodNumber => {
+            const row = document.createElement("tr");
+
+            const periodCell = document.createElement("td");
+            periodCell.className = "period-number-cell";
+            periodCell.textContent = "Period " + periodNumber;
+            row.appendChild(periodCell);
+
+            days.forEach(day => {
+                const cell = document.createElement("td");
+                cell.className = "weekly-lesson-cell";
+
+                const lesson = lessons.find(item =>
+                    item.day_of_week === day &&
+                    Number(item.period_number) === periodNumber
+                );
+
+                if (lesson) {
+                    const subject = document.createElement("strong");
+                    subject.className = "weekly-subject";
+                    subject.textContent = lesson.subject || "Subject";
+
+                    const time = document.createElement("span");
+                    time.className = "weekly-time";
+                    time.textContent =
+                        (lesson.start_time || "--:--") + " – " +
+                        (lesson.end_time || "--:--");
+
+                    cell.append(subject, time);
+                } else {
+                    cell.classList.add("empty-lesson");
+                    cell.textContent = "—";
+                }
+
+                row.appendChild(cell);
+            });
+
+            tbody.appendChild(row);
+
+            const periodLessons = lessons.filter(item =>
+                Number(item.period_number) === periodNumber
+            );
+
+            const latestEnd = periodLessons
+                .map(item => item.end_time)
+                .filter(Boolean)
+                .sort()
+                .pop();
+
+            if (
+                latestEnd &&
+                settings &&
+                settings.break_start &&
+                latestEnd >= settings.break_start
+            ) {
+                addBreakRow();
+            }
+        });
+
+        // Show the break even when there are no lessons yet.
+        addBreakRow();
+
+        table.appendChild(tbody);
+        wrapper.appendChild(table);
+        list.replaceChildren(wrapper);
+
+    } catch (error) {
+        list.textContent = error.message;
+        console.error("Student timetable:", error);
+    }
+}async function loadProfile(){
+const status=document.getElementById("status");
+try{
+const response=await fetch("/api/student/me");
+if(response.status===401){window.location.href="student-login.html";return;}
+if(response.status===403){
+const data=await response.json();
+if(data.mustChangePassword){window.location.href="student-change-password.html";return;}
+}
+if(!response.ok)throw new Error("Unable to load student profile.");
+const student=await response.json();
+document.getElementById("fullName").textContent=student.full_name;
+document.getElementById("studentNumber").textContent=student.student_number;
+document.getElementById("className").textContent=student.class_name;
+document.getElementById("email").textContent=student.email;
+document.getElementById("welcomeName").textContent=student.full_name;
+        if (student.photo_url) {
+            const photo = document.getElementById("studentPhoto");
+            photo.src = student.photo_url;
+            photo.style.display = "block";
+            document.getElementById("studentPhotoPlaceholder").style.display = "none";
+        }
+
+}catch(error){status.textContent=error.message;}
+}
+
+async function loadStudentSubjects() {
+    const list = document.getElementById("studentSubjectsList");
+
+    try {
+        const response = await fetch("/api/student/subjects");
+
+        if (response.status === 401) {
+            window.location.href = "student-login.html";
+            return;
+        }
+
+        const data = await response.json();
+
+        if (response.status === 403 && data.mustChangePassword) {
+            window.location.href = "student-change-password.html";
+            return;
+        }
+
+        if (!response.ok) {
+            throw new Error(data.message || "Unable to load subjects.");
+        }
+
+        list.replaceChildren();
+
+        const subjects = data.subjects || [];
+
+        if (subjects.length === 0) {
+            const empty = document.createElement("div");
+            empty.className = "panel";
+            empty.innerHTML = "<p class='status'>No subjects have been assigned to your class yet. Please check again later.</p>";
+            list.appendChild(empty);
+            return;
+        }
+
+        subjects.forEach((subject, index) => {
+            const card = document.createElement("article");
+            card.className = "professional-subject-card";
+
+            const top = document.createElement("div");
+            top.className = "subject-card-top";
+
+            const icon = document.createElement("div");
+            icon.className = "subject-icon";
+            icon.textContent = "📚";
+
+            const number = document.createElement("span");
+            number.className = "subject-number";
+            number.textContent = "SUBJECT " + (index + 1);
+
+            top.append(icon, number);
+
+            const title = document.createElement("h3");
+            title.textContent = subject.name;
+
+            const teacherBox = document.createElement("div");
+            teacherBox.className = "subject-teacher-box";
+
+            const teacherLabel = document.createElement("span");
+            teacherLabel.className = "subject-teacher-label";
+            teacherLabel.textContent = "Assigned Teacher";
+
+            const teacher = document.createElement("p");
+            teacher.className = "subject-teacher-name";
+            teacher.textContent = subject.teachers && subject.teachers.length
+                ? subject.teachers.join(", ")
+                : "Teacher information unavailable.";
+
+            teacherBox.append(teacherLabel, teacher);
+            card.append(top, title, teacherBox);
+            list.appendChild(card);
+        });
+
+    } catch (error) {
+        list.textContent = error.message;
+        console.error("Student subjects:", error);
+    }
+}
+
+async function loadAnnouncements(){
+const list=document.getElementById("studentAnnouncementList");
+try{
+const response=await fetch("/api/announcements");
+if(!response.ok)throw new Error("Unable to load announcements.");
+const announcements=await response.json();
+list.replaceChildren();
+if(announcements.length===0){
+const empty=document.createElement("p");
+empty.className="status";
+empty.textContent="There are no school announcements yet.";
+list.appendChild(empty);
+return;
+}
+announcements.forEach(item=>{
+const card=document.createElement("article");
+card.className="announcement-item";
+const title=document.createElement("h3");
+title.textContent=item.title;
+const message=document.createElement("p");
+message.textContent=item.message;
+const details=document.createElement("small");
+const date=item.created_at?new Date(item.created_at.replace(" ","T")+"Z").toLocaleString():"Date unavailable";
+details.textContent="Posted by "+item.author_name+" ("+item.author_role+") · "+date;
+card.append(title,message,details);
+list.appendChild(card);
+});
+}catch(error){
+list.textContent="Unable to load announcements. Please refresh the page.";
+console.error(error);
+}
+}
+
+
+async function uploadStudentPhoto(file) {
+    const status = document.getElementById("photoStatus");
+
+    if (!file) return;
+
+    if (file.size > 2 * 1024 * 1024) {
+        status.textContent = "Image must not exceed 2 MB.";
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append("photo", file);
+
+    status.textContent = "Uploading picture...";
+
+    try {
+        const response = await fetch("/api/student/photo", {
+            method: "POST",
+            body: formData
+        });
+
+        const responseText = await response.text();
+        let result;
+
+        try {
+            result = JSON.parse(responseText);
+        } catch {
+            console.error("Photo upload returned HTML or invalid JSON:", responseText);
+            throw new Error("The server returned an unexpected response. Check the server terminal for details.");
+        }
+
+        if (response.status === 401) {
+            window.location.href = "student-login.html";
+            return;
+        }
+
+        if (!response.ok) {
+            throw new Error(result.message || "Upload failed.");
+        }
+
+        const photo = document.getElementById("studentPhoto");
+        photo.src = result.photo_url + "?t=" + Date.now();
+        photo.style.display = "block";
+
+        document.getElementById("studentPhotoPlaceholder").style.display = "none";
+
+        status.textContent = "Profile picture updated successfully!";
+
+    } catch (error) {
+        status.textContent = error.message;
+    }
+}
+
+document.getElementById("studentPhotoInput").addEventListener(
+    "change",
+    function() {
+        uploadStudentPhoto(this.files[0]);
+        this.value = "";
+    }
+);
+
+async function logout(){
+try{
+await fetch("/api/logout",{method:"POST"});
+window.location.href="student-login.html";
+}catch(error){alert("Unable to log out. Please try again.");}
+}
+
+loadProfile();
+loadAnnouncements();
+loadStudentSubjects();
+
+/* NOTIFICATION CENTRE */
+async function loadNotificationCount() {
+    try {
+        const response = await fetch("/api/notifications/unread-count");
+        if (response.status === 401) return;
+        if (!response.ok) throw new Error("Unable to load notification count");
+        const data = await response.json();
+        const badge = document.getElementById("notificationBadge");
+        const count = Number(data.unreadCount || 0);
+        badge.textContent = count > 99 ? "99+" : count;
+        badge.style.display = count > 0 ? "flex" : "none";
+    } catch (error) {
+        console.error("Notification count:", error);
+    }
+}
+
+function toggleNotifications() {
+    const panel = document.getElementById("notificationPanel");
+    const bell = document.getElementById("notificationBell");
+    const isOpen = panel.classList.toggle("open");
+    bell.setAttribute("aria-expanded", String(isOpen));
+    if (isOpen) loadNotifications();
+}
+
+async function loadNotifications() {
+    const list = document.getElementById("notificationList");
+    list.textContent = "Loading notifications...";
+
+    try {
+        const response = await fetch("/api/notifications");
+        if (response.status === 401) {
+            window.location.href = window.location.pathname.includes("teacher")
+                ? "teacher-login.html" : "student-login.html";
+            return;
+        }
+        if (!response.ok) throw new Error("Unable to load notifications");
+
+        const notifications = await response.json();
+        list.replaceChildren();
+
+        if (!notifications.length) {
+            const empty = document.createElement("div");
+            empty.className = "notification-empty";
+            empty.textContent = "You're all caught up. No notifications yet.";
+            list.appendChild(empty);
+            return;
+        }
+
+        notifications.forEach(item => {
+            const card = document.createElement("article");
+            card.className = "notification-item" + (item.read_at ? "" : " unread");
+
+            const title = document.createElement("h4");
+            title.textContent = item.title;
+
+            const message = document.createElement("p");
+            message.textContent = item.message;
+
+            const date = document.createElement("small");
+            date.textContent = item.created_at
+                ? new Date(item.created_at).toLocaleString()
+                : "Date unavailable";
+
+            card.append(title, message, date);
+
+            if (!item.read_at) {
+                const button = document.createElement("button");
+                button.type = "button";
+                button.textContent = "Mark as read";
+                button.addEventListener("click", () =>
+                    markNotificationRead(item.id)
+                );
+                card.appendChild(button);
+            }
+
+            list.appendChild(card);
+        });
+    } catch (error) {
+        list.textContent = "Unable to load notifications. Please try again.";
+        console.error(error);
+    }
+}
+
+async function markNotificationRead(id) {
+    try {
+        const response = await fetch("/api/notifications/" + encodeURIComponent(id) + "/read", {
+            method: "PATCH"
+        });
+        if (!response.ok) throw new Error("Unable to mark notification as read");
+        await loadNotifications();
+        await loadNotificationCount();
+    } catch (error) {
+        alert(error.message);
+    }
+}
+
+async function markAllNotificationsRead() {
+    try {
+        const response = await fetch("/api/notifications/read-all", {
+            method: "PATCH"
+        });
+        if (!response.ok) throw new Error("Unable to mark notifications as read");
+        await loadNotifications();
+        await loadNotificationCount();
+    } catch (error) {
+        alert(error.message);
+    }
+}
+
+loadNotificationCount();
+setInterval(loadNotificationCount, 30000);
+
+
+async function loadStudentAttendance() {
+    const status = document.getElementById("attendanceStatus");
+    const body = document.getElementById("attendanceTableBody");
+
+    status.textContent = "Loading attendance...";
+    body.replaceChildren();
+
+    try {
+        const response = await fetch("/api/student/attendance");
+        const data = await response.json();
+
+        if (response.status === 401) {
+            window.location.href = "student-login.html";
+            return;
+        }
+
+        if (response.status === 403 && data.mustChangePassword) {
+            window.location.href = "student-change-password.html";
+            return;
+        }
+
+        if (!response.ok) {
+            throw new Error(data.message || "Unable to load attendance.");
+        }
+
+        const summary = data.summary || {};
+        const records = data.records || [];
+
+        document.getElementById("attendancePresent").textContent = summary.Present || 0;
+        document.getElementById("attendanceAbsent").textContent = summary.Absent || 0;
+        document.getElementById("attendanceLate").textContent = summary.Late || 0;
+        document.getElementById("attendanceTotal").textContent = records.length;
+
+        // Calculate attendance percentage.
+        const present = Number(summary.Present) || 0;
+        const late = Number(summary.Late) || 0;
+        const total = records.length;
+        const attended = present + late;
+        const percentage = total > 0
+            ? Math.round((attended / total) * 100)
+            : 0;
+
+        document.getElementById("attendancePercentage").textContent =
+            percentage + "%";
+
+        document.getElementById("attendanceProgressFill").style.width =
+            percentage + "%";
+
+        document.getElementById("attendanceProgressBar")
+            .setAttribute("aria-valuenow", percentage);
+
+        document.getElementById("attendanceProgressNote").textContent =
+            total > 0
+                ? attended + " out of " + total +
+                  " marked school days attended."
+                : "No attendance records available yet.";
+
+
+        if (records.length === 0) {
+            status.textContent = "No attendance records are available yet.";
+            return;
+        }
+
+        status.textContent = "";
+
+        records.forEach(record => {
+            const row = document.createElement("tr");
+
+            const dateCell = document.createElement("td");
+            const date = new Date(record.attendance_date);
+            dateCell.textContent = Number.isNaN(date.getTime())
+                ? record.attendance_date
+                : date.toLocaleDateString(undefined, {
+                    day: "2-digit", month: "short", year: "numeric",
+                    timeZone: "UTC"
+                });
+
+            const classCell = document.createElement("td");
+            classCell.textContent = record.class_name || "-";
+
+            const statusCell = document.createElement("td");
+            const badge = document.createElement("span");
+            badge.className = "attendance-badge " +
+                String(record.status || "").toLowerCase();
+            badge.textContent = record.status || "-";
+            statusCell.appendChild(badge);
+
+            row.append(dateCell, classCell, statusCell);
+            body.appendChild(row);
+        });
+
+    } catch (error) {
+        status.textContent = error.message;
+    }
+}
+
+</script>
+</body>
+</html>

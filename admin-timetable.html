@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Timetable Management | Monze Day Secondary School</title>
+
+<style>
+:root{
+    --navy:#102b50;
+    --dark:#091d38;
+    --gold:#d9ad45;
+    --light:#f3f6fb;
+    --white:#ffffff;
+    --muted:#718096;
+    --border:#e5eaf1;
+    --green:#16865b;
+    --red:#c33d3d;
+}
+
+*{box-sizing:border-box}
+
+body{
+    margin:0;
+    background:var(--light);
+    font-family:Arial,sans-serif;
+    color:#24344b;
+    line-height:1.55;
+}
+
+header{
+    background:linear-gradient(120deg,#071a32,#102b50 65%,#1d4978);
+    color:white;
+    padding:23px 5%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:18px;
+    flex-wrap:wrap;
+    box-shadow:0 5px 20px #091d3820;
+}
+
+.brand{
+    font-weight:800;
+    font-size:19px;
+    letter-spacing:.5px;
+}
+
+.brand small{
+    display:block;
+    color:var(--gold);
+    font-size:11px;
+    margin-top:7px;
+    letter-spacing:1.5px;
+}
+
+header a{
+    color:var(--gold);
+    text-decoration:none;
+    font-weight:bold;
+    font-size:13px;
+    padding:10px 15px;
+    border:1px solid #d9ad4560;
+    border-radius:8px;
+}
+
+header a:hover{
+    background:#d9ad4518;
+}
+
+main{
+    max-width:1320px;
+    margin:35px auto;
+    padding:0 22px;
+}
+
+h1{
+    margin:0 0 8px;
+    color:var(--navy);
+    font-size:30px;
+    font-weight:800;
+    letter-spacing:-.5px;
+}
+
+.subtitle{
+    color:var(--muted);
+    margin:0 0 25px;
+    line-height:1.7;
+}
+
+.card{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:25px;
+    margin-bottom:23px;
+    box-shadow:0 5px 20px #102b5008;
+    transition:box-shadow .2s ease;
+}
+
+.card:hover{
+    box-shadow:0 8px 25px #102b5012;
+}
+
+.card h2{
+    margin:0 0 17px;
+    color:var(--navy);
+    font-size:18px;
+    font-weight:800;
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.card h2:before{
+    content:"";
+    width:5px;
+    height:22px;
+    border-radius:5px;
+    background:var(--gold);
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:18px;
+}
+
+label{
+    display:block;
+    font-size:11px;
+    font-weight:800;
+    color:#536176;
+    margin-bottom:8px;
+    letter-spacing:.6px;
+}
+
+input,select{
+    width:100%;
+    padding:13px 14px;
+    border:1px solid #d7deea;
+    border-radius:9px;
+    background:#fff;
+    font-size:14px;
+    color:#17243a;
+    outline:none;
+    transition:border .2s,box-shadow .2s;
+}
+
+input:focus,select:focus{
+    border-color:var(--gold);
+    box-shadow:0 0 0 3px #d9ad4520;
+}
+
+button{
+    border:0;
+    border-radius:9px;
+    padding:12px 18px;
+    font-weight:800;
+    font-size:13px;
+    cursor:pointer;
+    transition:transform .15s,background .2s,box-shadow .2s;
+}
+
+button:hover{
+    transform:translateY(-1px);
+}
+
+.primary{
+    background:var(--navy);
+    color:white;
+    box-shadow:0 4px 10px #102b5020;
+}
+
+.primary:hover{
+    background:#1d4978;
+}
+
+.gold{
+    background:var(--gold);
+    color:var(--dark);
+    box-shadow:0 4px 10px #d9ad4525;
+}
+
+.gold:hover{
+    background:#edc665;
+}
+
+.secondary{
+    background:#edf1f7;
+    color:var(--navy);
+}
+
+.actions{
+    display:flex;
+    gap:11px;
+    flex-wrap:wrap;
+    margin-top:19px;
+}
+
+.notice{
+    padding:15px 17px;
+    border-radius:10px;
+    background:#fff8e6;
+    border:1px solid #f0d994;
+    color:#765710;
+    font-size:13px;
+    line-height:1.7;
+    margin:15px 0 19px;
+}
+
+.status{
+    font-size:13px;
+    margin-top:13px;
+    color:var(--muted);
+}
+
+.day-tabs{
+    display:flex;
+    gap:9px;
+    flex-wrap:wrap;
+    margin-bottom:20px;
+    padding:5px 0;
+}
+
+.day-tabs button{
+    background:#edf1f7;
+    color:var(--navy);
+    min-width:95px;
+    border:1px solid transparent;
+}
+
+.day-tabs button:hover{
+    border-color:var(--gold);
+}
+
+.day-tabs button.active{
+    background:var(--navy);
+    color:white;
+    border-color:var(--gold);
+    box-shadow:0 4px 12px #102b5025;
+}
+
+.lesson{
+    display:grid;
+    grid-template-columns:100px minmax(150px,1fr) minmax(170px,1fr);
+    gap:15px;
+    align-items:end;
+    padding:17px 0;
+    border-bottom:1px solid var(--border);
+}
+
+.lesson-time{
+    font-size:13px;
+    color:var(--navy);
+    font-weight:800;
+    padding-bottom:13px;
+}
+
+.break-row{
+    background:#fff8e6;
+    border:1px dashed #e1bd5c;
+    padding:15px;
+    border-radius:10px;
+    margin:13px 0;
+    color:#765710;
+    font-weight:800;
+    text-align:center;
+}
+
+.table-wrap{
+    overflow-x:auto;
+    border-radius:10px;
+}
+
+table{
+    border-collapse:separate;
+    border-spacing:0;
+    width:100%;
+    min-width:750px;
+    background:white;
+}
+
+th,td{
+    border-right:1px solid var(--border);
+    border-bottom:1px solid var(--border);
+    padding:15px;
+    text-align:left;
+    vertical-align:top;
+    font-size:13px;
+}
+
+th{
+    background:var(--navy);
+    color:white;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.7px;
+}
+
+th:first-child{
+    border-radius:8px 0 0 0;
+}
+
+th:last-child{
+    border-radius:0 8px 0 0;
+}
+
+td{
+    background:white;
+}
+
+.cell-subject{
+    font-weight:800;
+    color:var(--navy);
+}
+
+.cell-teacher{
+    font-size:11px;
+    color:var(--muted);
+    margin-top:6px;
+}
+
+.empty{
+    color:#9aa4b3;
+    font-style:italic;
+    padding:15px 0;
+}
+
+footer{
+    text-align:center;
+    padding:30px 15px;
+    color:var(--muted);
+    font-size:12px;
+    border-top:1px solid var(--border);
+    background:white;
+}
+
+@media(max-width:750px){
+    main{
+        margin:25px auto;
+        padding:0 14px;
+    }
+
+    h1{
+        font-size:25px;
+    }
+
+    .card{
+        padding:19px;
+    }
+
+    .lesson{
+        grid-template-columns:1fr;
+        gap:9px;
+    }
+
+    .lesson-time{
+        padding:0;
+    }
+
+    .day-tabs button{
+        flex:1 1 28%;
+        min-width:75px;
+    }
+}
+
+@media(max-width:480px){
+    header{
+        padding:18px;
+    }
+
+    .brand{
+        font-size:16px;
+    }
+
+    .card{
+        padding:16px;
+        border-radius:12px;
+    }
+
+    .actions button{
+        width:100%;
+    }
+}
+</style>
+
+</head>
+<body>
+<header>
+  <div class="brand">MONZE DAY SECONDARY SCHOOL<small>KNOWLEDGE • DISCIPLINE • EXCELLENCE</small></div>
+  <a href="admin-dashboard.html">← Administrator Dashboard</a>
+</header>
+
+<main>
+<h1>Timetable Management</h1>
+<p class="subtitle">Create and manage weekly lesson schedules for each class stream.</p>
+
+<section class="card">
+<h2>1. Select Class Stream</h2>
+<div class="grid">
+<div><label for="classSelect">CLASS STREAM</label>
+<select id="classSelect">
+<option value="">Select a class stream</option>
+</select></div>
+<div><label for="daySelect">DAY TO EDIT</label>
+<select id="daySelect">
+<option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option>
+</select></div>
+</div>
+<div class="status" id="classStatus">Choose a class stream to begin.</div>
+</section>
+
+<section class="card">
+<h2>2. Class Session Settings</h2>
+<p class="subtitle">Set the times and lesson duration for this class. The periods will be generated automatically.</p>
+<div class="grid">
+<div><label for="sessionStart">SESSION START</label><input id="sessionStart" type="time"></div>
+<div><label for="sessionEnd">SESSION END</label><input id="sessionEnd" type="time"></div>
+<div><label for="lessonMinutes">LESSON DURATION (MINUTES)</label><input id="lessonMinutes" type="number" min="10" max="180" value="40"></div>
+<div><label for="breakStart">BREAK START</label><input id="breakStart" type="time"></div>
+<div><label for="breakEnd">BREAK END</label><input id="breakEnd" type="time"></div>
+</div>
+<div class="actions"><button class="primary" id="saveSettings">Save Class Settings</button></div>
+<div class="status" id="settingsStatus"></div>
+</section>
+
+<section class="card">
+<h2>3. Edit Daily Lessons</h2>
+<div class="notice">Choose a subject for each period. The system will find approved teachers assigned to teach that subject in this class. You must select the correct teacher.</div>
+<div class="day-tabs" id="dayTabs">
+<button data-day="Monday" class="active">Monday</button>
+<button data-day="Tuesday">Tuesday</button>
+<button data-day="Wednesday">Wednesday</button>
+<button data-day="Thursday">Thursday</button>
+<button data-day="Friday">Friday</button>
+</div>
+<div id="lessonEditor"><p class="empty">Select a class stream first.</p></div>
+<div class="actions"><button class="gold" id="saveDay">Save This Day's Timetable</button></div>
+<div class="status" id="dayStatus"></div>
+</section>
+
+<section class="card">
+<h2>4. Weekly Timetable Preview</h2>
+<div class="table-wrap" id="weeklyPreview"><p class="empty">Select a class stream to view its weekly timetable.</p></div>
+</section>
+</main>
+<footer>Monze Day Secondary School · Knowledge • Discipline • Excellence</footer>
+
+<script>
+const days=["Monday","Tuesday","Wednesday","Thursday","Friday"];
+let selectedClass="";
+let selectedDay="Monday";
+let settings=null;
+let periods=[];
+let subjects=[];
+let weeklyRows=[];
+
+const $=id=>document.getElementById(id);
+
+async function api(url,options={}){
+  const response=await fetch(url,{credentials:"same-origin",headers:{"Content-Type":"application/json",...(options.headers||{})},...options});
+  let data={};
+  try{data=await response.json()}catch{}
+  if(!response.ok)throw new Error(data.message||data.error||`Request failed (${response.status})`);
+  return data;
+}
+function listFrom(data,key){
+  if(Array.isArray(data))return data;
+  if(Array.isArray(data[key]))return data[key];
+  return [];
+}
+function classOptions(){
+  const all=[];
+  for(let form=1;form<=4;form++)for(const letter of ["A","B","C","D"])all.push(`Form ${form}${letter}`);
+  return all;
+}
+function timeLabel(value){
+  if(!value)return "";
+  return String(value).slice(0,5);
+}
+function showStatus(id,message,isError=false){
+  $(id).textContent=message;
+  $(id).style.color=isError?"var(--red)":"var(--green)";
+}
+function minutes(value){
+  const [h,m]=String(value).slice(0,5).split(":").map(Number);
+  return h*60+m;
+}
+function clock(total){
+  return `${String(Math.floor(total/60)).padStart(2,"0")}:${String(total%60).padStart(2,"0")}`;
+}
+function makePeriods(s){
+  if(!s)return [];
+  let cursor=minutes(s.session_start),end=minutes(s.session_end);
+  const breakStart=minutes(s.break_start),breakEnd=minutes(s.break_end);
+  const duration=Number(s.lesson_minutes);
+  if(!duration||end<=cursor||breakEnd<=breakStart)return [];
+  const result=[];let number=1;
+  while(cursor<end&&number<30){
+    if(cursor>=breakStart&&cursor<breakEnd){cursor=breakEnd;continue;}
+    let next=Math.min(cursor+duration,end);
+    if(cursor<breakStart&&next>breakStart)next=breakStart;
+    if(next<=cursor)break;
+    result.push({period_number:number++,start_time:clock(cursor),end_time:clock(next)});
+    cursor=next;
+    if(cursor===breakStart)cursor=breakEnd;
+  }
+  return result;
+}
+function breakHtml(){
+  if(!settings)return "";
+  return `<div class="break-row">BREAK · ${timeLabel(settings.break_start)} – ${timeLabel(settings.break_end)}</div>`;
+}
+async function loadClasses(){
+  const select=$("classSelect");
+  select.innerHTML='<option value="">Select a class stream</option>';
+  classOptions().forEach(name=>{
+    const option=document.createElement("option");
+    option.value=name;option.textContent=name;select.appendChild(option);
+  });
+  try{
+    const data=await api("/api/admin/timetable/classes");
+    const returned=listFrom(data,"classes");
+    returned.forEach(item=>{
+      const name=typeof item==="string"?item:(item.class_name||item.name);
+      if(name&&!Array.from(select.options).some(o=>o.value.toLowerCase()===name.toLowerCase())){
+        const option=document.createElement("option");option.value=name;option.textContent=name;select.appendChild(option);
+      }
+    });
+  }catch(error){console.warn("Could not load class list:",error.message)}
+}
+async function loadClass(){
+  selectedClass=$("classSelect").value;
+  if(!selectedClass)return;
+  $("classStatus").textContent=`Loading ${selectedClass}...`;
+  try{
+    const [settingData,subjectData]=await Promise.all([
+      api("/api/admin/timetable/settings/"+encodeURIComponent(selectedClass)),
+      api("/api/admin/timetable/subjects/"+encodeURIComponent(selectedClass))
+    ]);
+    settings=settingData.settings||settingData;
+    subjects=listFrom(subjectData,"subjects").map(x=>typeof x==="string"?x:(x.subject_name||x.subject)).filter(Boolean);
+    $("sessionStart").value=timeLabel(settings.session_start);
+    $("sessionEnd").value=timeLabel(settings.session_end);
+    $("lessonMinutes").value=settings.lesson_minutes||40;
+    $("breakStart").value=timeLabel(settings.break_start);
+    $("breakEnd").value=timeLabel(settings.break_end);
+    periods=makePeriods(settings);
+    $("classStatus").textContent=`Selected: ${selectedClass}`;
+    if(!subjects.length)$("classStatus").textContent+= " · No subjects are configured for this stream yet.";
+    await loadWeekly();
+    await renderEditor();
+  }catch(error){
+    settings=null;periods=[];
+    $("classStatus").textContent=error.message;
+    $("lessonEditor").innerHTML='<p class="empty">Unable to load class settings or subjects.</p>';
+    $("weeklyPreview").innerHTML='<p class="empty">Timetable could not be loaded.</p>';
+  }
+}
+async function saveClassSettings(){
+  if(!selectedClass)return showStatus("settingsStatus","Select a class first.",true);
+  const body={
+    session_start:$("sessionStart").value,
+    session_end:$("sessionEnd").value,
+    lesson_minutes:Number($("lessonMinutes").value),
+    break_start:$("breakStart").value,
+    break_end:$("breakEnd").value
+  };
+  try{
+    await api("/api/admin/timetable/settings/"+encodeURIComponent(selectedClass),{method:"PUT",body:JSON.stringify(body)});
+    showStatus("settingsStatus","Class timetable settings saved.");
+    await loadClass();
+  }catch(error){showStatus("settingsStatus",error.message,true)}
+}
+async function teachersFor(subject){
+  if(!subject)return [];
+  const data=await api("/api/admin/timetable/teachers?class_name="+encodeURIComponent(selectedClass)+"&subject="+encodeURIComponent(subject));
+  return listFrom(data,"teachers");
+}
+async function renderEditor(){
+  const editor=$("lessonEditor");
+  if(!selectedClass){editor.innerHTML='<p class="empty">Select a class stream first.</p>';return}
+  if(!settings||!periods.length){editor.innerHTML='<p class="empty">Set and save valid session times first.</p>';return}
+  if(!subjects.length){editor.innerHTML='<p class="empty">No subjects are configured for this class. Add its subjects before creating a timetable.</p>';return}
+  editor.innerHTML="";
+  const saved=weeklyRows.filter(x=>x.day_of_week===selectedDay);
+  for(const period of periods){
+    const existing=saved.find(x=>Number(x.period_number)===period.period_number);
+    const row=document.createElement("div");row.className="lesson";
+    const time=document.createElement("div");time.className="lesson-time";time.textContent=`Period ${period.period_number} · ${period.start_time}–${period.end_time}`;
+    const subjectWrap=document.createElement("div");
+    const subjectLabel=document.createElement("label");subjectLabel.textContent="SUBJECT";
+    const subject=document.createElement("select");subject.className="subject-choice";
+    subject.innerHTML='<option value="">Free period</option>';
+    subjects.forEach(name=>{const o=document.createElement("option");o.value=name;o.textContent=name;subject.appendChild(o)});
+    subject.value=existing?.subject||"";
+    subjectWrap.append(subjectLabel,subject);
+    const teacherWrap=document.createElement("div");
+    const teacherLabel=document.createElement("label");teacherLabel.textContent="ASSIGNED TEACHER";
+    const teacher=document.createElement("select");teacher.className="teacher-choice";
+    teacher.innerHTML='<option value="">Select subject first</option>';
+    teacherWrap.append(teacherLabel,teacher);
+    row.append(time,subjectWrap,teacherWrap);
+    row.dataset.period=period.period_number;
+    editor.appendChild(row);
+    subject.addEventListener("change",()=>loadTeachersForRow(row,subject.value));
+    if(existing?.subject)await loadTeachersForRow(row,existing.subject,existing.teacher_id);
+  }
+  editor.insertAdjacentHTML("beforeend",breakHtml());
+}
+async function loadTeachersForRow(row,subject,selectedId=""){
+  const teacher=row.querySelector(".teacher-choice");
+  teacher.innerHTML='<option value="">Loading teachers...</option>';
+  teacher.disabled=true;
+  if(!subject){teacher.innerHTML='<option value="">Select subject first</option>';teacher.disabled=false;return}
+  try{
+    const teachers=await teachersFor(subject);
+    teacher.innerHTML='<option value="">Select a teacher</option>';
+    teachers.forEach(item=>{
+      const id=item.id||item.teacher_id;
+      const name=item.full_name||item.teacher_name||"Teacher";
+      const option=document.createElement("option");option.value=id;option.textContent=name;
+      teacher.appendChild(option);
+    });
+    if(selectedId)teacher.value=String(selectedId);
+    if(!teachers.length)teacher.innerHTML='<option value="">No approved matching teacher found</option>';
+    teacher.disabled=false;
+  }catch(error){teacher.innerHTML='<option value="">Could not load teachers</option>';teacher.disabled=false}
+}
+async function saveDay(){
+  if(!selectedClass)return showStatus("dayStatus","Select a class first.",true);
+  const entries=[];
+  for(const row of document.querySelectorAll("#lessonEditor .lesson")){
+    const subject=row.querySelector(".subject-choice").value;
+    const teacherId=row.querySelector(".teacher-choice").value;
+    if(subject){
+      if(!teacherId)return showStatus("dayStatus",`Select an approved teacher for ${subject} in Period ${row.dataset.period}.`,true);
+      entries.push({subject,teacher_id:Number(teacherId)});
+    }
+  }
+  try{
+    await api("/api/admin/timetable/day",{method:"PUT",body:JSON.stringify({class_name:selectedClass,day_of_week:selectedDay,entries})});
+    showStatus("dayStatus",`${selectedDay} timetable saved successfully.`);
+    await loadWeekly();
+    await renderEditor();
+  }catch(error){showStatus("dayStatus",error.message,true)}
+}
+async function loadWeekly(){
+  if(!selectedClass)return;
+  try{
+    const data=await api("/api/admin/timetable?class_name="+encodeURIComponent(selectedClass));
+    weeklyRows=listFrom(data,"timetable");
+    if(!weeklyRows.length&&Array.isArray(data.rows))weeklyRows=data.rows;
+    renderWeekly();
+  }catch(error){$("weeklyPreview").innerHTML=`<p class="empty">${error.message}</p>`}
+}
+function renderWeekly(){
+  const host=$("weeklyPreview");
+  if(!periods.length){host.innerHTML='<p class="empty">Save class settings to generate the weekly timetable.</p>';return}
+  let html='<table><thead><tr><th>PERIOD / TIME</th>'+days.map(d=>`<th>${d.toUpperCase()}</th>`).join("")+'</tr></thead><tbody>';
+  periods.forEach(p=>{
+    html+=`<tr><th>Period ${p.period_number}<br>${p.start_time}–${p.end_time}</th>`;
+    days.forEach(day=>{
+      const item=weeklyRows.find(x=>x.day_of_week===day&&Number(x.period_number)===p.period_number);
+      html+=`<td>${item?`<div class="cell-subject">${escapeHtml(item.subject)}</div><div class="cell-teacher">${escapeHtml(item.teacher_name||"Teacher not assigned")}</div>`:'<span class="empty">—</span>'}</td>`;
+    });
+    html+='</tr>';
+    if(minutes(p.end_time)===minutes(settings.break_start)){
+      html+=`<tr><th>BREAK<br>${timeLabel(settings.break_start)}–${timeLabel(settings.break_end)}</th><td colspan="5" style="text-align:center;background:#fff7df;color:#765710;font-weight:bold">BREAK</td></tr>`;
+    }
+  });
+  html+='</tbody></table>';
+  host.innerHTML=html;
+}
+function escapeHtml(value){
+  return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+$("classSelect").addEventListener("change",loadClass);
+$("daySelect").addEventListener("change",()=>{
+  selectedDay=$("daySelect").value;
+  document.querySelectorAll("#dayTabs button").forEach(b=>b.classList.toggle("active",b.dataset.day===selectedDay));
+  renderEditor();
+});
+document.querySelectorAll("#dayTabs button").forEach(button=>button.addEventListener("click",()=>{
+  selectedDay=button.dataset.day;$("daySelect").value=selectedDay;
+  document.querySelectorAll("#dayTabs button").forEach(b=>b.classList.toggle("active",b===button));
+  renderEditor();
+}));
+$("saveSettings").addEventListener("click",saveClassSettings);
+$("saveDay").addEventListener("click",saveDay);
+loadClasses();
+</script>
+</body>
+</html>

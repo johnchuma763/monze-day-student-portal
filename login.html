@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Account Selection | Monze Day Secondary School</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #091d38, #153c69);
+    color: #102b50;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    padding: 22px 20px;
+    border-top: 5px solid #d9ad45;
+    background: rgba(5, 20, 42, .35);
+}
+
+.header-content {
+    max-width: 1100px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.logo-icon {
+    width: 55px;
+    height: 55px;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    background: #d9ad45;
+    color: #102b50;
+    border-radius: 12px;
+    font-size: 21px;
+    font-weight: bold;
+}
+
+.school-brand h2 {
+    margin: 0;
+    color: white;
+    font-size: 19px;
+    letter-spacing: 1px;
+}
+
+.school-brand p {
+    margin: 5px 0 0;
+    color: #d9e3f0;
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+
+main {
+    width: 100%;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 45px 18px;
+}
+
+.container {
+    width: 100%;
+    max-width: 1000px;
+    text-align: center;
+}
+
+.section-tag {
+    display: inline-block;
+    padding: 9px 16px;
+    border: 1px solid rgba(217,173,69,.6);
+    border-radius: 30px;
+    color: #f0cf78;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+h1 {
+    margin: 20px 0 10px;
+    color: white;
+    font-size: 36px;
+}
+
+.intro {
+    margin: 0 0 38px;
+    color: #d9e3f0;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.login-options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+}
+
+.login-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 300px;
+    padding: 30px 22px;
+    background: white;
+    border-radius: 15px;
+    border-bottom: 5px solid #d9ad45;
+    box-shadow: 0 12px 35px rgba(0,0,0,.16);
+    text-decoration: none;
+    transition: transform .25s, box-shadow .25s;
+}
+
+.login-option:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 18px 40px rgba(0,0,0,.25);
+}
+
+.icon {
+    width: 75px;
+    height: 75px;
+    display: grid;
+    place-items: center;
+    margin-bottom: 20px;
+    background: #edf2f8;
+    border-radius: 18px;
+    font-size: 39px;
+}
+
+.login-option h2 {
+    margin: 0 0 12px;
+    color: #102b50;
+    font-size: 21px;
+}
+
+.login-option p {
+    flex: 1;
+    margin: 0;
+    color: #718096;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.login-button {
+    display: inline-block;
+    width: 100%;
+    margin-top: 23px;
+    padding: 13px 12px;
+    border-radius: 7px;
+    background: #102b50;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background .2s;
+}
+
+.login-option:hover .login-button {
+    background: #c9a34a;
+    color: #102b50;
+}
+
+.back-home {
+    display: inline-block;
+    margin-top: 35px;
+    color: #f0cf78;
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.back-home:hover {
+    text-decoration: underline;
+}
+
+footer {
+    padding: 24px 15px;
+    text-align: center;
+    background: rgba(5,20,42,.4);
+    border-top: 1px solid rgba(255,255,255,.1);
+    color: #d9e3f0;
+}
+
+footer h3 {
+    margin: 0 0 7px;
+    color: white;
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+
+footer p {
+    margin: 0 0 12px;
+    font-size: 13px;
+}
+
+footer small {
+    color: #aebed1;
+    font-size: 11px;
+}
+
+@media (max-width: 750px) {
+    .login-options {
+        grid-template-columns: 1fr;
+        max-width: 430px;
+        margin: auto;
+    }
+
+    .login-option {
+        min-height: 260px;
+    }
+
+    h1 {
+        font-size: 29px;
+    }
+
+    main {
+        padding: 35px 18px;
+    }
+}
+
+@media (max-width: 400px) {
+    .school-brand h2 {
+        font-size: 16px;
+    }
+
+    .school-brand p {
+        font-size: 10px;
+    }
+
+    h1 {
+        font-size: 26px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-content">
+        <div class="logo-icon">MD</div>
+
+        <div class="school-brand">
+            <h2>MONZE DAY</h2>
+            <p>SECONDARY SCHOOL</p>
+        </div>
+    </div>
+</header>
+
+<main>
+    <div class="container">
+
+        <span class="section-tag">SECURE PORTAL ACCESS</span>
+
+        <h1>Welcome Back</h1>
+
+        <p class="intro">
+            Select your account type to continue.
+        </p>
+
+        <div class="login-options">
+
+            <a href="student-login.html" class="login-option">
+                <div class="icon">🎓</div>
+
+                <h2>Student</h2>
+
+                <p>
+                    Access your academic results, subjects and student profile.
+                </p>
+
+                <span class="login-button">Student Login →</span>
+            </a>
+
+            <a href="teacher-login.html" class="login-option">
+                <div class="icon">👨‍🏫</div>
+
+                <h2>Teacher</h2>
+
+                <p>
+                    Manage student academic records and examination results.
+                </p>
+
+                <span class="login-button">Teacher Login →</span>
+            </a>
+
+            <a href="admin-login.html" class="login-option">
+                <div class="icon">🛡️</div>
+
+                <h2>Administrator</h2>
+
+                <p>
+                    Manage the school portal, student records and user accounts.
+                </p>
+
+                <span class="login-button">Admin Login →</span>
+            </a>
+
+        </div>
+
+        <a href="index.html" class="back-home">
+            ← Back to Homepage
+        </a>
+
+    </div>
+</main>
+
+<footer>
+    <h3>MONZE DAY SECONDARY SCHOOL</h3>
+    <p>Student Portal</p>
+    <small>© 2026 Monze Day Secondary School. All Rights Reserved.</small>
+</footer>
+
+</body>
+</html>

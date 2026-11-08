@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teacher Results Management | Monze Day Secondary School</title>
+
+<style>
+:root {
+    --navy:#102b50;
+    --navy2:#193d68;
+    --gold:#d9ad45;
+    --bg:#f3f5f9;
+    --white:#fff;
+    --text:#263449;
+    --muted:#718096;
+    --border:#e5e9f0;
+    --green:#168653;
+    --red:#b42318;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
+header{background:var(--navy);color:white;padding:20px 5%;border-bottom:4px solid var(--gold)}
+.header-inner{max-width:1250px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap}
+.brand{font-size:18px;font-weight:800}
+.brand small{display:block;color:#dce5f2;font-size:11px;margin-top:5px;letter-spacing:1px}
+.back-link{color:var(--gold);text-decoration:none;font-weight:bold}
+.container{max-width:1250px;margin:30px auto;padding:0 18px 45px}
+.page-title h1{color:var(--navy);margin:0 0 8px;font-size:29px}
+.page-title p{color:var(--muted);margin:0;line-height:1.6}
+.teacher-banner{margin:22px 0;background:linear-gradient(120deg,var(--navy),var(--navy2));color:white;padding:22px;border-radius:12px;border-left:5px solid var(--gold)}
+.teacher-banner h2{margin:0 0 7px;font-size:19px}
+.teacher-banner p{margin:0;color:#dce5f2;font-size:13px}
+.card{background:white;border:1px solid var(--border);border-radius:12px;padding:22px;margin-bottom:24px;box-shadow:0 3px 15px rgba(16,43,80,.05)}
+.card-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.card-heading h2{font-size:19px;color:var(--navy);margin:0}
+.badge{background:#fff4d7;color:#805d13;padding:6px 11px;border-radius:20px;font-size:11px;font-weight:bold}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.field{display:flex;flex-direction:column;gap:7px}
+.field.full{grid-column:1/-1}
+label{font-size:13px;font-weight:bold;color:var(--navy)}
+input,select,textarea{width:100%;padding:12px;border:1px solid #d9e0e9;border-radius:7px;font-size:14px;background:white;color:var(--text);outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(217,173,69,.13)}
+textarea{min-height:75px;resize:vertical}
+button{border:0;border-radius:7px;padding:12px 18px;font-weight:bold;font-size:13px;cursor:pointer}
+button:disabled{opacity:.55;cursor:not-allowed}
+.primary{background:var(--navy);color:white}
+.gold-button{background:var(--gold);color:var(--navy)}
+.secondary{background:#edf1f6;color:var(--navy)}
+.danger{background:#fff0ee;color:var(--red)}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:17px}
+.message{display:none;margin-top:15px;padding:12px 14px;border-radius:7px;font-size:13px;line-height:1.5}
+.message.success{display:block;background:#eaf7ef;color:#17643d}
+.message.error{display:block;background:#fff0ee;color:#a52218}
+.student-found{display:none;margin-top:15px;padding:15px;border-radius:8px;background:#edf7f0;border-left:4px solid var(--green)}
+.student-found strong{color:var(--navy)}
+.subject-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:15px}
+.subject-card{border:1px solid var(--border);border-radius:9px;padding:14px;background:#fbfcfe}
+.subject-card h3{font-size:14px;color:var(--navy);margin:0 0 12px}
+.subject-card .field{margin-top:10px}
+.hint{font-size:12px;color:var(--muted);line-height:1.5;margin:10px 0}
+.table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:8px}
+table{width:100%;min-width:850px;border-collapse:collapse}
+th{background:var(--navy);color:white;padding:13px 11px;text-align:left;font-size:12px;white-space:nowrap}
+td{padding:12px 11px;border-bottom:1px solid var(--border);font-size:12px}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover{background:#f8faff}
+.empty{text-align:center;color:var(--muted);padding:25px}
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.filters input,.filters select{max-width:220px}
+footer{background:var(--navy);color:#dce5f2;text-align:center;padding:20px;font-size:12px}
+footer strong{color:var(--gold)}
+@media(max-width:650px){
+ .container{margin:20px auto}
+ .card{padding:15px}
+ .grid,.subject-grid{grid-template-columns:1fr}
+ .page-title h1{font-size:25px}
+ .card-heading h2{font-size:17px}
+}
+</style>
+</head>
+
+<body>
+<header>
+ <div class="header-inner">
+  <div class="brand">
+   MONZE DAY SECONDARY SCHOOL
+   <small>KNOWLEDGE • DISCIPLINE • EXCELLENCE</small>
+  </div>
+  <a class="back-link" href="teacher-dashboard.html">← Teacher Dashboard</a>
+ </div>
+</header>
+
+<main class="container">
+ <div class="page-title">
+  <h1>Academic Results Management</h1>
+  <p>Search students, publish examination results and manage academic assessments.</p>
+ </div>
+
+ <div class="teacher-banner">
+  <h2 id="teacherName">Teacher Results Portal</h2>
+  <p id="teacherDetails">Loading your teacher account...</p>
+ </div>
+
+ <!-- STUDENT SEARCH -->
+ <section class="card">
+  <div class="card-heading">
+   <h2>1. Search Student</h2>
+   <span class="badge">STUDENT VERIFICATION</span>
+  </div>
+
+  <div class="grid">
+   <div class="field">
+    <label for="searchStudentNumber">Student Number</label>
+    <input id="searchStudentNumber" placeholder="Enter student number">
+   </div>
+   <div class="field">
+    <label for="searchClass">Class</label>
+    <select id="searchClass">
+     <option value="">Select class</option>
+    </select>
+   </div>
+  </div>
+
+  <div class="actions">
+   <button class="primary" id="searchButton" type="button">Search Student</button>
+   <button class="secondary" id="clearSearch" type="button">Clear</button>
+  </div>
+
+  <div id="searchMessage" class="message"></div>
+
+  <div id="studentFound" class="student-found">
+   <strong id="foundName"></strong><br>
+   <span id="foundDetails"></span>
+  </div>
+ </section>
+
+ <!-- END OF TERM -->
+ <section class="card" id="endTermSection">
+  <div class="card-heading">
+   <h2>2. End-of-Term Examination Results</h2>
+   <span class="badge">CLASS TEACHER ONLY</span>
+  </div>
+
+  <p class="hint">
+   The class teacher must enter a result for every official subject configured
+   by the administrator. All subject results are saved together.
+  </p>
+
+  <div id="endTermNotice" class="message"></div>
+
+  <form id="endTermForm">
+   <div class="grid">
+    <div class="field">
+     <label for="endTermTerm">Academic Term</label>
+     <select id="endTermTerm" required>
+      <option value="">Select term</option>
+      <option>Term 1</option>
+      <option>Term 2</option>
+      <option>Term 3</option>
+     </select>
+    </div>
+    <div class="field">
+     <label for="endTermYear">Academic Year</label>
+     <input id="endTermYear" type="number" min="2000" max="2100"
+      value="2026" required>
+    </div>
+   </div>
+
+   <div id="officialSubjects" class="subject-grid"></div>
+
+   <div class="actions">
+    <button class="gold-button" id="saveEndTerm" type="submit">
+     Save All Examination Results
+    </button>
+   </div>
+  </form>
+ </section>
+
+ <!-- OTHER ASSESSMENTS -->
+ <section class="card" id="otherSection">
+  <div class="card-heading">
+   <h2>3. Other Assessments</h2>
+   <span class="badge">APPROVED SUBJECT TEACHERS</span>
+  </div>
+
+  <p class="hint">
+   Submit class tests, mid-term tests, assignments and other subject assessments.
+  </p>
+
+  <form id="otherForm">
+   <div class="grid">
+    <div class="field">
+     <label for="otherKind">Assessment Type</label>
+     <select id="otherKind" required>
+      <option value="">Select assessment type</option>
+      <option>Class Test</option>
+      <option>Mid-Term Test</option>
+      <option>Assignment</option>
+      <option>Other Test</option>
+     </select>
+    </div>
+
+    <div class="field">
+     <label for="otherName">Assessment Name</label>
+     <input id="otherName" maxlength="120"
+      placeholder="e.g. Algebra Test 1" required>
+    </div>
+
+    <div class="field">
+     <label for="otherSubject">Subject</label>
+     <select id="otherSubject" required>
+      <option value="">Select your subject</option>
+     </select>
+    </div>
+
+    <div class="field">
+     <label for="otherTerm">Academic Term</label>
+     <select id="otherTerm" required>
+      <option value="">Select term</option>
+      <option>Term 1</option>
+      <option>Term 2</option>
+      <option>Term 3</option>
+     </select>
+    </div>
+
+    <div class="field">
+     <label for="otherYear">Academic Year</label>
+     <input id="otherYear" type="number" min="2000" max="2100"
+      value="2026" required>
+    </div>
+
+    <div class="field">
+     <label for="otherScore">Score (0–100)</label>
+     <input id="otherScore" type="number" min="0" max="100"
+      step="0.01" required>
+    </div>
+
+    <div class="field">
+     <label for="otherGrade">Grade</label>
+     <select id="otherGrade" required>
+      <option value="">Select grade</option>
+      <option>Distinction</option>
+      <option>Merit</option>
+      <option>Credit</option>
+      <option>Pass</option>
+      <option>Fail</option>
+     </select>
+    </div>
+
+    <div class="field full">
+     <label for="otherRemarks">Teacher's Remarks</label>
+     <textarea id="otherRemarks" placeholder="Optional remarks"></textarea>
+    </div>
+   </div>
+
+   <div class="actions">
+    <button class="primary" id="saveOther" type="submit">
+     Publish Assessment Result
+    </button>
+   </div>
+  </form>
+
+  <div id="otherMessage" class="message"></div>
+ </section>
+
+ <!-- SAVED RESULTS -->
+ <section class="card">
+  <div class="card-heading">
+   <h2>4. Published End-of-Term Results</h2>
+   <span class="badge">EXAMINATION RECORDS</span>
+  </div>
+  <div class="table-wrap">
+   <table>
+    <thead><tr>
+     <th>Student</th><th>Student No.</th><th>Class</th>
+     <th>Subject</th><th>Term</th><th>Year</th>
+     <th>Score</th><th>Grade</th><th>Remarks</th>
+    </tr></thead>
+    <tbody id="endResultsBody">
+     <tr><td colspan="9" class="empty">Loading results...</td></tr>
+    </tbody>
+   </table>
+  </div>
+ </section>
+
+ <section class="card">
+  <div class="card-heading">
+   <h2>5. Published Other Assessments</h2>
+   <span class="badge">CONTINUOUS ASSESSMENT</span>
+  </div>
+  <div class="table-wrap">
+   <table>
+    <thead><tr>
+     <th>Student</th><th>Student No.</th><th>Class</th>
+     <th>Assessment</th><th>Subject</th><th>Term</th>
+     <th>Year</th><th>Score</th><th>Grade</th><th>Remarks</th>
+    </tr></thead>
+    <tbody id="otherResultsBody">
+     <tr><td colspan="10" class="empty">Loading results...</td></tr>
+    </tbody>
+   </table>
+  </div>
+ </section>
+
+ <section class="card">
+  <div class="card-heading">
+   <h2>6. Unclassified Existing Results</h2>
+   <span class="badge">LEGACY RECORDS</span>
+  </div>
+  <div class="table-wrap">
+   <table>
+    <thead><tr>
+     <th>Student</th><th>Student No.</th><th>Class</th>
+     <th>Subject</th><th>Term</th><th>Year</th>
+     <th>Score</th><th>Grade</th><th>Remarks</th>
+    </tr></thead>
+    <tbody id="unclassifiedBody">
+     <tr><td colspan="9" class="empty">Loading results...</td></tr>
+    </tbody>
+   </table>
+  </div>
+ </section>
+</main>
+
+<footer>
+ © <span id="currentYear"></span> MONZE DAY SECONDARY SCHOOL
+ <br><br><strong>Knowledge • Discipline • Excellence</strong>
+</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+
+let teacher = null;
+let selectedStudent = null;
+let teacherClasses = [];
+let teacherSubjects = [];
+
+$("currentYear").textContent = new Date().getFullYear();
+
+function escapeHTML(value) {
+ return String(value ?? "").replace(/[&<>"']/g, c => ({
+  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+ })[c]);
+}
+
+function normalizeClass(value) {
+ return String(value || "").trim().replace(/\s+/g,"").toLowerCase();
+}
+
+function showMessage(id, text, success=false) {
+ const box = $(id);
+ box.textContent = text;
+ box.className = "message " + (success ? "success" : "error");
+}
+
+function hideMessage(id) {
+ $(id).className = "message";
+ $(id).textContent = "";
+}
+
+async function api(url, options={}) {
+ const response = await fetch(url, {
+  credentials:"same-origin",
+  ...options,
+  headers:{
+   ...(options.body ? {"Content-Type":"application/json"} : {}),
+   ...(options.headers || {})
+  }
+ });
+
+ const data = await response.json().catch(() => ({}));
+
+ if (response.status === 401) {
+  window.location.href = "teacher-login.html";
+  throw new Error("Please log in again.");
+ }
+
+ if (!response.ok) {
+  throw new Error(data.message || "Request failed.");
+ }
+
+ return data;
+}
+
+function populateSelect(element, values, placeholder) {
+ element.innerHTML =
+  `<option value="">${escapeHTML(placeholder)}</option>` +
+  values.map(value =>
+   `<option value="${escapeHTML(value)}">${escapeHTML(value)}</option>`
+  ).join("");
+}
+
+async function loadTeacher() {
+ try {
+  teacher = await api("/api/teacher/me");
+
+  $("teacherName").textContent =
+   teacher.full_name || "Teacher Results Portal";
+
+  $("teacherDetails").textContent =
+   (teacher.email || "") +
+   (teacher.is_class_teacher ? " • Class Teacher" : " • Subject Teacher");
+
+  teacherSubjects = String(teacher.subjects || "")
+   .split(",").map(v=>v.trim()).filter(Boolean);
+
+  teacherClasses = String(teacher.classes || "")
+   .split(",").map(v=>v.trim()).filter(Boolean);
+
+  if (teacher.assigned_class) teacherClasses.push(teacher.assigned_class);
+
+  const uniqueClasses = [...new Map(
+   teacherClasses.map(c=>[normalizeClass(c),c])
+  ).values()];
+
+  populateSelect($("searchClass"), uniqueClasses, "Select class");
+  populateSelect($("otherSubject"), teacherSubjects, "Select your subject");
+
+  const isClassTeacher =
+   teacher.is_class_teacher === true ||
+   Number(teacher.is_class_teacher) === 1 ||
+   teacher.is_class_teacher === "t";
+
+  if (!isClassTeacher) {
+   $("endTermSection").style.display = "none";
+  }
+
+  await loadResults();
+ } catch(error) {
+  console.error(error);
+  if (!error.message.includes("log in")) {
+   showMessage("searchMessage", error.message);
+  }
+ }
+}
+
+async function searchStudent() {
+ hideMessage("searchMessage");
+ $("studentFound").style.display = "none";
+ selectedStudent = null;
+
+ const studentNumber = $("searchStudentNumber").value.trim();
+ const className = $("searchClass").value;
+
+ if (!studentNumber || !className) {
+  showMessage("searchMessage","Enter the student number and select the class.");
+  return;
+ }
+
+ $("searchButton").disabled = true;
+
+ try {
+  const query = new URLSearchParams({studentNumber,className});
+  const student = await api("/api/teacher/search-student?" + query);
+
+  selectedStudent = student;
+
+  $("foundName").textContent = student.full_name;
+  $("foundDetails").textContent =
+   "Student Number: " + student.student_number +
+   " • Class: " + student.class_name;
+
+  $("studentFound").style.display = "block";
+  showMessage("searchMessage","Student verified successfully.",true);
+
+  await loadOfficialSubjects();
+ } catch(error) {
+  showMessage("searchMessage",error.message);
+ } finally {
+  $("searchButton").disabled = false;
+ }
+}
+
+async function loadOfficialSubjects() {
+ const isClassTeacher =
+  teacher && (
+   teacher.is_class_teacher === true ||
+   Number(teacher.is_class_teacher) === 1 ||
+   teacher.is_class_teacher === "t"
+  );
+
+ if (!isClassTeacher || !selectedStudent) return;
+
+ $("officialSubjects").innerHTML =
+  '<p class="hint">Loading official subjects...</p>';
+
+ try {
+  const query = new URLSearchParams({
+   className:selectedStudent.class_name
+  });
+
+  const subjects = await api(
+   "/api/teacher/official-subjects?" + query
+  );
+
+  if (!subjects.length) {
+   $("officialSubjects").innerHTML =
+    '<p class="hint">No official subjects are configured for this class.</p>';
+   return;
+  }
+
+  $("officialSubjects").innerHTML = subjects.map((subject,index)=>`
+   <div class="subject-card">
+    <h3>${escapeHTML(subject)}</h3>
+
+    <input type="hidden" class="official-subject"
+     value="${escapeHTML(subject)}">
+
+    <div class="field">
+     <label>Score (0–100)</label>
+     <input class="official-score" type="number" min="0" max="100"
+      step="0.01" required>
+    </div>
+
+    <div class="field">
+     <label>Grade</label>
+     <select class="official-grade" required>
+      <option value="">Select grade</option>
+      <option>Distinction</option>
+      <option>Merit</option>
+      <option>Credit</option>
+      <option>Pass</option>
+      <option>Fail</option>
+     </select>
+    </div>
+
+    <div class="field">
+     <label>Remarks</label>
+     <input class="official-remarks" placeholder="Optional remarks">
+    </div>
+   </div>
+  `).join("");
+ } catch(error) {
+  $("officialSubjects").innerHTML = "";
+  showMessage("endTermNotice",error.message);
+ }
+}
+
+$("searchButton").addEventListener("click",searchStudent);
+
+$("clearSearch").addEventListener("click",()=>{
+ selectedStudent = null;
+ $("searchStudentNumber").value = "";
+ $("searchClass").value = "";
+ $("studentFound").style.display = "none";
+ $("officialSubjects").innerHTML = "";
+ hideMessage("searchMessage");
+ hideMessage("endTermNotice");
+});
+
+$("endTermForm").addEventListener("submit",async event=>{
+ event.preventDefault();
+ hideMessage("endTermNotice");
+
+ if (!selectedStudent) {
+  showMessage("endTermNotice","Search and verify a student first.");
+  return;
+ }
+
+ const subjectCards = [...document.querySelectorAll(".subject-card")];
+
+ if (!subjectCards.length) {
+  showMessage("endTermNotice","No official subjects are available.");
+  return;
+ }
+
+ const subjects = subjectCards.map(card=>({
+  subject:card.querySelector(".official-subject").value,
+  score:card.querySelector(".official-score").value,
+  grade:card.querySelector(".official-grade").value,
+  remarks:card.querySelector(".official-remarks").value
+ }));
+
+ if (subjects.some(item =>
+  item.score === "" || !item.grade ||
+  Number(item.score)<0 || Number(item.score)>100
+ )) {
+  showMessage("endTermNotice","Complete every official subject with a valid score and grade.");
+  return;
+ }
+
+ $("saveEndTerm").disabled = true;
+
+ try {
+  const result = await api("/api/teacher/end-term-results",{
+   method:"POST",
+   body:JSON.stringify({
+    studentNumber:selectedStudent.student_number,
+    className:selectedStudent.class_name,
+    term:$("endTermTerm").value,
+    year:$("endTermYear").value,
+    subjects
+   })
+  });
+
+  showMessage("endTermNotice",result.message,true);
+  $("endTermForm").reset();
+  $("endTermYear").value = new Date().getFullYear();
+  await loadResults();
+ } catch(error) {
+  showMessage("endTermNotice",error.message);
+ } finally {
+  $("saveEndTerm").disabled = false;
+ }
+});
+
+$("otherForm").addEventListener("submit",async event=>{
+ event.preventDefault();
+ hideMessage("otherMessage");
+
+ if (!selectedStudent) {
+  showMessage("otherMessage","Search and verify a student first.");
+  return;
+ }
+
+ $("saveOther").disabled = true;
+
+ try {
+  const result = await api("/api/teacher/other-assessments",{
+   method:"POST",
+   body:JSON.stringify({
+    studentNumber:selectedStudent.student_number,
+    className:selectedStudent.class_name,
+    assessmentKind:$("otherKind").value,
+    assessmentName:$("otherName").value.trim(),
+    subject:$("otherSubject").value,
+    term:$("otherTerm").value,
+    year:$("otherYear").value,
+    score:$("otherScore").value,
+    grade:$("otherGrade").value,
+    remarks:$("otherRemarks").value
+   })
+  });
+
+  showMessage("otherMessage",result.message,true);
+  $("otherForm").reset();
+  $("otherYear").value = new Date().getFullYear();
+  await loadResults();
+ } catch(error) {
+  showMessage("otherMessage",error.message);
+ } finally {
+  $("saveOther").disabled = false;
+ }
+});
+
+function renderRows(elementId,rows,category) {
+ const body = $(elementId);
+
+ if (!rows.length) {
+  const count = category === "other" ? 10 : 9;
+  body.innerHTML =
+   `<tr><td colspan="${count}" class="empty">No records available.</td></tr>`;
+  return;
+ }
+
+ body.innerHTML = rows.map(row=>`
+  <tr>
+   <td>${escapeHTML(row.full_name)}</td>
+   <td>${escapeHTML(row.student_number)}</td>
+   <td>${escapeHTML(row.class_name)}</td>
+   ${category === "other" ?
+    `<td>${escapeHTML(row.assessment_name || row.assessment_kind || "-")}</td>` : ""}
+   <td>${escapeHTML(row.subject)}</td>
+   <td>${escapeHTML(row.term)}</td>
+   <td>${escapeHTML(row.year)}</td>
+   <td><strong>${escapeHTML(row.score)}%</strong></td>
+   <td>${escapeHTML(row.grade)}</td>
+   <td>${escapeHTML(row.remarks || "-")}</td>
+  </tr>
+ `).join("");
+}
+
+async function loadResults() {
+ try {
+  const rows = await api("/api/teacher/results");
+
+  renderRows("endResultsBody",
+   rows.filter(r=>r.assessment_type==="end_of_term"),"end");
+
+  renderRows("otherResultsBody",
+   rows.filter(r=>r.assessment_type==="other_assessment"),"other");
+
+  renderRows("unclassifiedBody",
+   rows.filter(r=>!r.assessment_type ||
+    r.assessment_type==="unclassified"),"end");
+
+ } catch(error) {
+  console.error("Results loading error:",error);
+ }
+}
+
+loadTeacher();
+</script>
+</body>
+</html>

@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Assignment Management | Monze Day Secondary School</title>
+
+<style>
+:root{
+ --navy:#071a35;
+ --navy2:#102d55;
+ --navy3:#193f70;
+ --gold:#d9ad52;
+ --bg:#f3f6fb;
+ --white:#fff;
+ --text:#25344d;
+ --muted:#7b8798;
+ --border:#e7edf4;
+ --green:#16845b;
+ --red:#bd4141;
+ --orange:#98600b;
+}
+*{box-sizing:border-box}
+body{
+ margin:0;
+ background:var(--bg);
+ font-family:Arial,sans-serif;
+ color:var(--text);
+}
+button,input,select,textarea{font:inherit}
+
+.topbar{
+ height:75px;
+ background:var(--navy);
+ color:white;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ padding:0 25px;
+ position:fixed;
+ top:0;
+ left:0;
+ right:0;
+ z-index:20;
+ box-shadow:0 3px 12px #0002;
+}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{
+ width:44px;
+ height:44px;
+ background:var(--gold);
+ color:var(--navy);
+ display:grid;
+ place-items:center;
+ border-radius:10px;
+ font-size:19px;
+ font-weight:bold;
+}
+.brand h2{font-size:15px;margin:0}
+.brand p{
+ color:var(--gold);
+ font-size:10px;
+ letter-spacing:2px;
+ margin:5px 0 0;
+}
+.top-actions{display:flex;gap:10px;align-items:center}
+
+.btn{
+ border:0;
+ border-radius:8px;
+ padding:11px 16px;
+ background:var(--navy);
+ color:white;
+ font-weight:bold;
+ cursor:pointer;
+ text-decoration:none;
+ display:inline-flex;
+ align-items:center;
+ justify-content:center;
+ gap:7px;
+ transition:.2s;
+}
+.btn:hover{background:var(--navy2);transform:translateY(-1px)}
+.btn.gold{background:var(--gold);color:var(--navy)}
+.btn.gold:hover{background:#e6bd67}
+.btn.light{background:#edf1f7;color:var(--navy)}
+.btn.light:hover{background:#dfe6f0}
+.btn.small{font-size:12px;padding:9px 12px}
+.btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+
+.menu-button{
+ display:none;
+ background:none;
+ border:0;
+ color:white;
+ font-size:26px;
+ cursor:pointer;
+}
+
+.sidebar{
+ position:fixed;
+ top:75px;
+ left:0;
+ bottom:0;
+ width:250px;
+ background:var(--navy);
+ padding:25px 15px;
+ overflow-y:auto;
+ z-index:15;
+}
+.sidebar-title{
+ color:var(--gold);
+ font-size:11px;
+ letter-spacing:2px;
+ font-weight:bold;
+ padding:0 12px;
+ margin:5px 0 20px;
+}
+.sidebar a{
+ display:flex;
+ align-items:center;
+ gap:13px;
+ padding:14px 13px;
+ color:#dce5f1;
+ text-decoration:none;
+ font-size:14px;
+ border-radius:7px;
+ margin-bottom:6px;
+}
+.sidebar a:hover,.sidebar a.active{
+ background:var(--navy2);
+ color:white;
+ border-left:4px solid var(--gold);
+}
+
+main{
+ margin-left:250px;
+ padding:105px 30px 35px;
+ min-height:100vh;
+ max-width:1650px;
+}
+
+.welcome{
+ background:linear-gradient(115deg,var(--navy),#163b69);
+ padding:32px;
+ border-radius:14px;
+ color:white;
+ position:relative;
+ overflow:hidden;
+ margin-bottom:25px;
+ box-shadow:0 7px 20px #071a3518;
+}
+.welcome:after{
+ content:"MD";
+ position:absolute;
+ right:35px;
+ top:5px;
+ font-size:110px;
+ font-weight:bold;
+ color:#ffffff0b;
+}
+.welcome small{
+ color:var(--gold);
+ font-weight:bold;
+ letter-spacing:2px;
+}
+.welcome h1{font-size:28px;margin:12px 0}
+.welcome p{
+ color:#d6e0ee;
+ margin:7px 0;
+ font-size:14px;
+ line-height:1.7;
+ max-width:700px;
+}
+
+.stats{
+ display:grid;
+ grid-template-columns:repeat(3,minmax(0,1fr));
+ gap:18px;
+ margin-bottom:25px;
+}
+.stat{
+ background:white;
+ padding:21px;
+ border-radius:12px;
+ border:1px solid var(--border);
+ border-top:4px solid var(--gold);
+ box-shadow:0 4px 15px #00000008;
+}
+.stat-icon{
+ width:38px;
+ height:38px;
+ display:grid;
+ place-items:center;
+ border-radius:9px;
+ background:#fff5df;
+ font-size:18px;
+ margin-bottom:12px;
+}
+.stat span{color:var(--muted);font-size:12px}
+.stat strong{
+ display:block;
+ color:var(--navy);
+ font-size:27px;
+ margin-top:8px;
+}
+
+.grid{
+ display:grid;
+ grid-template-columns:minmax(0,1fr) minmax(300px,.9fr);
+ gap:20px;
+ align-items:start;
+}
+.panel{
+ background:white;
+ border:1px solid var(--border);
+ border-radius:13px;
+ padding:23px;
+ box-shadow:0 4px 16px #00000008;
+ margin-bottom:22px;
+ min-width:0;
+}
+.panel-heading{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:10px;
+ margin-bottom:18px;
+}
+.panel h2{
+ color:var(--navy);
+ font-size:19px;
+ margin:0;
+}
+.panel-description{
+ color:var(--muted);
+ font-size:13px;
+ line-height:1.7;
+ margin:-7px 0 18px;
+}
+
+.field{margin-bottom:16px}
+.field label{
+ display:block;
+ font-size:13px;
+ font-weight:bold;
+ color:var(--navy);
+ margin-bottom:7px;
+}
+.field input,.field select,.field textarea{
+ width:100%;
+ padding:12px;
+ border:1px solid #dce3ed;
+ border-radius:8px;
+ background:white;
+ color:var(--text);
+ outline:none;
+}
+.field input:focus,.field select:focus,.field textarea:focus{
+ border-color:var(--gold);
+ box-shadow:0 0 0 3px #d9ad5220;
+}
+.field textarea{min-height:125px;resize:vertical;line-height:1.6}
+.field input[type=file]{font-size:12px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+
+.notice{
+ padding:12px;
+ border-radius:8px;
+ font-size:13px;
+ margin:12px 0;
+ display:none;
+ line-height:1.5;
+}
+.notice.success{display:block;background:#e4f5ed;color:#13734e}
+.notice.error{display:block;background:#fdeaea;color:#a83232}
+
+.form-footer{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:12px;
+ flex-wrap:wrap;
+ margin-top:8px;
+}
+.form-hint{font-size:11px;color:var(--muted);line-height:1.5}
+
+.assignment-tools{
+ display:flex;
+ gap:9px;
+ margin:15px 0;
+}
+.assignment-tools input{
+ min-width:0;
+ flex:1;
+ padding:11px 12px;
+ border:1px solid var(--border);
+ border-radius:8px;
+ outline:none;
+}
+.assignment-tools input:focus{border-color:var(--gold)}
+
+.assignment-card{
+ border:1px solid var(--border);
+ border-radius:11px;
+ padding:17px;
+ margin-bottom:13px;
+ background:#fff;
+ transition:.2s;
+}
+.assignment-card:hover{
+ border-color:#d9ad5280;
+ box-shadow:0 5px 15px #071a350b;
+}
+.assignment-card h3{
+ font-size:15px;
+ color:var(--navy);
+ margin:0 0 10px;
+}
+.meta{
+ font-size:12px;
+ color:var(--muted);
+ line-height:1.9;
+}
+.card-actions{
+ display:flex;
+ gap:8px;
+ flex-wrap:wrap;
+ margin-top:13px;
+}
+.badge{
+ display:inline-block;
+ padding:6px 10px;
+ border-radius:20px;
+ font-size:11px;
+ font-weight:bold;
+ background:#edf1f7;
+ color:var(--navy);
+}
+.badge.green{background:#e4f5ed;color:#13734e}
+.badge.orange{background:#fff2dc;color:#98600b}
+.badge.red{background:#fdeaea;color:#a83232}
+
+.empty{
+ text-align:center;
+ padding:30px 15px;
+ color:var(--muted);
+ font-size:13px;
+ line-height:1.7;
+}
+.empty-icon{font-size:30px;margin-bottom:10px}
+
+.modal{
+ display:none;
+ position:fixed;
+ inset:0;
+ background:#071a3580;
+ z-index:40;
+ align-items:center;
+ justify-content:center;
+ padding:15px;
+}
+.modal.show{display:flex}
+.modal-box{
+ background:white;
+ width:100%;
+ max-width:900px;
+ max-height:90vh;
+ overflow:auto;
+ border-radius:15px;
+ padding:24px;
+ box-shadow:0 15px 50px #0003;
+}
+.modal-header{
+ display:flex;
+ justify-content:space-between;
+ gap:12px;
+ align-items:center;
+ flex-wrap:wrap;
+ padding-bottom:15px;
+ border-bottom:1px solid var(--border);
+ margin-bottom:15px;
+}
+.modal-box h2{color:var(--navy);margin:0;font-size:19px}
+
+.grade-form{
+ display:grid;
+ grid-template-columns:120px 120px minmax(130px,1fr) auto;
+ gap:9px;
+ align-items:end;
+ margin-top:15px;
+ padding-top:13px;
+ border-top:1px solid var(--border);
+}
+.grade-form label{
+ display:block;
+ font-size:11px;
+ color:var(--muted);
+ margin-bottom:6px;
+}
+.grade-form input{
+ width:100%;
+ padding:10px;
+ border:1px solid #dce3ed;
+ border-radius:7px;
+ min-width:0;
+}
+.submission-card{
+ border:1px solid var(--border);
+ border-radius:10px;
+ padding:17px;
+ margin-bottom:13px;
+}
+.submission-card h3{margin:0 0 9px;color:var(--navy);font-size:15px}
+footer{
+ text-align:center;
+ padding:22px;
+ color:var(--muted);
+ font-size:12px;
+ line-height:1.8;
+}
+
+@media(max-width:1100px){
+ .grid{grid-template-columns:1fr}
+}
+@media(max-width:750px){
+ .sidebar{
+  display:none;
+  width:100%;
+  top:75px;
+  bottom:auto;
+  max-height:75vh;
+ }
+ .sidebar.open{display:block}
+ main{margin-left:0;padding:95px 14px 25px}
+ .menu-button{display:block}
+ .topbar{padding:0 13px}
+ .brand h2{font-size:11px}
+ .brand p{font-size:9px}
+ .welcome{padding:24px}
+ .welcome h1{font-size:23px}
+ .welcome:after{font-size:75px;right:15px}
+ .stats{grid-template-columns:1fr 1fr;gap:11px}
+ .stat{padding:15px}
+ .stat strong{font-size:23px}
+ .two{grid-template-columns:1fr}
+ .grade-form{grid-template-columns:1fr 1fr}
+ .grade-form button{grid-column:1/-1}
+ .panel{padding:17px}
+ .top-actions .btn{padding:9px 10px;font-size:11px}
+}
+@media(max-width:400px){
+ .stats{grid-template-columns:1fr}
+ .brand{gap:7px}
+ .logo{width:37px;height:37px}
+}
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+ <div class="brand">
+  <div class="logo">MD</div>
+  <div>
+   <h2>MONZE DAY SECONDARY SCHOOL</h2>
+   <p>TEACHER PORTAL</p>
+  </div>
+ </div>
+
+ <div class="top-actions">
+  <button class="menu-button" onclick="toggleMenu()">☰</button>
+  <a class="btn gold" href="teacher-dashboard.html">Dashboard</a>
+  <button class="btn" onclick="logout()">Logout</button>
+ </div>
+</header>
+
+<aside class="sidebar" id="sidebar">
+ <div class="sidebar-title">TEACHER MENU</div>
+ <a href="teacher-dashboard.html">🏠 Dashboard</a>
+ <a class="active" href="teacher-assignments.html">📝 Assignment Management</a>
+ <a href="teacher-dashboard.html">👨‍🎓 My Students</a>
+ <a href="teacher-dashboard.html">📊 Academic Results</a>
+ <a href="teacher-dashboard.html">📅 Timetable</a>
+ <a href="teacher-dashboard.html">📢 Announcements</a>
+</aside>
+
+<main>
+
+<section class="welcome">
+ <small>ACADEMIC MANAGEMENT</small>
+ <h1>Assignment Management</h1>
+ <p>Create assignments for your allocated classes, publish instructions, review student submissions, download submitted work and provide marks and feedback.</p>
+</section>
+
+<section class="stats">
+ <div class="stat">
+  <div class="stat-icon">📝</div>
+  <span>Published assignments</span>
+  <strong id="totalAssignments">0</strong>
+ </div>
+
+ <div class="stat">
+  <div class="stat-icon">📥</div>
+  <span>Total submissions</span>
+  <strong id="totalSubmissions">0</strong>
+ </div>
+
+ <div class="stat">
+  <div class="stat-icon">📋</div>
+  <span>Awaiting review</span>
+  <strong id="awaitingReview">—</strong>
+ </div>
+</section>
+
+<div class="grid">
+
+<section class="panel">
+ <div class="panel-heading">
+  <h2>＋ Create New Assignment</h2>
+ </div>
+
+ <p class="panel-description">
+  Complete the form below to prepare and publish an assignment.
+ </p>
+
+ <div id="createNotice" class="notice"></div>
+
+ <form id="createForm">
+
+  <div class="field">
+   <label for="title">Assignment title *</label>
+   <input id="title" name="title" maxlength="160" required placeholder="e.g. Algebra Exercise 3">
+  </div>
+
+  <div class="two">
+   <div class="field">
+    <label for="className">Assigned class *</label>
+    <select id="className" required>
+     <option value="">Loading your classes...</option>
+    </select>
+   </div>
+
+   <div class="field">
+    <label for="subjectName">Subject *</label>
+    <select id="subjectName" required>
+     <option value="">Select a class first</option>
+    </select>
+   </div>
+  </div>
+
+  <div class="field">
+   <label for="instructions">Assignment instructions *</label>
+   <textarea id="instructions" maxlength="8000" required placeholder="Explain the assignment, questions and submission requirements..."></textarea>
+  </div>
+
+  <div class="two">
+   <div class="field">
+    <label for="dueAt">Submission deadline *</label>
+    <input id="dueAt" type="datetime-local" required>
+   </div>
+
+   <div class="field">
+    <label for="attachment">Attachment (optional)</label>
+    <input id="attachment" type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.jpg,.jpeg,.png,.webp">
+   </div>
+  </div>
+
+  <div class="form-footer">
+   <span class="form-hint">Check the class, subject and deadline before publishing.</span>
+   <button class="btn gold" type="submit" id="publishButton">Publish Assignment</button>
+  </div>
+
+ </form>
+</section>
+
+<section class="panel">
+ <div class="panel-heading">
+  <h2>Assignment Overview</h2>
+  <button class="btn light small" onclick="loadAssignments()">↻ Refresh</button>
+ </div>
+
+ <p class="panel-description">
+  View your published assignments and manage student submissions.
+ </p>
+
+ <div class="assignment-tools">
+  <input id="assignmentSearch" type="search" placeholder="Search assignments...">
+ </div>
+
+ <div id="assignmentList">
+  <div class="empty">
+   <div class="empty-icon">📘</div>
+   Loading assignments...
+  </div>
+ </div>
+</section>
+
+</div>
+
+<footer>
+ MONZE DAY SECONDARY SCHOOL<br>
+ Knowledge • Discipline • Excellence
+</footer>
+
+</main>
+
+<div class="modal" id="submissionsModal">
+ <div class="modal-box">
+
+  <div class="modal-header">
+   <h2 id="submissionsTitle">Student Submissions</h2>
+   <button class="btn light small" onclick="closeSubmissions()">Close</button>
+  </div>
+
+  <div id="submissionNotice" class="notice"></div>
+
+  <div id="submissionsList">
+   <div class="empty">Loading submissions...</div>
+  </div>
+
+ </div>
+</div>
+
+<script>
+let assignments=[];
+let classData=[];
+let currentAssignmentId=null;
+
+async function api(url,options={}){
+ const response=await fetch(url,{
+  credentials:"same-origin",
+  ...options
+ });
+
+ let data={};
+
+ try{
+  data=await response.json();
+ }catch(e){}
+
+ if(!response.ok){
+  throw new Error(data.message||"Request failed.");
+ }
+
+ return data;
+}
+
+function escapeHTML(value){
+ return String(value??"").replace(/[&<>"']/g,c=>({
+  "&":"&amp;",
+  "<":"&lt;",
+  ">":"&gt;",
+  '"':"&quot;",
+  "'":"&#39;"
+ }[c]));
+}
+
+function dateText(value){
+ if(!value)return "Not specified";
+
+ const d=new Date(value);
+
+ return Number.isNaN(d.getTime())
+  ?"Not specified"
+  :d.toLocaleString();
+}
+
+function notice(id,message,type){
+ const el=document.getElementById(id);
+ el.className="notice "+type;
+ el.textContent=message;
+}
+
+async function loadClasses(){
+ const select=document.getElementById("className");
+
+ try{
+  const data=await api("/api/teacher/my-class-subjects");
+
+  classData=Array.isArray(data.classes)?data.classes:[];
+
+  select.innerHTML=
+   '<option value="">Select class</option>'+
+   classData.map(c=>
+    `<option value="${escapeHTML(c.class_name)}">${escapeHTML(c.class_name)}</option>`
+   ).join("");
+
+  if(!classData.length){
+   select.innerHTML='<option value="">No allocated classes found</option>';
+  }
+
+  updateSubjects();
+
+ }catch(error){
+  select.innerHTML='<option value="">Unable to load classes</option>';
+  notice("createNotice",error.message,"error");
+ }
+}
+
+function updateSubjects(){
+ const selected=document.getElementById("className").value;
+ const item=classData.find(c=>c.class_name===selected);
+ const select=document.getElementById("subjectName");
+
+ const subjects=(item?.subjects||[]).filter(s=>s.is_assigned);
+
+ select.innerHTML=
+  '<option value="">Select subject</option>'+
+  subjects.map(s=>
+   `<option value="${escapeHTML(s.subject_name)}">${escapeHTML(s.subject_name)}</option>`
+  ).join("");
+
+ if(!subjects.length){
+  select.innerHTML='<option value="">No assigned subjects for this class</option>';
+ }
+}
+
+document.getElementById("className")
+ .addEventListener("change",updateSubjects);
+
+async function loadAssignments(){
+ const target=document.getElementById("assignmentList");
+
+ target.innerHTML='<div class="empty">Loading assignments...</div>';
+
+ try{
+  assignments=await api("/api/teacher/assignments");
+
+  if(!Array.isArray(assignments)){
+   assignments=[];
+  }
+
+  renderAssignments();
+
+  document.getElementById("totalAssignments").textContent=assignments.length;
+
+  document.getElementById("totalSubmissions").textContent=
+   assignments.reduce((n,a)=>n+Number(a.submission_count||0),0);
+
+ }catch(error){
+  target.innerHTML=`
+   <div class="empty">
+    ${escapeHTML(error.message)}
+    <br><br>
+    <button class="btn" onclick="loadAssignments()">Try again</button>
+   </div>`;
+ }
+}
+
+function renderAssignments(){
+ const target=document.getElementById("assignmentList");
+ const search=document.getElementById("assignmentSearch").value.trim().toLowerCase();
+
+ const filtered=assignments.filter(a=>
+  [a.title,a.class_name,a.subject_name]
+   .some(value=>String(value||"").toLowerCase().includes(search))
+ );
+
+ if(!filtered.length){
+  target.innerHTML=`
+   <div class="empty">
+    <div class="empty-icon">📘</div>
+    ${assignments.length?"No matching assignments found.":"No assignments published yet."}
+   </div>`;
+  return;
+ }
+
+ target.innerHTML=filtered.map(a=>`
+  <article class="assignment-card">
+
+   <h3>${escapeHTML(a.title)}</h3>
+
+   <div class="meta">
+    🏫 Class: ${escapeHTML(a.class_name)}
+    <br>
+    📚 Subject: ${escapeHTML(a.subject_name)}
+    <br>
+    📅 Deadline: ${escapeHTML(dateText(a.due_at))}
+    <br>
+    👥 Submissions: ${Number(a.submission_count||0)}
+   </div>
+
+   <div class="card-actions">
+    <button class="btn gold small view-btn"
+     data-id="${escapeHTML(a.id)}"
+     data-title="${escapeHTML(a.title)}">
+     View submissions
+    </button>
+
+    ${a.attachment_name?`
+     <a class="btn light small"
+      href="/api/teacher/assignments/${encodeURIComponent(a.id)}/attachment">
+      ↓ Download attachment
+     </a>`:""}
+   </div>
+
+  </article>
+ `).join("");
+}
+
+document.getElementById("assignmentSearch")
+ .addEventListener("input",renderAssignments);
+
+document.getElementById("assignmentList")
+ .addEventListener("click",event=>{
+  const button=event.target.closest(".view-btn");
+  if(!button)return;
+
+  viewSubmissions(button.dataset.id,button.dataset.title);
+});
+
+document.getElementById("createForm")
+ .addEventListener("submit",async event=>{
+  event.preventDefault();
+
+  const button=document.getElementById("publishButton");
+
+  const form=new FormData();
+
+  form.append("title",document.getElementById("title").value.trim());
+  form.append("class_name",document.getElementById("className").value);
+  form.append("subject_name",document.getElementById("subjectName").value);
+  form.append("instructions",document.getElementById("instructions").value.trim());
+
+  const dueValue=document.getElementById("dueAt").value;
+
+  if(!dueValue){
+   notice("createNotice","Please select a submission deadline.","error");
+   return;
+  }
+
+  const dueDate=new Date(dueValue);
+
+  if(Number.isNaN(dueDate.getTime())){
+   notice("createNotice","Please enter a valid deadline.","error");
+   return;
+  }
+
+  if(dueDate<=new Date()){
+   notice("createNotice","The deadline must be in the future.","error");
+   return;
+  }
+
+  form.append("due_at",dueDate.toISOString());
+
+  const file=document.getElementById("attachment").files[0];
+
+  if(file){
+   form.append("attachment",file);
+  }
+
+  button.disabled=true;
+  button.textContent="Publishing...";
+
+  try{
+   const result=await api("/api/teacher/assignments",{
+    method:"POST",
+    body:form
+   });
+
+   notice(
+    "createNotice",
+    result.message||"Assignment published successfully.",
+    "success"
+   );
+
+   event.target.reset();
+   updateSubjects();
+
+   await loadAssignments();
+
+  }catch(error){
+   notice("createNotice",error.message,"error");
+
+  }finally{
+   button.disabled=false;
+   button.textContent="Publish Assignment";
+  }
+ });
+
+async function viewSubmissions(id,title){
+ currentAssignmentId=id;
+
+ document.getElementById("submissionsTitle").textContent=
+  "Submissions: "+title;
+
+ document.getElementById("submissionsList").innerHTML=
+  '<div class="empty">Loading submissions...</div>';
+
+ document.getElementById("submissionNotice").className="notice";
+
+ document.getElementById("submissionsModal").classList.add("show");
+
+ try{
+  const rows=await api(
+   `/api/teacher/assignments/${encodeURIComponent(id)}/submissions`
+  );
+
+  renderSubmissions(rows,id);
+
+ }catch(error){
+  document.getElementById("submissionsList").innerHTML=`
+   <div class="empty">${escapeHTML(error.message)}</div>`;
+ }
+}
+
+function renderSubmissions(rows,assignmentId){
+ const target=document.getElementById("submissionsList");
+
+ if(!Array.isArray(rows)||!rows.length){
+  target.innerHTML=`
+   <div class="empty">
+    <div class="empty-icon">📥</div>
+    No students have submitted this assignment yet.
+   </div>`;
+  return;
+ }
+
+ target.innerHTML=rows.map(s=>`
+  <div class="submission-card">
+
+   <h3>${escapeHTML(s.full_name)}</h3>
+
+   <div class="meta">
+    Student number: ${escapeHTML(s.student_number)}
+    <br>
+    Submitted: ${escapeHTML(dateText(s.submitted_at))}
+    <br>
+    Status:
+    <span class="badge ${s.graded_at?"green":"orange"}">
+     ${s.graded_at?"Graded":"Awaiting review"}
+    </span>
+   </div>
+
+   <div class="card-actions">
+    <a class="btn light small"
+     href="/api/teacher/assignment-submissions/${encodeURIComponent(s.id)}/download">
+     ↓ Download submission
+    </a>
+   </div>
+
+   <form class="grade-form" data-submission-id="${escapeHTML(s.id)}">
+
+    <div>
+     <label>Marks awarded</label>
+     <input type="number" name="marks" min="0" step="any"
+      required value="${s.marks??""}" placeholder="e.g. 75">
+    </div>
+
+    <div>
+     <label>Maximum marks</label>
+     <input type="number" name="maximum_marks" min="0.01"
+      step="any" required value="${s.maximum_marks??100}">
+    </div>
+
+    <div>
+     <label>Feedback</label>
+     <input type="text" name="comments" maxlength="4000"
+      value="${escapeHTML(s.comments||"")}"
+      placeholder="Feedback for the student">
+    </div>
+
+    <button class="btn gold small" type="submit">Save grade</button>
+
+   </form>
+
+  </div>
+ `).join("");
+}
+
+document.getElementById("submissionsList")
+ .addEventListener("submit",event=>{
+  const form=event.target.closest(".grade-form");
+  if(!form)return;
+
+  gradeSubmission(event,form.dataset.submissionId);
+});
+
+async function gradeSubmission(event,id){
+ event.preventDefault();
+
+ const form=event.currentTarget;
+ const data=new FormData(form);
+
+ const marks=Number(data.get("marks"));
+ const maximum=Number(data.get("maximum_marks"));
+
+ if(!Number.isFinite(marks)||!Number.isFinite(maximum)||
+    maximum<=0||marks<0||marks>maximum){
+  notice(
+   "submissionNotice",
+   "Check the marks. Marks awarded cannot exceed maximum marks.",
+   "error"
+  );
+  return;
+ }
+
+ const payload={
+  marks:data.get("marks"),
+  maximum_marks:data.get("maximum_marks"),
+  comments:data.get("comments")
+ };
+
+ const button=form.querySelector("button");
+
+ button.disabled=true;
+ button.textContent="Saving...";
+
+ try{
+  const result=await api(
+   `/api/teacher/assignment-submissions/${encodeURIComponent(id)}/grade`,
+   {
+    method:"PATCH",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify(payload)
+   }
+  );
+
+  notice(
+   "submissionNotice",
+   result.message||"Grade saved successfully.",
+   "success"
+  );
+
+  await viewSubmissions(
+   currentAssignmentId,
+   document.getElementById("submissionsTitle").textContent.replace("Submissions: ","")
+  );
+
+  await loadAssignments();
+
+ }catch(error){
+  notice("submissionNotice",error.message,"error");
+
+  button.disabled=false;
+  button.textContent="Save grade";
+ }
+}
+
+function closeSubmissions(){
+ document.getElementById("submissionsModal").classList.remove("show");
+}
+
+document.getElementById("submissionsModal")
+ .addEventListener("click",event=>{
+  if(event.target.id==="submissionsModal"){
+   closeSubmissions();
+  }
+});
+
+function toggleMenu(){
+ document.getElementById("sidebar").classList.toggle("open");
+}
+
+async function logout(){
+ try{
+  await fetch("/api/logout",{
+   method:"POST",
+   credentials:"same-origin"
+  });
+ }catch(e){}
+
+ location.href="teacher-login.html";
+}
+
+loadClasses();
+loadAssignments();
+</script>
+
+</body>
+</html>

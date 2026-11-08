@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Manage Digital Library | Monze Day Secondary School</title>
+
+<style>
+:root {
+    --navy: #071a35;
+    --navy-light: #102b50;
+    --gold: #d9ad45;
+    --gold-dark: #a77b18;
+    --background: #f3f5f9;
+    --text: #182b43;
+    --muted: #667085;
+    --border: #e1e6ed;
+    --red: #b42318;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--background);
+    color: var(--text);
+}
+
+/* HEADER */
+
+header {
+    background: linear-gradient(135deg, var(--navy), var(--navy-light));
+    color: white;
+    padding: 25px 15px;
+    text-align: center;
+    border-bottom: 5px solid var(--gold);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 23px;
+    letter-spacing: 1px;
+}
+
+header p {
+    margin: 9px 0 0;
+    color: #e8ca80;
+    font-size: 13px;
+}
+
+/* MAIN */
+
+main {
+    max-width: 1050px;
+    margin: auto;
+    padding: 25px 16px 45px;
+}
+
+/* BACK BUTTON */
+
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--navy-light);
+    color: white;
+    text-decoration: none;
+    padding: 11px 17px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 22px;
+    transition: .2s;
+}
+
+.back-button:hover {
+    background: var(--gold-dark);
+}
+
+/* PANEL */
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 5px 22px rgba(0,0,0,.06);
+}
+
+.heading {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+.heading-icon {
+    width: 53px;
+    height: 53px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff5dc;
+    color: var(--gold-dark);
+    border-radius: 12px;
+    font-size: 27px;
+    flex-shrink: 0;
+}
+
+.heading h2 {
+    margin: 0;
+    color: var(--navy);
+    font-size: 22px;
+}
+
+.heading p {
+    margin: 6px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+/* STATUS */
+
+#message {
+    padding: 13px 15px;
+    background: #f5f7fa;
+    color: var(--muted);
+    border-radius: 8px;
+    font-size: 13px;
+    margin-bottom: 20px;
+}
+
+/* MATERIALS */
+
+#materials {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.material {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 19px;
+    background: white;
+    transition: .2s;
+}
+
+.material:hover {
+    border-color: var(--gold);
+    box-shadow: 0 5px 15px rgba(0,0,0,.06);
+    transform: translateY(-2px);
+}
+
+.material-heading {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.file-icon {
+    width: 43px;
+    height: 43px;
+    background: #edf2f8;
+    color: var(--navy-light);
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 21px;
+    flex-shrink: 0;
+}
+
+.material h3 {
+    margin: 3px 0 0;
+    color: var(--navy);
+    font-size: 16px;
+    overflow-wrap: anywhere;
+}
+
+.details {
+    margin: 15px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+.badge {
+    background: #f1f4f8;
+    color: #475467;
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+}
+
+.filename {
+    color: var(--muted);
+    font-size: 12px;
+    overflow-wrap: anywhere;
+    margin: 12px 0;
+}
+
+.actions {
+    display: flex;
+    gap: 9px;
+    margin-top: 16px;
+}
+
+.download-button,
+.delete-button {
+    flex: 1;
+    text-align: center;
+    padding: 11px 9px;
+    border-radius: 7px;
+    font-size: 12px;
+    font-weight: bold;
+    text-decoration: none;
+    border: 0;
+    cursor: pointer;
+}
+
+.download-button {
+    background: var(--navy-light);
+    color: white;
+}
+
+.download-button:hover {
+    background: var(--gold-dark);
+}
+
+.delete-button {
+    background: #fff0ef;
+    color: var(--red);
+    border: 1px solid #f3c5c1;
+}
+
+.delete-button:hover {
+    background: var(--red);
+    color: white;
+}
+
+.empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 45px 15px;
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    border-radius: 12px;
+}
+
+.empty-state div {
+    font-size: 38px;
+    margin-bottom: 10px;
+}
+
+.empty-state h3 {
+    color: var(--navy);
+    margin: 0 0 8px;
+}
+
+.empty-state p {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+@media(max-width: 700px) {
+    main {
+        padding: 18px 12px 35px;
+    }
+
+    .card {
+        padding: 18px 14px;
+    }
+
+    #materials {
+        grid-template-columns: 1fr;
+    }
+
+    header h1 {
+        font-size: 19px;
+    }
+
+    .heading h2 {
+        font-size: 19px;
+    }
+}
+
+@media(max-width: 360px) {
+    .actions {
+        flex-direction: column;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>MONZE DAY SECONDARY SCHOOL</h1>
+    <p>ADMINISTRATOR PORTAL · DIGITAL LIBRARY MANAGEMENT</p>
+</header>
+
+<main>
+
+    <a href="admin-dashboard.html" class="back-button">
+        ← Back to Admin Portal
+    </a>
+
+    <section class="card">
+
+        <div class="heading">
+            <div class="heading-icon">📚</div>
+
+            <div>
+                <h2>Library Management</h2>
+                <p>View, download and manage all uploaded learning materials.</p>
+            </div>
+        </div>
+
+        <p id="message">Loading library materials...</p>
+
+        <div id="materials"></div>
+
+    </section>
+
+</main>
+
+<footer>
+    MONZE DAY SECONDARY SCHOOL<br>
+    Knowledge • Discipline • Excellence
+</footer>
+
+<script>
+async function load() {
+    const box = document.getElementById("materials");
+    const msg = document.getElementById("message");
+
+    box.innerHTML = "";
+    msg.textContent = "Loading library materials...";
+
+    try {
+        const r = await fetch("/api/admin/library/resources", {
+            credentials: "same-origin"
+        });
+
+        const d = await r.json();
+
+        if (!r.ok) {
+            throw Error(d.message || "Unable to load materials.");
+        }
+
+        const resources = d.resources || [];
+
+        msg.textContent = resources.length +
+            (resources.length === 1
+                ? " library material found."
+                : " library materials found.");
+
+        if (!resources.length) {
+            const empty = document.createElement("div");
+            empty.className = "empty-state";
+
+            const icon = document.createElement("div");
+            icon.textContent = "📚";
+
+            const heading = document.createElement("h3");
+            heading.textContent = "No Library Materials";
+
+            const description = document.createElement("p");
+            description.textContent =
+                "Uploaded learning materials will appear here.";
+
+            empty.append(icon, heading, description);
+            box.append(empty);
+            return;
+        }
+
+        resources.forEach(x => {
+            const el = document.createElement("article");
+            el.className = "material";
+
+            const top = document.createElement("div");
+            top.className = "material-heading";
+
+            const icon = document.createElement("div");
+            icon.className = "file-icon";
+            icon.textContent = "📄";
+
+            const title = document.createElement("h3");
+            title.textContent = x.title;
+
+            top.append(icon, title);
+
+            const details = document.createElement("div");
+            details.className = "details";
+
+            const classBadge = document.createElement("span");
+            classBadge.className = "badge";
+            classBadge.textContent = x.class_name;
+
+            const subjectBadge = document.createElement("span");
+            subjectBadge.className = "badge";
+            subjectBadge.textContent = x.subject_name;
+
+            const categoryBadge = document.createElement("span");
+            categoryBadge.className = "badge";
+            categoryBadge.textContent =
+                (x.category || "other").replaceAll("_", " ");
+
+            details.append(classBadge, subjectBadge, categoryBadge);
+
+            const filename = document.createElement("p");
+            filename.className = "filename";
+            filename.textContent = "File: " + x.original_file_name;
+
+            const actions = document.createElement("div");
+            actions.className = "actions";
+
+            const download = document.createElement("a");
+            download.className = "download-button";
+            download.textContent = "⬇ Download";
+            download.href =
+                "/api/library/resources/" +
+                encodeURIComponent(x.id) +
+                "/download";
+
+            const remove = document.createElement("button");
+            remove.className = "delete-button";
+            remove.textContent = "Delete";
+            remove.onclick = () => removeMaterial(x.id);
+
+            actions.append(download, remove);
+            el.append(top, details, filename, actions);
+            box.append(el);
+        });
+
+    } catch (e) {
+        msg.textContent = e.message ||
+            "Unable to load library materials.";
+    }
+}
+
+async function removeMaterial(id) {
+    if (!confirm("Permanently delete this material?")) {
+        return;
+    }
+
+    const msg = document.getElementById("message");
+
+    try {
+        const r = await fetch(
+            "/api/admin/library/resources/" +
+            encodeURIComponent(id),
+            {
+                method: "DELETE",
+                credentials: "same-origin"
+            }
+        );
+
+        const d = await r.json();
+
+        if (!r.ok) {
+            throw Error(d.message || "Unable to delete material.");
+        }
+
+        msg.textContent = d.message || "Material deleted successfully.";
+        await load();
+
+    } catch (e) {
+        msg.textContent = e.message;
+    }
+}
+
+load();
+</script>
+
+</body>
+</html>

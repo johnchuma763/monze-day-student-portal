@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Administrator Account Request | Monze Day Secondary School</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:grid;place-items:center;padding:20px;background:#f1f5fb;font-family:Arial,sans-serif}
+.card{width:100%;max-width:480px;background:white;padding:35px;border-radius:15px;box-shadow:0 8px 30px #08265318}
+.logo{width:65px;height:65px;margin:auto;display:grid;place-items:center;background:#082653;color:#e5b93f;border-radius:14px;font-size:27px;font-weight:bold}
+h1{text-align:center;color:#082653;font-size:23px}
+.subtitle{text-align:center;color:#64748b;font-size:14px;line-height:1.6}
+label{display:block;margin-top:18px;color:#263b59;font-weight:bold;font-size:14px}
+input,textarea{width:100%;padding:13px;margin-top:8px;border:1px solid #d7dfeb;border-radius:8px;font-size:15px;font-family:Arial}
+textarea{min-height:110px;resize:vertical}
+button{width:100%;padding:14px;margin-top:22px;background:#082653;color:white;border:0;border-radius:8px;font-size:15px;font-weight:bold;cursor:pointer}
+button:disabled{opacity:.6}
+#message{text-align:center;margin-top:15px;font-size:14px;line-height:1.5}
+.back{display:block;text-align:center;margin-top:22px;color:#082653;text-decoration:none;font-weight:bold}
+</style>
+</head>
+<body>
+<main class="card">
+<div class="logo">MD</div>
+<h1>Administrator Account Request</h1>
+<p class="subtitle">Monze Day Secondary School<br>Submit your details for review by the school administration.</p>
+<form id="requestForm">
+<label for="fullName">Full Name</label>
+<input id="fullName" maxlength="150" autocomplete="name" required>
+<label for="email">Email Address</label>
+<input id="email" type="email" maxlength="254" autocomplete="email" required>
+<label for="reason">Reason for Requesting Access</label>
+<textarea id="reason" maxlength="1000" required></textarea>
+<button id="submitButton" type="submit">Submit Request</button>
+</form>
+<div id="message" role="status" aria-live="polite"></div>
+<a class="back" href="admin-login.html">← Back to Administrator Login</a>
+</main>
+<script>
+document.getElementById("requestForm").addEventListener("submit", async event => {
+    event.preventDefault();
+    const button = document.getElementById("submitButton");
+    const message = document.getElementById("message");
+    button.disabled = true;
+    message.textContent = "Submitting your request...";
+    try {
+        const response = await fetch("/api/admin-requests", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                fullName: document.getElementById("fullName").value,
+                email: document.getElementById("email").value,
+                reason: document.getElementById("reason").value
+            })
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.message || "Request could not be submitted.");
+        message.textContent = result.message;
+        document.getElementById("requestForm").reset();
+    } catch(error) {
+        message.textContent = error.message;
+    } finally {
+        button.disabled = false;
+    }
+});
+</script>
+</body>
+</html>

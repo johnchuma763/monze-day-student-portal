@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Create Account | Monze Day Secondary School</title>
+
+<style>
+:root {
+    --navy: #102b50;
+    --navy-light: #1b4778;
+    --gold: #c9a34a;
+    --background: #f3f6fb;
+    --white: #ffffff;
+    --text: #26364b;
+    --muted: #718096;
+    --border: #dce3ed;
+    --success: #16803c;
+    --error: #c62828;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    background: var(--background);
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    background: var(--navy);
+    color: white;
+    padding: 22px 6%;
+    border-top: 5px solid var(--gold);
+    box-shadow: 0 3px 12px #102b501c;
+}
+
+.header-content {
+    max-width: 1150px;
+    margin: auto;
+}
+
+.school-name {
+    margin: 0;
+    font-size: 21px;
+    letter-spacing: 1px;
+    font-weight: 800;
+}
+
+.portal-label {
+    margin: 7px 0 0;
+    color: #d9e3f0;
+    font-size: 13px;
+    letter-spacing: .5px;
+}
+
+.container {
+    width: 100%;
+    max-width: 850px;
+    margin: 42px auto;
+    padding: 0 18px;
+    flex: 1;
+}
+
+.breadcrumb {
+    margin-bottom: 17px;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.breadcrumb a {
+    color: var(--navy);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.card {
+    background: var(--white);
+    border-radius: 15px;
+    overflow: hidden;
+    border: 1px solid #e7ebf2;
+    box-shadow: 0 8px 30px #102b5010;
+}
+
+.card-header {
+    padding: 28px 32px;
+    border-bottom: 1px solid #edf0f5;
+    background: linear-gradient(135deg, #ffffff, #f9fbfe);
+}
+
+.icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f7f0df;
+    color: var(--navy);
+    font-size: 23px;
+    margin-bottom: 17px;
+}
+
+h1 {
+    margin: 0;
+    color: var(--navy);
+    font-size: 25px;
+}
+
+.subtitle {
+    margin: 9px 0 0;
+    color: var(--muted);
+    line-height: 1.6;
+    font-size: 14px;
+}
+
+.form-content {
+    padding: 30px 32px 34px;
+}
+
+.section-title {
+    color: var(--navy);
+    font-size: 14px;
+    font-weight: 800;
+    margin: 0 0 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #edf0f5;
+    text-transform: uppercase;
+    letter-spacing: .7px;
+}
+
+.form-group {
+    margin-bottom: 21px;
+}
+
+label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 9px;
+}
+
+input,
+select {
+    width: 100%;
+    min-height: 48px;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--text);
+    font-size: 14px;
+    transition: border-color .2s, box-shadow .2s;
+}
+
+input::placeholder {
+    color: #a0aaba;
+}
+
+input:focus,
+select:focus {
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px #c9a34a25;
+}
+
+.field-hint {
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 7px;
+    line-height: 1.5;
+}
+
+.account-section {
+    padding: 20px;
+    margin: 8px 0 24px;
+    border: 1px solid #e8edf4;
+    border-radius: 10px;
+    background: #fbfcfe;
+}
+
+.account-section h3 {
+    color: var(--navy);
+    font-size: 14px;
+    margin: 0 0 18px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.password-note {
+    background: #fff9eb;
+    border: 1px solid #f0dfb5;
+    color: #775b1d;
+    padding: 13px 15px;
+    border-radius: 8px;
+    font-size: 12px;
+    line-height: 1.6;
+    margin: 4px 0 22px;
+}
+
+.create {
+    width: 100%;
+    min-height: 50px;
+    background: var(--navy);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: background .2s, transform .2s;
+}
+
+.create:hover {
+    background: var(--navy-light);
+    transform: translateY(-1px);
+}
+
+.create:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+#message {
+    display: none;
+    margin: 20px 0 0;
+    padding: 13px 15px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.6;
+}
+
+#message.success,
+#message.error {
+    display: block;
+}
+
+#message.success {
+    color: var(--success);
+    background: #eaf7ee;
+    border: 1px solid #c9e8d2;
+}
+
+#message.error {
+    color: var(--error);
+    background: #fff0f0;
+    border: 1px solid #f2cccc;
+}
+
+.back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 24px;
+    color: var(--navy);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.back:hover {
+    color: var(--navy-light);
+    text-decoration: underline;
+}
+
+footer {
+    text-align: center;
+    padding: 23px 15px;
+    color: var(--muted);
+    font-size: 12px;
+    border-top: 1px solid #e5eaf1;
+    background: white;
+}
+
+.footer-slogan {
+    color: var(--navy);
+    font-weight: bold;
+    margin-bottom: 7px;
+    letter-spacing: .4px;
+}
+
+@media (max-width: 600px) {
+    header {
+        padding: 19px 20px;
+    }
+
+    .school-name {
+        font-size: 17px;
+    }
+
+    .container {
+        margin: 25px auto;
+        padding: 0 13px;
+    }
+
+    .card-header {
+        padding: 23px 20px;
+    }
+
+    .form-content {
+        padding: 24px 20px 27px;
+    }
+
+    h1 {
+        font-size: 22px;
+    }
+
+    .account-section {
+        padding: 16px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-content">
+        <h2 class="school-name">MONZE DAY SECONDARY SCHOOL</h2>
+        <p class="portal-label">ADMINISTRATOR PORTAL</p>
+    </div>
+</header>
+
+<main class="container">
+
+    <div class="breadcrumb">
+        <a href="admin-dashboard.html">Dashboard</a>
+        &nbsp; / &nbsp; Create Account
+    </div>
+
+    <section class="card">
+
+        <div class="card-header">
+            <div class="icon">♙</div>
+            <h1>Create New Account</h1>
+            <p class="subtitle">
+                Register student and teacher accounts securely
+                through the administrator portal.
+            </p>
+        </div>
+
+        <div class="form-content">
+
+            <form id="accountForm">
+
+                <h3 class="section-title">Account Information</h3>
+
+                <div class="form-group">
+                    <label for="accountType">Account Type</label>
+                    <select id="accountType" required>
+                        <option value="">Select account type</option>
+                        <option value="student">Student Account</option>
+                        <option value="teacher">Teacher Account</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input
+                        type="text"
+                        id="fullName"
+                        maxlength="150"
+                        placeholder="Enter full name"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input
+                        type="email"
+                        id="email"
+                        maxlength="254"
+                        placeholder="Enter email address"
+                        required>
+                </div>
+
+                <div id="studentFields" class="account-section hidden">
+                    <h3>Student Information</h3>
+
+                    <div class="form-group">
+                        <label for="studentNumber">Student Number</label>
+                        <input
+                            type="text"
+                            id="studentNumber"
+                            placeholder="Enter student number">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="className">Class</label>
+                        <select id="className">
+                            <option value="">Select class</option>
+                            <option>Form 1</option>
+                            <option>Form 2</option>
+                            <option>Form 3</option>
+                            <option>Form 4</option>
+                            <option>Form 5</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="teacherFields" class="account-section hidden">
+                    <h3>Teacher Information</h3>
+
+                    <div class="form-group">
+                        <label for="subjects">Subjects</label>
+                        <input
+                            type="text"
+                            id="subjects"
+                            placeholder="e.g. Mathematics, English">
+                        <p class="field-hint">
+                            Enter the subjects assigned to this teacher.
+                        </p>
+                    </div>
+                </div>
+
+                <h3 class="section-title">Security Information</h3>
+
+                <div class="password-note">
+                    <strong>Temporary Password:</strong>
+                    Create a secure password containing at least
+                    10 characters. The account holder can use it
+                    to sign in.
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Temporary Password</label>
+                    <input
+                        type="password"
+                        id="password"
+                        minlength="10"
+                        maxlength="128"
+                        autocomplete="new-password"
+                        placeholder="Enter temporary password"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        minlength="10"
+                        maxlength="128"
+                        autocomplete="new-password"
+                        placeholder="Re-enter temporary password"
+                        required>
+                </div>
+
+                <button type="submit" class="create" id="createButton">
+                    Create Account
+                </button>
+
+            </form>
+
+            <p id="message" role="status" aria-live="polite"></p>
+
+            <a href="admin-dashboard.html" class="back">
+                ← Back to Dashboard
+            </a>
+
+        </div>
+    </section>
+</main>
+
+<footer>
+    <div class="footer-slogan">
+        Knowledge • Discipline • Excellence
+    </div>
+    © 2026 Monze Day Secondary School. All Rights Reserved.
+</footer>
+
+<script>
+const accountType = document.getElementById("accountType");
+const studentFields = document.getElementById("studentFields");
+const teacherFields = document.getElementById("teacherFields");
+const studentNumber = document.getElementById("studentNumber");
+const className = document.getElementById("className");
+const subjects = document.getElementById("subjects");
+
+const form = document.getElementById("accountForm");
+const message = document.getElementById("message");
+const createButton = document.getElementById("createButton");
+
+let administratorVerified = false;
+
+accountType.addEventListener("change", function () {
+    const type = this.value;
+
+    studentFields.classList.toggle("hidden", type !== "student");
+    teacherFields.classList.toggle("hidden", type !== "teacher");
+
+    studentNumber.required = type === "student";
+    className.required = type === "student";
+    subjects.required = false;
+});
+
+async function checkAdmin() {
+    try {
+        const response = await fetch("/api/admin/me", {
+            credentials: "same-origin"
+        });
+
+        if (!response.ok) {
+            location.replace("admin-login.html");
+            return false;
+        }
+
+        administratorVerified = true;
+        return true;
+
+    } catch (error) {
+        message.textContent = "Unable to verify administrator session.";
+        message.className = "error";
+        return false;
+    }
+}
+
+form.addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    message.textContent = "";
+    message.className = "";
+
+    if (!administratorVerified) {
+        message.textContent = "Administrator verification is required.";
+        message.className = "error";
+        return;
+    }
+
+    const type = accountType.value;
+    const password = document.getElementById("password").value;
+    const confirmPassword =
+        document.getElementById("confirmPassword").value;
+
+    if (password !== confirmPassword) {
+        message.textContent = "Passwords do not match.";
+        message.className = "error";
+        return;
+    }
+
+    if (password.length < 10) {
+        message.textContent =
+            "Password must contain at least 10 characters.";
+        message.className = "error";
+        return;
+    }
+
+    if (type === "teacher" && !subjects.value.trim()) {
+        message.textContent = "Please enter the teacher's subjects.";
+        message.className = "error";
+        return;
+    }
+
+    const accountData = {
+        accountType: type,
+        fullName: document.getElementById("fullName").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        password: password
+    };
+
+    if (type === "student") {
+        accountData.studentNumber = studentNumber.value.trim();
+        accountData.className = className.value;
+    }
+
+    if (type === "teacher") {
+        accountData.subjects = subjects.value.trim();
+    }
+
+    createButton.disabled = true;
+    createButton.textContent = "Creating Account...";
+
+    try {
+        const response = await fetch("/api/admin/create-account", {
+            method: "POST",
+            credentials: "same-origin",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(accountData)
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            if (response.status === 401 || response.status === 403) {
+                administratorVerified = false;
+                message.textContent =
+                    "Your administrator session has expired. Please sign in again.";
+            } else {
+                message.textContent =
+                    result.message || "Unable to create account.";
+            }
+
+            message.className = "error";
+            return;
+        }
+
+        message.textContent = result.message;
+        message.className = "success";
+
+        form.reset();
+        studentFields.classList.add("hidden");
+        teacherFields.classList.add("hidden");
+        studentNumber.required = false;
+        className.required = false;
+        subjects.required = false;
+
+    } catch (error) {
+        message.textContent =
+            "Connection error. Please check that the server is running.";
+        message.className = "error";
+
+    } finally {
+        createButton.disabled = false;
+        createButton.textContent = "Create Account";
+    }
+});
+
+checkAdmin();
+</script>
+
+</body>
+</html>

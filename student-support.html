@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Support Centre | Monze Day Secondary School</title>
+<style>
+:root{--navy:#102b50;--navy2:#173b68;--gold:#d9ad45;--bg:#f3f5f9;--white:#fff;--muted:#68758a;--border:#e4e9f0;--green:#16845b;--red:#c0392b}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:#253247}
+header{background:var(--navy);color:white;padding:18px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.brand{font-weight:800;letter-spacing:.5px}
+.brand small{display:block;color:var(--gold);font-size:11px;margin-top:5px}
+header a{color:white;text-decoration:none;border:1px solid #ffffff55;padding:9px 13px;border-radius:8px}
+.container{max-width:1100px;margin:30px auto;padding:0 16px}
+.hero{background:linear-gradient(120deg,var(--navy),var(--navy2));color:white;border-radius:16px;padding:27px;margin-bottom:22px}
+.hero h1{margin:0 0 9px;font-size:27px}
+.hero p{margin:0;color:#e1e9f4;line-height:1.6}
+.grid{display:grid;grid-template-columns:1fr 1.2fr;gap:20px;align-items:start}
+.card{background:white;border:1px solid var(--border);border-radius:14px;padding:22px;box-shadow:0 5px 20px #102b500b}
+h2{font-size:19px;color:var(--navy);margin:0 0 18px}
+label{display:block;font-weight:700;font-size:13px;margin:14px 0 7px}
+input,select,textarea{width:100%;padding:12px;border:1px solid #d7deea;border-radius:8px;font:inherit;background:white}
+textarea{min-height:125px;resize:vertical}
+button{cursor:pointer;border:0;border-radius:8px;padding:11px 16px;font-weight:700}
+.primary{background:var(--navy);color:white}
+.primary:hover{background:var(--navy2)}
+.gold{background:var(--gold);color:var(--navy)}
+button:disabled{opacity:.55;cursor:not-allowed}
+.notice{padding:12px;border-radius:8px;margin:12px 0;font-size:14px;display:none}
+.notice.show{display:block}
+.notice.error{background:#fff0ef;color:var(--red)}
+.notice.success{background:#eaf8f1;color:var(--green)}
+.request{border:1px solid var(--border);border-radius:10px;padding:15px;margin-bottom:12px}
+.request h3{margin:0 0 7px;color:var(--navy);font-size:16px}
+.request p{margin:5px 0;color:var(--muted);font-size:13px;line-height:1.5}
+.status{display:inline-block;border-radius:20px;padding:5px 10px;font-size:11px;font-weight:800;background:#fff5dd;color:#936700}
+.status.resolved{background:#e6f6ed;color:#16734c}
+.status.progress{background:#e9f1ff;color:#245b9a}
+.request button{margin-top:10px;background:#edf1f7;color:var(--navy)}
+.conversation{display:none;margin-top:18px;border-top:1px solid var(--border);padding-top:16px}
+.message{padding:12px;border-radius:10px;margin:9px 0;background:#f0f3f8;line-height:1.5;font-size:14px;overflow-wrap:anywhere}
+.message.admin{background:#eaf2ff;border-left:3px solid var(--gold)}
+.message small{display:block;color:var(--muted);font-size:11px;margin-bottom:5px}
+.empty{text-align:center;padding:30px;color:var(--muted)}
+footer{text-align:center;padding:25px;color:var(--muted);font-size:12px}
+@media(max-width:750px){.grid{grid-template-columns:1fr}header{padding:15px}.hero h1{font-size:23px}}
+</style>
+</head>
+<body>
+<header>
+<div class="brand">MONZE DAY SECONDARY SCHOOL<small>STUDENT SUPPORT CENTRE</small></div>
+<a href="student-dashboard.html">← Dashboard</a>
+</header>
+
+<div class="container">
+<section class="hero">
+<h1>How can we help you?</h1>
+<p>Submit a support request, report a problem or ask for assistance. You can track your request and communicate with the school administration here.</p>
+</section>
+
+<div id="notice" class="notice" role="status"></div>
+
+<div class="grid">
+<section class="card">
+<h2>Submit a Support Request</h2>
+<form id="requestForm">
+<label for="category">Request Category</label>
+<select id="category" required>
+<option value="">Choose a category</option>
+<option>Academic Issue</option>
+<option>Account/Login Problem</option>
+<option>Technical Problem</option>
+<option>Teacher/Staff Concern</option>
+<option>General Enquiry</option>
+<option>Other</option>
+</select>
+
+<label for="subject">Subject</label>
+<input id="subject" maxlength="150" minlength="3" required placeholder="Briefly describe your issue">
+
+<label for="description">Explain your issue</label>
+<textarea id="description" minlength="10" maxlength="5000" required placeholder="Provide enough information to help us understand your request..."></textarea>
+
+<button class="primary" id="submitButton" type="submit" style="margin-top:16px;width:100%">Submit Request →</button>
+</form>
+</section>
+
+<section class="card">
+<h2>My Support Requests</h2>
+<div id="requestList"><div class="empty">Loading your requests...</div></div>
+
+<div class="conversation" id="conversation">
+<h2 id="conversationTitle">Conversation</h2>
+<div id="messages"></div>
+<form id="replyForm">
+<label for="replyMessage">Send a follow-up message</label>
+<textarea id="replyMessage" maxlength="3000" minlength="2" required placeholder="Write your message..."></textarea>
+<button class="primary" type="submit" style="margin-top:10px">Send Message</button>
+</form>
+</div>
+</section>
+</div>
+</div>
+
+<footer>MONZE DAY SECONDARY SCHOOL · Knowledge • Discipline • Excellence</footer>
+
+<script>
+const notice=document.getElementById("notice");
+let activeRequest=null;
+
+function showNotice(message,type="success"){
+ notice.textContent=message;
+ notice.className="notice show "+type;
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+
+async function api(url,options={}){
+ const response=await fetch(url,{
+  credentials:"same-origin",
+  ...options,
+  headers:{"Content-Type":"application/json",...(options.headers||{})}
+ });
+ const data=await response.json().catch(()=>({message:"Unexpected server response."}));
+ if(response.status===401){
+  location.href="student-login.html";
+  throw new Error("Please sign in again.");
+ }
+ if(!response.ok) throw new Error(data.message||"Request failed.");
+ return data;
+}
+
+function escapeHTML(value){
+ return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+
+function dateText(value){
+ return value?new Date(value).toLocaleString():"";
+}
+
+function statusClass(status){
+ return status==="Resolved"?"resolved":status==="In Progress"?"progress":"";
+}
+
+async function loadRequests(){
+ const data=await api("/api/support/requests");
+ const list=document.getElementById("requestList");
+ if(!data.requests.length){
+  list.innerHTML='<div class="empty">You have not submitted any support requests yet.</div>';
+  return;
+ }
+ list.innerHTML=data.requests.map(r=>`
+ <article class="request">
+  <h3>#${escapeHTML(r.id)} · ${escapeHTML(r.subject)}</h3>
+  <p>${escapeHTML(r.category)} · ${escapeHTML(dateText(r.created_at))}</p>
+  <p><span class="status ${statusClass(r.status)}">${escapeHTML(r.status)}</span> · ${Number(r.message_count)||0} messages</p>
+  <button type="button" onclick="openConversation('${escapeHTML(r.id)}','${escapeHTML(r.subject).replace(/'/g,"&#39;")}')">View Conversation →</button>
+ </article>`).join("");
+}
+
+async function openConversation(id,subject){
+ activeRequest=id;
+ document.getElementById("conversation").style.display="block";
+ document.getElementById("conversationTitle").textContent="Request #"+id;
+ document.getElementById("messages").innerHTML='<div class="empty">Loading conversation...</div>';
+ document.getElementById("replyForm").style.display="block";
+ try{
+  const data=await api("/api/support/requests/"+encodeURIComponent(id)+"/messages");
+  document.getElementById("messages").innerHTML=
+   `<div class="message"><small>Your original request · ${escapeHTML(dateText(data.request.created_at))}</small><strong>${escapeHTML(data.request.subject)}</strong><br>${escapeHTML(data.request.description).replace(/\n/g,"<br>")}</div>`+
+   data.messages.map(m=>`<div class="message ${m.sender_type==="admin"?"admin":""}"><small>${m.sender_type==="admin"?"School Administration":"You"} · ${escapeHTML(dateText(m.created_at))}</small>${escapeHTML(m.message).replace(/\n/g,"<br>")}</div>`).join("");
+  if(data.request.status==="Resolved"){
+   document.getElementById("replyForm").style.display="none";
+  }
+ }catch(error){showNotice(error.message,"error");}
+}
+
+document.getElementById("requestForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+ const button=document.getElementById("submitButton");
+ button.disabled=true;
+ try{
+  const data=await api("/api/support/requests",{
+   method:"POST",
+   body:JSON.stringify({
+    category:document.getElementById("category").value,
+    subject:document.getElementById("subject").value,
+    description:document.getElementById("description").value
+   })
+  });
+  e.target.reset();
+  showNotice(data.message);
+  await loadRequests();
+ }catch(error){showNotice(error.message,"error");}
+ finally{button.disabled=false;}
+});
+
+document.getElementById("replyForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+ if(!activeRequest)return;
+ const input=document.getElementById("replyMessage");
+ try{
+  const data=await api("/api/support/requests/"+encodeURIComponent(activeRequest)+"/messages",{
+   method:"POST",body:JSON.stringify({message:input.value})
+  });
+  input.value="";
+  showNotice(data.message);
+  await openConversation(activeRequest);
+  await loadRequests();
+ }catch(error){showNotice(error.message,"error");}
+});
+
+(async()=>{
+ try{
+  await api("/api/student/me");
+  await loadRequests();
+ }catch(error){
+  if(error.message!=="Please sign in again.")showNotice(error.message,"error");
+ }
+})();
+</script>
+</body>
+</html>

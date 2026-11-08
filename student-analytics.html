@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Performance Analytics | Monze Day Secondary School</title>
+
+<style>
+:root{
+--navy:#102b50;
+--navy2:#173b68;
+--gold:#d9ad45;
+--bg:#f3f5f9;
+--white:#fff;
+--text:#263449;
+--muted:#718096;
+--border:#e5e9f0;
+--green:#168653;
+--red:#c74747;
+}
+
+*{box-sizing:border-box}
+
+body{
+margin:0;
+font-family:Arial,Helvetica,sans-serif;
+background:var(--bg);
+color:var(--text);
+}
+
+header{
+background:var(--navy);
+color:white;
+padding:20px 5%;
+border-bottom:4px solid var(--gold);
+}
+
+.header-inner{
+max-width:1200px;
+margin:auto;
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:15px;
+flex-wrap:wrap;
+}
+
+.brand{
+font-size:18px;
+font-weight:800;
+letter-spacing:.5px;
+}
+
+.brand small{
+display:block;
+color:#dce5f2;
+font-size:11px;
+margin-top:5px;
+letter-spacing:1px;
+}
+
+.back-link{
+color:var(--gold);
+text-decoration:none;
+font-weight:bold;
+}
+
+.container{
+max-width:1200px;
+margin:30px auto;
+padding:0 18px 40px;
+}
+
+.page-title{margin-bottom:25px}
+
+.page-title h1{
+color:var(--navy);
+margin:0 0 8px;
+font-size:28px;
+}
+
+.page-title p{
+color:var(--muted);
+margin:0;
+line-height:1.6;
+}
+
+.banner{
+background:linear-gradient(120deg,var(--navy),var(--navy2));
+color:white;
+padding:22px;
+border-radius:12px;
+margin-bottom:25px;
+border-left:5px solid var(--gold);
+}
+
+.banner h2{margin:0 0 7px;font-size:19px}
+.banner p{margin:0;color:#dce5f2;font-size:14px}
+
+.message{
+padding:14px 16px;
+border-radius:8px;
+margin-bottom:20px;
+background:#fff7df;
+color:#795b12;
+display:none;
+line-height:1.5;
+}
+
+.message.error{
+display:block;
+background:#fff0f0;
+color:#a52d2d;
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+gap:16px;
+margin-bottom:25px;
+}
+
+.stat-card{
+background:white;
+border:1px solid var(--border);
+border-radius:12px;
+padding:20px;
+box-shadow:0 3px 15px rgba(16,43,80,.05);
+}
+
+.stat-card small{
+color:var(--muted);
+font-size:12px;
+font-weight:bold;
+}
+
+.stat-card h2{
+margin:10px 0 5px;
+color:var(--navy);
+font-size:29px;
+}
+
+.stat-card p{
+margin:0;
+font-size:12px;
+color:var(--muted);
+}
+
+.section-card{
+background:white;
+border-radius:12px;
+padding:22px;
+margin-bottom:22px;
+box-shadow:0 3px 15px rgba(16,43,80,.06);
+border:1px solid var(--border);
+}
+
+.section-heading{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:12px;
+flex-wrap:wrap;
+margin-bottom:18px;
+}
+
+.section-heading h2{
+margin:0;
+color:var(--navy);
+font-size:19px;
+}
+
+.badge{
+background:#fff4d7;
+color:#805d13;
+padding:6px 11px;
+border-radius:20px;
+font-size:11px;
+font-weight:bold;
+}
+
+.subject-row{margin-bottom:20px}
+.subject-row:last-child{margin-bottom:0}
+
+.subject-info{
+display:flex;
+justify-content:space-between;
+gap:10px;
+font-size:13px;
+font-weight:bold;
+margin-bottom:8px;
+}
+
+.bar{
+height:11px;
+background:#edf0f5;
+border-radius:20px;
+overflow:hidden;
+}
+
+.bar-fill{
+height:100%;
+border-radius:20px;
+background:var(--navy2);
+}
+
+.bar-fill.gold{background:var(--gold)}
+.bar-fill.green{background:var(--green)}
+
+.category-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+gap:15px;
+}
+
+.category-card{
+background:#f8f9fc;
+border:1px solid var(--border);
+border-radius:10px;
+padding:18px;
+}
+
+.category-card h3{
+margin:0 0 10px;
+font-size:14px;
+color:var(--navy);
+}
+
+.category-card strong{
+font-size:26px;
+color:var(--navy);
+}
+
+.category-card p{
+font-size:12px;
+color:var(--muted);
+margin:7px 0 0;
+}
+
+.trend-list{
+display:flex;
+align-items:flex-end;
+gap:12px;
+min-height:190px;
+overflow-x:auto;
+padding:15px 5px 5px;
+}
+
+.trend-item{
+min-width:65px;
+flex:1;
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:7px;
+}
+
+.trend-value{
+font-size:12px;
+font-weight:bold;
+color:var(--navy);
+}
+
+.trend-track{
+height:125px;
+width:28px;
+background:#edf0f5;
+border-radius:8px;
+display:flex;
+align-items:flex-end;
+overflow:hidden;
+}
+
+.trend-fill{
+width:100%;
+background:var(--gold);
+border-radius:8px;
+}
+
+.trend-label{
+font-size:11px;
+text-align:center;
+color:var(--muted);
+}
+
+.table-wrap{
+overflow-x:auto;
+border:1px solid var(--border);
+border-radius:8px;
+}
+
+table{
+width:100%;
+min-width:700px;
+border-collapse:collapse;
+}
+
+th{
+background:var(--navy);
+color:white;
+padding:13px 12px;
+text-align:left;
+font-size:12px;
+white-space:nowrap;
+}
+
+td{
+padding:13px 12px;
+border-bottom:1px solid var(--border);
+font-size:13px;
+}
+
+tbody tr:last-child td{border-bottom:none}
+
+.empty{
+padding:25px;
+text-align:center;
+color:var(--muted);
+font-size:14px;
+}
+
+.highlight-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:15px;
+}
+
+.highlight{
+padding:18px;
+border-radius:10px;
+background:#f8f9fc;
+border:1px solid var(--border);
+}
+
+.highlight small{
+color:var(--muted);
+font-size:12px;
+}
+
+.highlight h3{
+color:var(--navy);
+margin:8px 0;
+font-size:19px;
+}
+
+.highlight p{
+margin:0;
+font-size:13px;
+color:var(--muted);
+}
+
+footer{
+text-align:center;
+padding:20px;
+color:var(--muted);
+font-size:12px;
+}
+
+button{
+background:var(--navy);
+color:white;
+border:0;
+padding:11px 17px;
+border-radius:7px;
+font-weight:bold;
+cursor:pointer;
+}
+
+button:hover{background:var(--navy2)}
+
+@media(max-width:600px){
+.container{margin:22px auto}
+.page-title h1{font-size:24px}
+.section-card{padding:16px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="header-inner">
+<div class="brand">
+MONZE DAY SECONDARY SCHOOL
+<small>STUDENT PERFORMANCE ANALYTICS</small>
+</div>
+<a class="back-link" href="student-dashboard.html">← Student Dashboard</a>
+</div>
+</header>
+
+<main class="container">
+
+<div class="page-title">
+<h1>📊 Performance Analytics</h1>
+<p>Understand your academic progress using your published assessment results.</p>
+</div>
+
+<div class="banner">
+<h2 id="welcomeTitle">Your Academic Performance</h2>
+<p id="welcomeText">Your academic statistics will appear here once your results are loaded.</p>
+</div>
+
+<div id="message" class="message"></div>
+
+<div class="stats">
+<div class="stat-card">
+<small>OVERALL AVERAGE</small>
+<h2 id="overallAverage">—</h2>
+<p>Average of available subject averages</p>
+</div>
+
+<div class="stat-card">
+<small>SUBJECTS</small>
+<h2 id="subjectCount">—</h2>
+<p>Subjects with published results</p>
+</div>
+
+<div class="stat-card">
+<small>ASSESSMENTS</small>
+<h2 id="assessmentCount">—</h2>
+<p>Published result records</p>
+</div>
+
+<div class="stat-card">
+<small>ACADEMIC PERIODS</small>
+<h2 id="periodCount">—</h2>
+<p>Terms and years represented</p>
+</div>
+</div>
+
+<section class="section-card">
+<div class="section-heading">
+<h2>📚 Subject Performance</h2>
+<span class="badge">SUBJECT AVERAGES</span>
+</div>
+<div id="subjectPerformance">
+<div class="empty">Loading subject performance...</div>
+</div>
+</section>
+
+<section class="section-card">
+<div class="section-heading">
+<h2>🏆 Performance Highlights</h2>
+</div>
+<div class="highlight-grid" id="highlights">
+<div class="empty">Loading performance highlights...</div>
+</div>
+</section>
+
+<section class="section-card">
+<div class="section-heading">
+<h2>📝 Assessment Comparison</h2>
+</div>
+<div class="category-grid" id="categoryPerformance">
+<div class="empty">Loading assessment comparison...</div>
+</div>
+</section>
+
+<section class="section-card">
+<div class="section-heading">
+<h2>📈 Performance Trends</h2>
+<span class="badge">BY TERM</span>
+</div>
+<div id="trendChart">
+<div class="empty">Loading performance trends...</div>
+</div>
+</section>
+
+<section class="section-card">
+<div class="section-heading">
+<h2>📋 Published Results</h2>
+<span class="badge">OFFICIAL RECORDS</span>
+</div>
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Subject</th>
+<th>Assessment</th>
+<th>Term</th>
+<th>Year</th>
+<th>Score</th>
+<th>Grade</th>
+</tr>
+</thead>
+<tbody id="resultsTable">
+<tr><td colspan="6" class="empty">Loading published results...</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<div style="text-align:center;margin:25px 0">
+<button onclick="loadAnalytics()">↻ Refresh Analytics</button>
+</div>
+
+</main>
+
+<footer>
+MONZE DAY SECONDARY SCHOOL<br>
+Knowledge • Discipline • Excellence
+</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+
+function escapeHTML(value){
+return String(value ?? "").replace(/[&<>"']/g, char => ({
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+'"':"&quot;",
+"'":"&#39;"
+})[char]);
+}
+
+function average(rows){
+if(!rows.length) return null;
+return rows.reduce((sum,row)=>sum + Number(row.score),0)/rows.length;
+}
+
+function formatAverage(value){
+return value === null ? "—" : value.toFixed(1) + "%";
+}
+
+function termNumber(term){
+const match = String(term || "").match(/\d+/);
+return match ? Number(match[0]) : 99;
+}
+
+function periodLabel(row){
+return `${row.term} ${row.year}`;
+}
+
+function showMessage(message,error=false){
+const box=$("message");
+box.textContent=message;
+box.className=error ? "message error" : "message";
+box.style.display="block";
+}
+
+function hideMessage(){
+$("message").style.display="none";
+}
+
+function renderSubjects(rows){
+const groups={};
+
+rows.forEach(row=>{
+const name=String(row.subject || "Unknown");
+if(!groups[name]) groups[name]=[];
+groups[name].push(row);
+});
+
+const subjects=Object.entries(groups).map(([name,items])=>({
+name,
+average:average(items),
+count:items.length
+})).sort((a,b)=>b.average-a.average);
+
+if(!subjects.length){
+$("subjectPerformance").innerHTML='<div class="empty">No subject results are available yet.</div>';
+return subjects;
+}
+
+$("subjectPerformance").innerHTML=subjects.map((subject,index)=>{
+const width=Math.max(0,Math.min(100,subject.average));
+const color=index===0?"green":index===subjects.length-1?"gold":"";
+return `
+<div class="subject-row">
+<div class="subject-info">
+<span>${escapeHTML(subject.name)} <small style="color:#718096">(${subject.count} records)</small></span>
+<strong>${formatAverage(subject.average)}</strong>
+</div>
+<div class="bar">
+<div class="bar-fill ${color}" style="width:${width}%"></div>
+</div>
+</div>`;
+}).join("");
+
+return subjects;
+}
+
+function renderHighlights(subjects){
+if(!subjects.length){
+$("highlights").innerHTML='<div class="empty">Highlights will appear when results are published.</div>';
+return;
+}
+
+const highest=subjects[0];
+const lowest=subjects[subjects.length-1];
+
+$("highlights").innerHTML=`
+<div class="highlight">
+<small>HIGHEST SUBJECT AVERAGE</small>
+<h3>${escapeHTML(highest.name)}</h3>
+<p>${formatAverage(highest.average)} across ${highest.count} result record(s)</p>
+</div>
+<div class="highlight">
+<small>LOWEST SUBJECT AVERAGE</small>
+<h3>${escapeHTML(lowest.name)}</h3>
+<p>${formatAverage(lowest.average)} across ${lowest.count} result record(s)</p>
+</div>`;
+}
+
+function renderCategories(rows){
+const categories=[
+{
+key:"end_of_term",
+title:"End-of-Term Examinations"
+},
+{
+key:"other_assessment",
+title:"Other Assessments"
+},
+{
+key:"unclassified",
+title:"Unclassified Results"
+}
+];
+
+$("categoryPerformance").innerHTML=categories.map(category=>{
+const items=rows.filter(row=>(row.assessment_type || "unclassified")===category.key);
+const avg=average(items);
+
+return `
+<div class="category-card">
+<h3>${category.title}</h3>
+<strong>${formatAverage(avg)}</strong>
+<p>${items.length} published result record(s)</p>
+</div>`;
+}).join("");
+}
+
+function renderTrends(rows){
+const periods={};
+
+rows.forEach(row=>{
+const key=`${row.year}|${row.term}`;
+if(!periods[key]) periods[key]=[];
+periods[key].push(row);
+});
+
+const sorted=Object.entries(periods).map(([key,items])=>{
+const [year,term]=key.split("|");
+return {
+year:Number(year),
+term,
+average:average(items),
+items
+};
+}).sort((a,b)=>{
+return a.year-b.year || termNumber(a.term)-termNumber(b.term);
+});
+
+if(!sorted.length){
+$("trendChart").innerHTML='<div class="empty">No performance trends are available yet.</div>';
+return sorted;
+}
+
+$("trendChart").innerHTML=`
+<div class="trend-list">
+${sorted.map(period=>`
+<div class="trend-item">
+<div class="trend-value">${formatAverage(period.average)}</div>
+<div class="trend-track">
+<div class="trend-fill" style="height:${Math.max(0,Math.min(100,period.average))}%"></div>
+</div>
+<div class="trend-label">${escapeHTML(period.term)}<br>${period.year}</div>
+</div>`).join("")}
+</div>
+<p style="font-size:12px;color:#718096;margin-top:12px">
+Each period shows the average of its published result records. Periods may contain different numbers of assessments.
+</p>`;
+return sorted;
+}
+
+function renderResults(rows){
+const sorted=[...rows].sort((a,b)=>{
+return Number(b.year)-Number(a.year) ||
+termNumber(b.term)-termNumber(a.term) ||
+String(a.subject).localeCompare(String(b.subject));
+});
+
+if(!sorted.length){
+$("resultsTable").innerHTML='<tr><td colspan="6" class="empty">No published results are available.</td></tr>';
+return;
+}
+
+$("resultsTable").innerHTML=sorted.map(row=>{
+const assessment=row.assessment_name ||
+row.assessment_kind ||
+(row.assessment_type==="end_of_term" ? "End-of-Term Examination" :
+row.assessment_type==="other_assessment" ? "Other Assessment" : "Unclassified");
+
+return `
+<tr>
+<td>${escapeHTML(row.subject)}</td>
+<td>${escapeHTML(assessment)}</td>
+<td>${escapeHTML(row.term)}</td>
+<td>${escapeHTML(row.year)}</td>
+<td><strong>${Number(row.score).toFixed(1)}%</strong></td>
+<td>${escapeHTML(row.grade || "—")}</td>
+</tr>`;
+}).join("");
+}
+
+async function loadAnalytics(){
+hideMessage();
+
+$("overallAverage").textContent="—";
+$("subjectCount").textContent="—";
+$("assessmentCount").textContent="—";
+$("periodCount").textContent="—";
+
+try{
+const response=await fetch("/api/student/results",{
+method:"GET",
+credentials:"same-origin",
+headers:{"Accept":"application/json"}
+});
+
+if(response.status===401){
+showMessage("Your student session has expired. Please log in again.",true);
+return;
+}
+
+if(response.status===403){
+const data=await response.json();
+if(data.mustChangePassword){
+showMessage("You must change your temporary password before viewing academic analytics.",true);
+return;
+}
+throw new Error(data.message || "Access denied.");
+}
+
+if(!response.ok){
+const data=await response.json().catch(()=>({}));
+throw new Error(data.message || "Unable to load academic results.");
+}
+
+const rows=await response.json();
+
+if(!Array.isArray(rows)){
+throw new Error("The results server returned an unexpected response.");
+}
+
+if(!rows.length){
+$("welcomeText").textContent="Your academic analytics will become available when results are published.";
+$("subjectPerformance").innerHTML='<div class="empty">No published subject results yet.</div>';
+$("highlights").innerHTML='<div class="empty">No performance highlights yet.</div>';
+$("categoryPerformance").innerHTML='<div class="empty">No assessment records yet.</div>';
+$("trendChart").innerHTML='<div class="empty">No performance trends yet.</div>';
+$("resultsTable").innerHTML='<tr><td colspan="6" class="empty">No published results are available.</td></tr>';
+showMessage("There are currently no published academic results for your account.");
+return;
+}
+
+const subjects=renderSubjects(rows);
+const overall=average(subjects.map(subject=>({score:subject.average})));
+
+const periods=new Set(rows.map(row=>`${row.year}|${row.term}`));
+
+$("overallAverage").textContent=formatAverage(overall);
+$("subjectCount").textContent=subjects.length;
+$("assessmentCount").textContent=rows.length;
+$("periodCount").textContent=periods.size;
+
+$("welcomeText").textContent=
+`You have ${rows.length} published result record(s) across ${subjects.length} subject(s).`;
+
+renderHighlights(subjects);
+renderCategories(rows);
+renderTrends(rows);
+renderResults(rows);
+
+}catch(error){
+console.error("Analytics error:",error);
+showMessage(error.message || "Unable to load your academic analytics.",true);
+}
+}
+
+loadAnalytics();
+</script>
+
+</body>
+</html>

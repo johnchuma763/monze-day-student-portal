@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teacher Registration | Monze Day Secondary School</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 20px;
+    background: #f2f4f8;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    max-width: 550px;
+    margin: 25px auto;
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+}
+
+header {
+    background: #071d49;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    border-radius: 9px;
+    margin-bottom: 22px;
+}
+
+header h2 {
+    margin: 0;
+    font-size: 19px;
+}
+
+header p {
+    color: #e5bd55;
+    margin-bottom: 0;
+}
+
+h3 {
+    color: #071d49;
+}
+
+label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 7px;
+    font-weight: bold;
+    color: #17233c;
+}
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 22px;
+    border: none;
+    border-radius: 6px;
+    background: #D4A62E;
+    color: #071d49;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #bd9124;
+}
+
+#classTeacherFields {
+    display: none;
+}
+
+#message {
+    margin-top: 15px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.note {
+    background: #fff6dc;
+    padding: 12px;
+    border-left: 4px solid #D4A62E;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.back {
+    display: block;
+    text-align: center;
+    margin-top: 18px;
+    color: #071d49;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<header>
+    <h2>MONZE DAY SECONDARY SCHOOL</h2>
+    <p>TEACHER REGISTRATION</p>
+</header>
+
+<h3>Create Your Teacher Account</h3>
+
+<p>Enter your details to register as a teacher.</p>
+
+<form id="registrationForm">
+
+<label>Full Name</label>
+<input type="text" name="full_name" required>
+
+<label>Email Address</label>
+<input type="email" name="email" required>
+
+<label>Password</label>
+<input type="password" name="password" minlength="8" required>
+
+<label>Subjects Taught</label>
+<input
+    type="text"
+    name="subjects"
+    placeholder="Example: Mathematics, Science"
+    required
+>
+
+<label>Classes Taught</label>
+<input
+    type="text"
+    name="classes"
+    placeholder="Example: Form 1, Form 2"
+    required
+>
+
+<label>Would you like to become a class teacher?</label>
+<select id="isClassTeacher" name="is_class_teacher" required>
+    <option value="">Select an option</option>
+    <option value="yes">Yes</option>
+    <option value="no">No</option>
+</select>
+
+<div id="classTeacherFields">
+
+    <label>Select Your Assigned Class</label>
+
+    <select id="assignedClass" name="assigned_class">
+        <option value="">Select class</option>
+        <option value="Form 1">Form 1</option>
+        <option value="Form 2">Form 2</option>
+        <option value="Form 3">Form 3</option>
+        <option value="Form 4">Form 4</option>
+    </select>
+
+</div>
+
+<div class="note">
+    Your registration will be reviewed by the school administrator.
+    You can access the teacher portal after approval.
+</div>
+
+<button type="submit">Register as Teacher</button>
+
+</form>
+
+<div id="message"></div>
+
+<a class="back" href="teacher-login.html">Already registered? Sign in</a>
+
+</div>
+
+<script>
+const classTeacherSelect = document.getElementById("isClassTeacher");
+const classFields = document.getElementById("classTeacherFields");
+const assignedClass = document.getElementById("assignedClass");
+
+classTeacherSelect.addEventListener("change", function() {
+    const isYes = this.value === "yes";
+    classFields.style.display = isYes ? "block" : "none";
+    assignedClass.required = isYes;
+    if (!isYes) assignedClass.value = "";
+});
+
+document.getElementById("registrationForm").addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const message = document.getElementById("message");
+    const data = Object.fromEntries(new FormData(this));
+
+    message.textContent = "Submitting registration...";
+
+    try {
+        const response = await fetch("/api/teacher/register", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+        message.textContent = result.message;
+
+        if (response.ok) this.reset();
+
+    } catch (error) {
+        message.textContent = "Unable to connect to the server.";
+    }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+node_modules/
+.env
+.env.*
+!.env.example
+
+portal.db
+portal.db-shm
+portal.db-wal
+
+uploads/
+
+*.backup*
+*.before-*
+server-backup*
+__pycache__/
+*.pyc
+
+.DS_Store
+npm-debug.log*
+
+# Database files
+*.db
+*.db-*
+*.sqlite
+*.sqlite3
+
+# Backup files
+*-backup*
+*.backup*
+backups/
+
+# Temporary files
+*.tmp
+*.log
+
+# Environment files and secret backups
+.env*
+!.env.example
+
+# Database files
+*.db
+*.db-*
+*.sqlite
+*.sqlite3
+
+# Backup files
+*-backup*
+*.backup*
+backups/
+
+# Temporary files
+*.tmp
+*.log
+
+# Historical backup snapshots
+*-before-*
+
+# Accidental old homepage copies
+/admin
+/index.html  tere
+/h2
+/admin\
+
+# Allow the safe environment template
+!.env.example
+
+# All backup copies
+*.backup*
+*.backup
+*.before-*
+*.before.*
+*-backup*
+*-before-*
+
+# Local database files
+*.db
+*.db-*
+*.sqlite
+*.sqlite3
+
+# Temporary and diagnostic files
+h2
+
+# Additional historical backup naming patterns
+*backup*
+*before*
+*before.*
+*.photo-debug-backup
+*.backup
+*.before

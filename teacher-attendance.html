@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Attendance | Monze Day Secondary School</title>
+
+<style>
+:root {
+    --navy: #102b50;
+    --deep: #091d38;
+    --gold: #d9ad45;
+    --light-gold: #f0cf78;
+    --background: #f3f6fb;
+    --white: #ffffff;
+    --text: #23334a;
+    --muted: #718096;
+    --border: #e3e9f1;
+    --green: #168653;
+    --red: #c74747;
+    --orange: #c27a18;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    background: var(--background);
+    color: var(--text);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+header {
+    background: linear-gradient(120deg, var(--deep), var(--navy));
+    color: white;
+    padding: 20px 5%;
+    border-bottom: 4px solid var(--gold);
+}
+
+.header-content {
+    max-width: 1150px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.logo {
+    width: 54px;
+    height: 54px;
+    border: 2px solid var(--gold);
+    border-radius: 13px;
+    display: grid;
+    place-items: center;
+    color: var(--light-gold);
+    font-size: 23px;
+    font-weight: bold;
+}
+
+.school-name {
+    font-size: 17px;
+    font-weight: bold;
+    letter-spacing: .5px;
+}
+
+.school-subtitle {
+    color: #d8e1ef;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+main {
+    max-width: 1150px;
+    margin: 30px auto;
+    padding: 0 18px 40px;
+}
+
+.topline {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 22px;
+}
+
+h1 {
+    margin: 0;
+    color: var(--navy);
+    font-size: 27px;
+}
+
+.subtitle {
+    margin-top: 7px;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.back-button {
+    background: white;
+    border: 1px solid var(--border);
+    color: var(--navy);
+    padding: 11px 16px;
+    border-radius: 9px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    padding: 22px;
+    margin-bottom: 20px;
+    box-shadow: 0 5px 20px rgba(16,43,80,.045);
+}
+
+.card-title {
+    font-size: 17px;
+    color: var(--navy);
+    font-weight: bold;
+    margin-bottom: 17px;
+}
+
+.controls {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 17px;
+}
+
+label {
+    display: block;
+    font-size: 12px;
+    font-weight: bold;
+    color: #526176;
+    margin-bottom: 8px;
+}
+
+select, input {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #d8e0eb;
+    border-radius: 9px;
+    background: #fff;
+    color: var(--text);
+    font-size: 14px;
+    outline: none;
+}
+
+select:focus, input:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(217,173,69,.13);
+}
+
+.summary {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.stat {
+    background: white;
+    padding: 17px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+.stat-label {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.stat-number {
+    font-size: 25px;
+    font-weight: bold;
+    margin-top: 8px;
+    color: var(--navy);
+}
+
+.stat.present .stat-number { color: var(--green); }
+.stat.absent .stat-number { color: var(--red); }
+.stat.late .stat-number { color: var(--orange); }
+
+.table-wrap { overflow-x: auto; }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 620px;
+}
+
+th {
+    background: #f5f7fb;
+    color: #617086;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    padding: 14px 12px;
+}
+
+td {
+    padding: 15px 12px;
+    border-bottom: 1px solid #edf0f5;
+    font-size: 13px;
+}
+
+.student-name {
+    font-weight: bold;
+    color: var(--navy);
+}
+
+.student-number {
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+.status-buttons {
+    display: flex;
+    gap: 6px;
+}
+
+.status-button {
+    border: 1px solid var(--border);
+    background: white;
+    padding: 8px 10px;
+    border-radius: 7px;
+    font-size: 11px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.status-button.active.present {
+    background: #e5f5ed;
+    color: var(--green);
+    border-color: var(--green);
+}
+
+.status-button.active.absent {
+    background: #fff0f0;
+    color: var(--red);
+    border-color: var(--red);
+}
+
+.status-button.active.late {
+    background: #fff5e6;
+    color: var(--orange);
+    border-color: var(--orange);
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.primary-button {
+    border: none;
+    background: var(--navy);
+    color: white;
+    padding: 13px 21px;
+    border-radius: 9px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.primary-button:hover { background: var(--deep); }
+
+.primary-button:disabled {
+    opacity: .55;
+    cursor: not-allowed;
+}
+
+.message {
+    font-size: 13px;
+    margin-top: 14px;
+    padding: 12px;
+    border-radius: 8px;
+    display: none;
+}
+
+.message.success {
+    display: block;
+    color: #116b43;
+    background: #e7f6ee;
+}
+
+.message.error {
+    display: block;
+    color: #a52d2d;
+    background: #fff0f0;
+}
+
+.empty {
+    text-align: center;
+    color: var(--muted);
+    padding: 35px 12px;
+    font-size: 14px;
+}
+
+footer {
+    text-align: center;
+    padding: 22px;
+    color: #78869a;
+    font-size: 12px;
+}
+
+footer strong { color: var(--navy); }
+
+@media(max-width:650px) {
+    main { margin-top: 22px; }
+    h1 { font-size: 23px; }
+    .controls { grid-template-columns: 1fr; }
+    .summary { grid-template-columns: repeat(2, 1fr); }
+    .card { padding: 16px; }
+    .school-name { font-size: 14px; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-content">
+        <div class="logo">MD</div>
+        <div>
+            <div class="school-name">MONZE DAY SECONDARY SCHOOL</div>
+            <div class="school-subtitle">Knowledge • Discipline • Excellence</div>
+        </div>
+    </div>
+</header>
+
+<main>
+    <div class="topline">
+        <div>
+            <h1>Student Attendance</h1>
+            <div class="subtitle">Record and manage daily class attendance.</div>
+        </div>
+        <a class="back-button" href="teacher-dashboard.html">← Teacher Dashboard</a>
+    </div>
+
+    <section class="card">
+        <div class="card-title">Attendance Details</div>
+
+        <div class="controls">
+            <div>
+                <label for="classSelect">SELECT CLASS</label>
+                <select id="classSelect">
+                    <option value="">Loading your classes...</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="attendanceDate">ATTENDANCE DATE</label>
+                <input type="date" id="attendanceDate">
+            </div>
+        </div>
+    </section>
+
+    <section class="summary">
+        <div class="stat">
+            <div class="stat-label">Total Students</div>
+            <div class="stat-number" id="totalCount">0</div>
+        </div>
+        <div class="stat present">
+            <div class="stat-label">Present</div>
+            <div class="stat-number" id="presentCount">0</div>
+        </div>
+        <div class="stat absent">
+            <div class="stat-label">Absent</div>
+            <div class="stat-number" id="absentCount">0</div>
+        </div>
+        <div class="stat late">
+            <div class="stat-label">Late</div>
+            <div class="stat-number" id="lateCount">0</div>
+        </div>
+    </section>
+
+    <section class="card">
+        <div class="card-title">Class Register</div>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Student</th>
+                        <th>Student Number</th>
+                        <th>Attendance Status</th>
+                    </tr>
+                </thead>
+                <tbody id="studentRows">
+                    <tr>
+                        <td colspan="4" class="empty">Select a class to load students.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="actions">
+            <button class="primary-button" id="saveButton" onclick="saveAttendance()" disabled>
+                Save Attendance
+            </button>
+            <span id="progressText" class="subtitle"></span>
+        </div>
+
+        <div id="message" class="message"></div>
+    </section>
+</main>
+
+<footer>
+    <strong>MONZE DAY SECONDARY SCHOOL</strong><br>
+    Knowledge • Discipline • Excellence
+</footer>
+
+<script>
+const classSelect = document.getElementById("classSelect");
+const dateInput = document.getElementById("attendanceDate");
+const rowsContainer = document.getElementById("studentRows");
+const saveButton = document.getElementById("saveButton");
+
+let students = [];
+let attendance = {};
+
+function localDate() {
+    const now = new Date();
+    const offset = now.getTimezoneOffset();
+    return new Date(now.getTime() - offset * 60000)
+        .toISOString().slice(0, 10);
+}
+
+dateInput.value = localDate();
+dateInput.max = localDate();
+
+async function api(url, options = {}) {
+    const response = await fetch(url, {
+        credentials: "same-origin",
+        ...options,
+        headers: {
+            "Content-Type": "application/json",
+            ...(options.headers || {})
+        }
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+        throw new Error(data.message || `Request failed (${response.status})`);
+    }
+
+    return data;
+}
+
+function showMessage(message, type) {
+    const box = document.getElementById("message");
+    box.textContent = message;
+    box.className = "message " + type;
+}
+
+function clearMessage() {
+    const box = document.getElementById("message");
+    box.textContent = "";
+    box.className = "message";
+}
+
+function updateSummary() {
+    let present = 0;
+    let absent = 0;
+    let late = 0;
+
+    Object.values(attendance).forEach(status => {
+        if (status === "Present") present++;
+        if (status === "Absent") absent++;
+        if (status === "Late") late++;
+    });
+
+    document.getElementById("totalCount").textContent = students.length;
+    document.getElementById("presentCount").textContent = present;
+    document.getElementById("absentCount").textContent = absent;
+    document.getElementById("lateCount").textContent = late;
+
+    const marked = present + absent + late;
+    document.getElementById("progressText").textContent =
+        `${marked} of ${students.length} marked`;
+}
+
+function renderStudents() {
+    if (!students.length) {
+        rowsContainer.innerHTML =
+            '<tr><td colspan="4" class="empty">No students found in this class.</td></tr>';
+        saveButton.disabled = true;
+        updateSummary();
+        return;
+    }
+
+    rowsContainer.innerHTML = students.map((student, index) => {
+        const status = attendance[student.id];
+
+        return `
+            <tr>
+                <td>${index + 1}</td>
+                <td>
+                    <div class="student-name">${escapeHtml(student.full_name)}</div>
+                </td>
+                <td>${escapeHtml(student.student_number || "—")}</td>
+                <td>
+                    <div class="status-buttons">
+                        ${statusButton(student.id, "Present", status)}
+                        ${statusButton(student.id, "Absent", status)}
+                        ${statusButton(student.id, "Late", status)}
+                    </div>
+                </td>
+            </tr>
+        `;
+    }).join("");
+
+    saveButton.disabled = false;
+    updateSummary();
+}
+
+function statusButton(studentId, value, current) {
+    const css = value.toLowerCase();
+    const active = current === value ? "active" : "";
+
+    return `
+        <button type="button"
+            class="status-button ${css} ${active}"
+            onclick="setStatus(${Number(studentId)}, '${value}')">
+            ${value}
+        </button>
+    `;
+}
+
+function escapeHtml(value) {
+    return String(value ?? "").replace(/[&<>"']/g, character => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+    })[character]);
+}
+
+function setStatus(studentId, status) {
+    attendance[studentId] = status;
+    renderStudents();
+    clearMessage();
+}
+
+async function loadClasses() {
+    try {
+        const data = await api("/api/teacher/me");
+
+        const teacher = data.teacher || data;
+        const rawClasses = teacher.classes || "";
+
+        const classes = Array.isArray(rawClasses)
+            ? rawClasses
+            : String(rawClasses).split(",");
+
+        classSelect.innerHTML = '<option value="">Choose a class</option>';
+
+        [...new Set(classes.map(value => String(value).trim()).filter(Boolean))]
+            .forEach(className => {
+                const option = document.createElement("option");
+                option.value = className;
+                option.textContent = className;
+                classSelect.appendChild(option);
+            });
+
+        if (!classes.length || !classes.some(value => String(value).trim())) {
+            classSelect.innerHTML = '<option value="">No assigned classes found</option>';
+            return;
+        }
+
+        await loadAttendance();
+    } catch (error) {
+        classSelect.innerHTML = '<option value="">Unable to load classes</option>';
+        showMessage(error.message, "error");
+    }
+}
+
+async function loadAttendance() {
+    const className = classSelect.value;
+    const date = dateInput.value;
+
+    if (!className || !date) {
+        students = [];
+        attendance = {};
+        renderStudents();
+        return;
+    }
+
+    clearMessage();
+    saveButton.disabled = true;
+    rowsContainer.innerHTML =
+        '<tr><td colspan="4" class="empty">Loading students...</td></tr>';
+
+    try {
+        const [studentData, attendanceData] = await Promise.all([
+            api("/api/teacher/attendance/students?class_name=" + encodeURIComponent(className)),
+            api("/api/teacher/attendance?class_name=" + encodeURIComponent(className) +
+                "&date=" + encodeURIComponent(date))
+        ]);
+
+        students = studentData.students || [];
+        attendance = {};
+
+        (attendanceData.records || []).forEach(record => {
+            if (record.student_id && record.status) {
+                attendance[record.student_id] = record.status;
+            }
+        });
+
+        renderStudents();
+    } catch (error) {
+        students = [];
+        attendance = {};
+        renderStudents();
+        showMessage(error.message, "error");
+    }
+}
+
+async function saveAttendance() {
+    const className = classSelect.value;
+    const date = dateInput.value;
+
+    if (!className || !date || !students.length) {
+        showMessage("Choose a class with students first.", "error");
+        return;
+    }
+
+    if (Object.keys(attendance).length !== students.length) {
+        showMessage("Please mark every student before saving attendance.", "error");
+        return;
+    }
+
+    const records = students.map(student => ({
+        student_id: Number(student.id),
+        status: attendance[student.id]
+    }));
+
+    saveButton.disabled = true;
+    saveButton.textContent = "Saving...";
+
+    try {
+        await api("/api/teacher/attendance", {
+            method: "PUT",
+            body: JSON.stringify({
+                class_name: className,
+                date,
+                records
+            })
+        });
+
+        showMessage("Attendance saved successfully.", "success");
+    } catch (error) {
+        showMessage(error.message, "error");
+    } finally {
+        saveButton.disabled = false;
+        saveButton.textContent = "Save Attendance";
+    }
+}
+
+classSelect.addEventListener("change", loadAttendance);
+dateInput.addEventListener("change", loadAttendance);
+
+loadClasses();
+</script>
+
+</body>
+</html>

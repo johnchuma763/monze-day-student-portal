@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Administrator Login | Monze Day Secondary School</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+    margin:0;
+    min-height:100vh;
+    padding:25px 16px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    font-family:Arial,sans-serif;
+    background:linear-gradient(135deg,#091d38,#153c69);
+}
+
+header{
+    width:100%;
+    max-width:440px;
+    margin-bottom:18px;
+    text-align:center;
+    color:white;
+}
+
+header h2{
+    margin:0;
+    font-size:17px;
+    letter-spacing:1px;
+}
+
+header p{
+    margin:7px 0 0;
+    color:#d9e3f0;
+    font-size:13px;
+}
+
+.card{
+    width:100%;
+    max-width:440px;
+    padding:35px;
+    background:white;
+    border-radius:16px;
+    box-shadow:0 15px 45px rgba(0,0,0,.2);
+}
+
+.logo{
+    width:68px;
+    height:68px;
+    margin:0 auto 18px;
+    display:grid;
+    place-items:center;
+    border-radius:16px;
+    background:#102b50;
+    color:#d9ad45;
+    font-size:34px;
+}
+
+h1{
+    text-align:center;
+    color:#102b50;
+    font-size:27px;
+    margin:0 0 9px;
+}
+
+.subtitle{
+    text-align:center;
+    color:#718096;
+    font-size:14px;
+    line-height:1.6;
+    margin:0 0 27px;
+}
+
+label{
+    display:block;
+    margin:18px 0 8px;
+    color:#263b59;
+    font-size:14px;
+    font-weight:bold;
+}
+
+input{
+    width:100%;
+    padding:14px;
+    border:1px solid #d5deea;
+    border-radius:8px;
+    outline:none;
+    font-size:15px;
+}
+
+input:focus{
+    border-color:#c9a34a;
+    box-shadow:0 0 0 3px rgba(201,163,74,.13);
+}
+
+.password-box{
+    position:relative;
+}
+
+.password-box input{
+    padding-right:75px;
+}
+
+.toggle-password{
+    position:absolute;
+    right:10px;
+    top:50%;
+    transform:translateY(-50%);
+    border:none;
+    background:transparent;
+    color:#102b50;
+    font-size:13px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.login-button{
+    width:100%;
+    margin-top:25px;
+    padding:15px;
+    border:none;
+    border-radius:8px;
+    background:#102b50;
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.login-button:hover{
+    background:#1b416e;
+}
+
+.login-button:disabled{
+    opacity:.6;
+    cursor:wait;
+}
+
+#status{
+    min-height:20px;
+    margin-top:16px;
+    text-align:center;
+    font-size:14px;
+    line-height:1.5;
+}
+
+.register-box{
+    margin-top:24px;
+    padding-top:20px;
+    border-top:1px solid #e5eaf1;
+    text-align:center;
+}
+
+.register-box p{
+    margin:0 0 10px;
+    color:#718096;
+    font-size:13px;
+}
+
+.register-box a{
+    color:#a77c19;
+    font-weight:bold;
+    font-size:14px;
+    text-decoration:none;
+}
+
+.register-box a:hover{
+    text-decoration:underline;
+}
+
+.back{
+    display:block;
+    margin-top:23px;
+    text-align:center;
+    color:#102b50;
+    font-size:14px;
+    font-weight:bold;
+    text-decoration:none;
+}
+
+.back:hover{
+    text-decoration:underline;
+}
+
+footer{
+    margin-top:24px;
+    text-align:center;
+    color:#d9e3f0;
+    font-size:12px;
+}
+
+@media(max-width:420px){
+    .card{padding:27px 22px}
+    h1{font-size:24px}
+    header h2{font-size:15px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h2>MONZE DAY SECONDARY SCHOOL</h2>
+    <p>Administrator Portal</p>
+</header>
+
+<main class="card">
+
+    <div class="logo">🛡️</div>
+
+    <h1>Administrator Login</h1>
+
+    <p class="subtitle">
+        Sign in securely to manage the school portal.
+    </p>
+
+    <form id="adminLoginForm">
+
+        <label for="email">Administrator Email</label>
+        <input
+            type="email"
+            id="email"
+            placeholder="Enter your school email"
+            autocomplete="username"
+            required
+        >
+
+        <label for="password">Password</label>
+
+        <div class="password-box">
+            <input
+                type="password"
+                id="password"
+                placeholder="Enter your password"
+                autocomplete="current-password"
+                required
+            >
+            <button
+                type="button"
+                class="toggle-password"
+                id="togglePassword"
+            >Show</button>
+        </div>
+
+        <button
+            type="submit"
+            class="login-button"
+            id="loginButton"
+        >
+            Sign In
+        </button>
+
+        <p id="status" role="status" aria-live="polite"></p>
+
+    </form>
+
+    <div class="register-box">
+        <p>Don't have an administrator account?</p>
+        <a href="admin-register.html">
+            Register as Administrator
+        </a>
+    </div>
+
+    <a href="login.html" class="back">
+        ← Back to Account Selection
+    </a>
+
+</main>
+
+<footer>
+    Knowledge • Discipline • Excellence
+</footer>
+
+<script>
+const form = document.getElementById("adminLoginForm");
+const statusBox = document.getElementById("status");
+const loginButton = document.getElementById("loginButton");
+const passwordInput = document.getElementById("password");
+
+document.getElementById("togglePassword").addEventListener("click", function() {
+    const hidden = passwordInput.type === "password";
+
+    passwordInput.type = hidden ? "text" : "password";
+    this.textContent = hidden ? "Hide" : "Show";
+});
+
+form.addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    statusBox.textContent = "Signing in...";
+    statusBox.style.color = "#102b50";
+    loginButton.disabled = true;
+
+    try {
+        const response = await fetch("/api/admin/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                email: document.getElementById("email").value.trim(),
+                password: passwordInput.value
+            })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.message || "Login failed.");
+        }
+
+        statusBox.textContent = "Login successful. Opening dashboard...";
+        statusBox.style.color = "green";
+
+        window.location.href = "admin-dashboard.html";
+
+    } catch (error) {
+        statusBox.textContent =
+            error.message || "Unable to connect to the server.";
+        statusBox.style.color = "#b42318";
+        loginButton.disabled = false;
+    }
+});
+</script>
+
+</body>
+</html>

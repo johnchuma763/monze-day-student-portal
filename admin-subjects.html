@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manage Subjects | Monze Day Secondary School</title>
+<style>
+:root{--navy:#102b50;--gold:#d9ad45;--light:#f3f6fa}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:var(--light);color:#243247}
+header{background:var(--navy);color:white;padding:22px;border-bottom:4px solid var(--gold)}
+header h2{margin:0 0 6px}
+header p{margin:0;color:#dce5f0}
+.container{max-width:1100px;margin:30px auto;padding:0 16px}
+.card{background:white;padding:24px;border-radius:12px;margin-bottom:22px;box-shadow:0 3px 14px rgba(0,0,0,.06)}
+h3{color:var(--navy);margin-top:0}
+.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:15px}
+label{display:block;font-weight:bold;margin-bottom:7px}
+input,select{width:100%;padding:12px;border:1px solid #ccd5e0;border-radius:7px;background:white;font-size:15px}
+button{padding:11px 16px;border:0;border-radius:7px;cursor:pointer;font-weight:bold;margin:4px 3px}
+button:disabled{opacity:.5;cursor:not-allowed}
+.primary{background:var(--navy);color:white}
+.gold{background:var(--gold);color:#17243a}
+.danger{background:#b83232;color:white}
+.secondary{background:#e5ebf2;color:var(--navy)}
+.table-wrap{width:100%;overflow-x:auto}
+table{width:100%;min-width:650px;border-collapse:collapse}
+th,td{padding:13px;border:1px solid #e0e5eb;text-align:left}
+th{background:var(--navy);color:white}
+tr:nth-child(even){background:#f6f8fb}
+.message{margin-top:14px;font-weight:bold}
+.back{color:var(--gold);text-decoration:none;display:inline-block;margin-top:15px}
+.pending{background:#fff9e9;border:1px solid #ead49c;padding:15px;border-radius:9px;margin-top:18px}
+.pending li{padding:5px}
+@media(max-width:600px){.card{padding:16px}header{padding:18px}}
+</style>
+</head>
+<body>
+<header>
+<h2>MONZE DAY SECONDARY SCHOOL</h2>
+<p>Administrator Portal · Subject Management</p>
+<a class="back" href="admin-dashboard.html">← Back to Dashboard</a>
+</header>
+<main class="container">
+<section class="card">
+<h3>Manage Class Subjects</h3>
+<p>Select a form and class, enter all its subjects, then save the complete list.</p>
+<div class="form-grid">
+<div><label for="formNumber">Form</label>
+<select id="formNumber">
+<option value="1">Form 1</option><option value="2">Form 2</option>
+<option value="3">Form 3</option><option value="4">Form 4</option>
+</select></div>
+<div><label for="classLetter">Class</label>
+<select id="classLetter">
+<option value="A">Class A</option><option value="B">Class B</option>
+<option value="C">Class C</option><option value="D">Class D</option>
+</select></div>
+</div>
+<br>
+<form id="subjectForm">
+<label for="subjectName">Subject Name</label>
+<input id="subjectName" type="text" maxlength="100" placeholder="Enter subject name" required>
+<br><br>
+<button class="gold" type="submit">Add to List</button>
+</form>
+<div class="pending">
+<h3>Subjects Waiting to Be Saved</h3>
+<p id="pendingCount">0 subjects added</p>
+<ol id="pendingList"><li>No pending subjects.</li></ol>
+<button class="primary" id="saveBatch" type="button" disabled>Save Class Subjects</button>
+<button class="secondary" id="clearPending" type="button">Clear List</button>
+</div>
+<p class="message" id="message" role="status"></p>
+</section>
+<section class="card">
+<h3>Registered Class Subjects</h3>
+<p>Each class has its own subject table, arranged from Form 1A to Form 4D.</p>
+<div id="classTables">
+<p>Loading class tables...</p>
+</div>
+</section>
+</main>
+<script>
+const formNumber=document.getElementById("formNumber");
+const classLetter=document.getElementById("classLetter");
+const subjectName=document.getElementById("subjectName");
+const subjectForm=document.getElementById("subjectForm");
+const subjectsTable=document.getElementById("subjectsTable");
+const pendingList=document.getElementById("pendingList");
+const pendingCount=document.getElementById("pendingCount");
+const saveBatch=document.getElementById("saveBatch");
+const message=document.getElementById("message");
+let pending=[];
+
+async function api(url,options={}){
+ const response=await fetch(url,{credentials:"same-origin",...options,
+  headers:{"Content-Type":"application/json",...(options.headers||{})}});
+ const data=await response.json();
+ if(!response.ok)throw new Error(data.message||"Request failed.");
+ return data;
+}
+function showMessage(text,success=true){
+ message.textContent=text;
+ message.style.color=success?"green":"#b83232";
+}
+function renderPending(){
+ pendingList.innerHTML="";
+ pendingCount.textContent=pending.length+" subjects added";
+ saveBatch.disabled=pending.length===0;
+ if(!pending.length){pendingList.innerHTML="<li>No pending subjects.</li>";return;}
+ pending.forEach((name,index)=>{
+  const li=document.createElement("li");
+  li.textContent=name+" ";
+  const remove=document.createElement("button");
+  remove.type="button";remove.className="danger";remove.textContent="Remove";
+  remove.onclick=()=>{pending.splice(index,1);renderPending();};
+  li.appendChild(remove);pendingList.appendChild(li);
+ });
+}
+subjectForm.addEventListener("submit",event=>{
+ event.preventDefault();
+ const name=subjectName.value.trim();
+ if(!name)return;
+ if(pending.some(s=>s.toLowerCase()===name.toLowerCase())){
+  showMessage("That subject is already in the pending list.",false);return;
+ }
+ pending.push(name);
+ subjectName.value="";
+ renderPending();
+ showMessage(name+" added to the pending list. It is not saved yet.");
+ subjectName.focus();
+});
+document.getElementById("clearPending").onclick=()=>{
+ pending=[];renderPending();showMessage("Pending list cleared.");
+};
+saveBatch.onclick=async()=>{
+ if(!pending.length)return;
+ const form=formNumber.value,letter=classLetter.value;
+ saveBatch.disabled=true;
+ try{
+  const result=await api("/api/admin/class-subjects/batch",{
+   method:"POST",
+   body:JSON.stringify({form_number:Number(form),class_letter:letter,subjects:pending})
+  });
+  pending=[];renderPending();showMessage(result.message);await loadSubjects();
+ }catch(error){showMessage(error.message,false);}
+ finally{saveBatch.disabled=pending.length===0;}
+};
+async function loadSubjects(){
+ const container=document.getElementById("classTables");
+ container.innerHTML="<p>Loading class tables...</p>";
+
+ try{
+  const subjects=await api("/api/admin/class-subjects");
+  subjects.sort((a,b)=>Number(a.form_number)-Number(b.form_number)||
+   a.class_letter.localeCompare(b.class_letter)||
+   a.subject_name.localeCompare(b.subject_name));
+
+  container.innerHTML="";
+
+  for(let form=1;form<=4;form++){
+   for(const letter of ["A","B","C","D"]){
+    const className="Form "+form+letter;
+    const group=subjects.filter(s=>
+     Number(s.form_number)===form && s.class_letter.trim()===letter
+    );
+
+    const card=document.createElement("div");
+    card.className="card";
+
+    const heading=document.createElement("h3");
+    heading.textContent=className;
+    card.appendChild(heading);
+
+    const wrap=document.createElement("div");
+    wrap.className="table-wrap";
+
+    const table=document.createElement("table");
+    const thead=document.createElement("thead");
+    thead.innerHTML="<tr><th>#</th><th>Subject</th><th>Actions</th></tr>";
+    table.appendChild(thead);
+
+    const tbody=document.createElement("tbody");
+
+    if(!group.length){
+     const row=document.createElement("tr");
+     const cell=document.createElement("td");
+     cell.colSpan=3;
+     cell.textContent="No subjects registered for "+className+".";
+     row.appendChild(cell);
+     tbody.appendChild(row);
+    }else{
+     group.forEach((subject,index)=>{
+      const row=document.createElement("tr");
+
+      [index+1,subject.subject_name].forEach(value=>{
+       const cell=document.createElement("td");
+       cell.textContent=value;
+       row.appendChild(cell);
+      });
+
+      const actions=document.createElement("td");
+      const edit=document.createElement("button");
+      edit.className="gold";
+      edit.textContent="Edit";
+      edit.onclick=()=>editSubject(subject);
+
+      const remove=document.createElement("button");
+      remove.className="danger";
+      remove.textContent="Delete";
+      remove.onclick=()=>deleteSubject(subject.id);
+
+      actions.append(edit,remove);
+      row.appendChild(actions);
+      tbody.appendChild(row);
+     });
+    }
+
+    table.appendChild(tbody);
+    wrap.appendChild(table);
+    card.appendChild(wrap);
+    container.appendChild(card);
+   }
+  }
+ }catch(error){
+  container.innerHTML="<p>Unable to load class tables.</p>";
+  showMessage(error.message,false);
+ }
+}
+
+async function editSubject(subject){
+ const name=prompt("Edit subject name:",subject.subject_name);
+ if(name===null)return;
+ if(!name.trim()){showMessage("Subject name cannot be empty.",false);return;}
+ try{
+  await api("/api/admin/class-subjects/"+subject.id,{
+   method:"PATCH",body:JSON.stringify({subject_name:name.trim()})
+  });
+  showMessage("Subject updated successfully.");await loadSubjects();
+ }catch(error){showMessage(error.message,false);}
+}
+async function deleteSubject(id){
+ if(!confirm("Are you sure you want to delete this subject?"))return;
+ try{
+  const result=await api("/api/admin/class-subjects/"+id,{method:"DELETE"});
+  showMessage(result.message);await loadSubjects();
+ }catch(error){showMessage(error.message,false);}
+}
+renderPending();
+loadSubjects();
+</script>
+</body>
+</html>

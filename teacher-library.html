@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Teacher Digital Library | Monze Day Secondary School</title>
+
+<style>
+:root {
+    --navy: #102b50;
+    --navy-dark: #071a35;
+    --navy-light: #1b4778;
+    --gold: #d9ad45;
+    --background: #f3f6fb;
+    --text: #25344d;
+    --muted: #718096;
+    --white: #ffffff;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: var(--background);
+    color: var(--text);
+}
+
+header {
+    background: linear-gradient(115deg, var(--navy-dark), var(--navy));
+    color: white;
+    padding: 25px 18px;
+    text-align: center;
+    border-bottom: 4px solid var(--gold);
+    box-shadow: 0 4px 15px #102b501c;
+}
+
+.logo {
+    width: 52px;
+    height: 52px;
+    display: grid;
+    place-items: center;
+    margin: 0 auto 12px;
+    background: var(--gold);
+    color: var(--navy-dark);
+    border-radius: 13px;
+    font-size: 22px;
+    font-weight: 800;
+}
+
+header h1 {
+    font-size: 22px;
+    margin: 8px 0;
+    letter-spacing: .5px;
+}
+
+header p {
+    margin: 7px 0 0;
+    color: var(--gold);
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+main {
+    max-width: 950px;
+    margin: 25px auto;
+    padding: 15px 20px 35px;
+}
+
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: white;
+    color: var(--navy);
+    padding: 12px 17px;
+    border: 1px solid #dce3ec;
+    border-radius: 9px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 22px;
+    box-shadow: 0 3px 10px #102b500c;
+    transition: .2s;
+}
+
+.back-button:hover {
+    background: var(--navy);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.card {
+    background: white;
+    padding: 27px;
+    margin-bottom: 23px;
+    border-radius: 15px;
+    border: 1px solid #e6ebf2;
+    box-shadow: 0 5px 20px #102b500c;
+}
+
+.card-heading {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 22px;
+}
+
+.heading-icon {
+    width: 49px;
+    height: 49px;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    background: #fff4dc;
+    border-radius: 12px;
+    font-size: 23px;
+}
+
+.card h2 {
+    color: var(--navy);
+    font-size: 20px;
+    margin: 0;
+}
+
+.card-heading p {
+    color: var(--muted);
+    font-size: 13px;
+    margin: 5px 0 0;
+}
+
+label {
+    display: block;
+    color: var(--navy);
+    font-size: 13px;
+    font-weight: bold;
+    margin-top: 16px;
+}
+
+input,
+select,
+textarea {
+    display: block;
+    width: 100%;
+    padding: 13px 14px;
+    margin-top: 7px;
+    border: 1px solid #d5dce6;
+    border-radius: 9px;
+    background: #fbfcfe;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+    transition: border .2s, box-shadow .2s;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px #d9ad4520;
+    background: white;
+}
+
+textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+input[type="file"] {
+    background: #fffaf0;
+    border: 1px dashed var(--gold);
+    padding: 15px;
+    cursor: pointer;
+}
+
+.file-help {
+    display: block;
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 8px;
+}
+
+.submit-button {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 14px 18px;
+    margin-top: 23px;
+    background: var(--navy);
+    color: white;
+    border: 0;
+    border-radius: 9px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.submit-button:hover {
+    background: var(--navy-light);
+    transform: translateY(-2px);
+}
+
+.submit-button:disabled {
+    opacity: .65;
+    cursor: wait;
+    transform: none;
+}
+
+#message {
+    display: none;
+    padding: 12px 14px;
+    border-radius: 8px;
+    margin: 17px 0 0;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+#message:not(:empty) {
+    display: block;
+    background: #fff8e8;
+    color: #785817;
+    border: 1px solid #f0dfb6;
+}
+
+#materials {
+    margin-top: 12px;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 35px 15px;
+    background: #f8fafd;
+    border: 1px dashed #d8e0eb;
+    border-radius: 11px;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.empty-state .empty-icon {
+    font-size: 36px;
+    margin-bottom: 12px;
+}
+
+.item {
+    padding: 19px;
+    margin-top: 13px;
+    border: 1px solid #e6ebf2;
+    border-left: 4px solid var(--gold);
+    border-radius: 10px;
+    background: #ffffff;
+}
+
+.item strong {
+    display: block;
+    color: var(--navy);
+    font-size: 16px;
+    overflow-wrap: anywhere;
+}
+
+.item p {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.6;
+    margin: 9px 0 13px;
+}
+
+.item-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+}
+
+.btn {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 15px;
+    border-radius: 7px;
+    background: var(--navy);
+    color: white;
+    text-decoration: none;
+    border: 0;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background: var(--navy-light);
+}
+
+.delete {
+    background: #a52a2a;
+}
+
+.delete:hover {
+    background: #801e1e;
+}
+
+footer {
+    text-align: center;
+    padding: 22px 15px;
+    color: var(--muted);
+    font-size: 12px;
+    border-top: 1px solid #e1e7ef;
+    background: white;
+}
+
+footer strong {
+    display: block;
+    color: var(--navy);
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+}
+
+@media(max-width: 600px) {
+    header {
+        padding: 21px 12px;
+    }
+
+    header h1 {
+        font-size: 18px;
+    }
+
+    main {
+        padding: 10px 13px 25px;
+        margin-top: 17px;
+    }
+
+    .card {
+        padding: 20px 17px;
+        border-radius: 12px;
+    }
+
+    .card h2 {
+        font-size: 18px;
+    }
+
+    .back-button {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .item-actions .btn {
+        flex: 1;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">MD</div>
+    <h1>MONZE DAY SECONDARY SCHOOL</h1>
+    <p>TEACHER DIGITAL LIBRARY</p>
+</header>
+
+<main>
+
+    <a href="teacher-dashboard.html" class="back-button">
+        ← Back to Teacher Portal
+    </a>
+
+    <section class="card">
+
+        <div class="card-heading">
+            <div class="heading-icon">📤</div>
+            <div>
+                <h2>Upload Learning Material</h2>
+                <p>Share educational resources with your students.</p>
+            </div>
+        </div>
+
+        <form id="form">
+
+            <label>Material Title</label>
+            <input
+                name="title"
+                placeholder="Enter material title"
+                maxlength="150"
+                required
+            >
+
+            <label>Description (Optional)</label>
+            <textarea
+                name="description"
+                placeholder="Describe this learning material..."
+                maxlength="1000"
+            ></textarea>
+
+            <label>Assigned Class</label>
+            <input
+                name="class_name"
+                placeholder="e.g. Form 2"
+                required
+            >
+
+            <label>Assigned Subject</label>
+            <input
+                name="subject_name"
+                placeholder="e.g. Mathematics"
+                required
+            >
+
+            <label>Material Category</label>
+            <select name="category">
+                <option value="notes">Notes</option>
+                <option value="revision">Revision</option>
+                <option value="past_paper">Past Papers</option>
+                <option value="textbook">Textbooks</option>
+                <option value="other">Other</option>
+            </select>
+
+            <label>Choose Learning Material</label>
+            <input
+                type="file"
+                name="file"
+                accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt"
+                required
+            >
+
+            <small class="file-help">
+                Supported: PDF, Word, PowerPoint, Excel and TXT.
+                Maximum file size: 15 MB.
+            </small>
+
+            <button type="submit" class="submit-button" id="uploadButton">
+                📤 Upload Material
+            </button>
+
+        </form>
+
+        <p id="message" role="status" aria-live="polite"></p>
+
+    </section>
+
+    <section class="card">
+
+        <div class="card-heading">
+            <div class="heading-icon">📚</div>
+            <div>
+                <h2>My Uploaded Materials</h2>
+                <p>View and manage your learning resources.</p>
+            </div>
+        </div>
+
+        <div id="materials">Loading materials...</div>
+
+    </section>
+
+</main>
+
+<footer>
+    <strong>MONZE DAY SECONDARY SCHOOL</strong>
+    Knowledge • Discipline • Excellence
+    <br><br>
+    © Monze Day Secondary School · Teacher Portal
+</footer>
+
+<script>
+async function load() {
+    const box = document.getElementById("materials");
+
+    try {
+        const r = await fetch("/api/teacher/library/resources");
+        const d = await r.json();
+
+        if (!r.ok) {
+            throw Error(d.message || "Unable to load materials");
+        }
+
+        box.innerHTML = "";
+
+        if (!d.resources || !d.resources.length) {
+            const empty = document.createElement("div");
+            empty.className = "empty-state";
+
+            const icon = document.createElement("div");
+            icon.className = "empty-icon";
+            icon.textContent = "📚";
+
+            const message = document.createElement("div");
+            message.textContent = "You have not uploaded any materials yet.";
+
+            empty.append(icon, message);
+            box.append(empty);
+            return;
+        }
+
+        d.resources.forEach(x => {
+            const el = document.createElement("div");
+            el.className = "item";
+
+            const title = document.createElement("strong");
+            title.textContent = x.title;
+
+            const info = document.createElement("p");
+            info.textContent =
+                x.class_name + " · " +
+                x.subject_name + " · " +
+                x.category;
+
+            const actions = document.createElement("div");
+            actions.className = "item-actions";
+
+            const a = document.createElement("a");
+            a.href = "/api/library/resources/" +
+                encodeURIComponent(x.id) + "/download";
+            a.textContent = "⬇ Download";
+            a.className = "btn";
+
+            const b = document.createElement("button");
+            b.type = "button";
+            b.textContent = "Delete";
+            b.className = "btn delete";
+            b.onclick = () => removeMaterial(x.id);
+
+            actions.append(a, b);
+            el.append(title, info, actions);
+            box.append(el);
+        });
+
+    } catch (e) {
+        box.textContent = e.message;
+    }
+}
+
+async function removeMaterial(id) {
+    if (!confirm("Delete this library material?")) return;
+
+    try {
+        const r = await fetch(
+            "/api/teacher/library/resources/" + encodeURIComponent(id),
+            { method: "DELETE" }
+        );
+
+        const d = await r.json();
+
+        document.getElementById("message").textContent =
+            d.message || "";
+
+        if (r.ok) {
+            load();
+        }
+    } catch (e) {
+        document.getElementById("message").textContent = e.message;
+    }
+}
+
+document.getElementById("form").addEventListener("submit", async e => {
+    e.preventDefault();
+
+    const msg = document.getElementById("message");
+    const button = document.getElementById("uploadButton");
+    const data = new FormData(e.target);
+
+    msg.textContent = "Uploading learning material...";
+    button.disabled = true;
+    button.textContent = "Uploading...";
+
+    try {
+        const r = await fetch("/api/teacher/library/resources", {
+            method: "POST",
+            body: data
+        });
+
+        const d = await r.json();
+
+        msg.textContent = d.message || "";
+
+        if (r.ok) {
+            e.target.reset();
+            load();
+        }
+
+    } catch (err) {
+        msg.textContent = err.message;
+    } finally {
+        button.disabled = false;
+        button.textContent = "📤 Upload Material";
+    }
+});
+
+load();
+</script>
+
+</body>
+</html>

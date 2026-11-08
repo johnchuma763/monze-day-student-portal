@@ -1,0 +1,351 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  }
+
+html {
+scroll-behavior: smooth;
+}
+
+body {
+font-family: Arial, sans-serif;
+background: #f5f7fb;
+color: #17243b;
+}
+
+header {
+min-height: 85px;
+padding: 15px 7%;
+background: #071a35;
+display: flex;
+justify-content: space-between;
+align-items: center;
+gap: 20px;
+flex-wrap: wrap;
+}
+
+.logo {
+display: flex;
+align-items: center;
+gap: 12px;
+color: white;
+}
+
+.logo-icon {
+background: #d9ad52;
+color: #071a35;
+padding: 13px;
+font-weight: bold;
+border-radius: 8px;
+}
+
+.logo h2 {
+font-size: 19px;
+}
+
+.logo p {
+font-size: 10px;
+letter-spacing: 2px;
+margin-top: 4px;
+}
+
+nav {
+display: flex;
+gap: 22px;
+flex-wrap: wrap;
+}
+
+nav a {
+color: white;
+text-decoration: none;
+font-size: 14px;
+}
+
+nav a:hover {
+color: #d9ad52;
+}
+
+.login-btn,
+.primary-btn {
+background: #d9ad52;
+color: #071a35;
+padding: 13px 22px;
+border-radius: 5px;
+text-decoration: none;
+font-weight: bold;
+display: inline-block;
+}
+
+.hero {
+background: linear-gradient(120deg, #071a35, #123d70);
+color: white;
+padding: 100px 7%;
+min-height: 520px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+gap: 50px;
+flex-wrap: wrap;
+}
+
+.hero-content {
+max-width: 550px;
+}
+
+.tag,
+.section-tag {
+color: #d9ad52;
+letter-spacing: 3px;
+font-size: 12px;
+font-weight: bold;
+}
+
+.hero h1 {
+font-size: clamp(45px, 7vw, 70px);
+margin: 25px 0;
+line-height: 1.1;
+}
+
+.hero h1 span {
+color: #d9ad52;
+}
+
+.hero-content p {
+color: #d4dce8;
+line-height: 1.8;
+margin-bottom: 30px;
+}
+
+.hero-card {
+width: 290px;
+min-height: 290px;
+background: rgba(255,255,255,0.09);
+border: 1px solid rgba(255,255,255,0.2);
+border-radius: 15px;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+text-align: center;
+padding: 25px;
+}
+
+.school-icon {
+font-size: 65px;
+margin-bottom: 20px;
+}
+
+.hero-card h2 {
+letter-spacing: 3px;
+}
+
+.hero-card p {
+color: #d9ad52;
+margin-top: 10px;
+}
+
+.gold-line,
+.footer-line {
+height: 3px;
+width: 70px;
+background: #d9ad52;
+margin: 20px 0;
+}
+
+.hero-card .motto {
+font-size: 12px;
+}
+
+.services {
+padding: 85px 7%;
+text-align: center;
+}
+
+.services h2,
+.about h2 {
+font-size: 34px;
+margin: 18px 0;
+}
+
+.section-description {
+color: #718096;
+margin-bottom: 45px;
+}
+
+.service-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+gap: 22px;
+margin-top: 40px;
+}
+
+.service-card {
+background: white;
+padding: 35px 22px;
+border-radius: 10px;
+box-shadow: 0 5px 25px rgba(0,0,0,0.05);
+transition: 0.3s;
+}
+
+.service-card:hover {
+transform: translateY(-6px);
+}
+
+.service-card div {
+font-size: 40px;
+margin-bottom: 18px;
+}
+
+.service-card h3 {
+margin-bottom: 12px;
+}
+
+.service-card p {
+color: #718096;
+line-height: 1.7;
+font-size: 14px;
+}
+
+.about {
+padding: 80px 10%;
+background: #eaf0f7;
+text-align: center;
+}
+
+.about p {
+max-width: 750px;
+margin: 20px auto 0;
+line-height: 1.9;
+color: #526078;
+}
+
+footer {
+background: #071a35;
+color: white;
+padding: 45px 20px;
+text-align: center;
+}
+
+footer p {
+color: #d9ad52;
+margin-top: 12px;
+}
+
+.footer-line {
+margin: 25px auto;
+}
+
+footer small {
+color: #aeb9c9;
+}
+
+@media(max-width: 700px) {
+header {
+justify-content: center;
+text-align: center;
+}
+
+nav {
+    justify-content: center;
+}
+
+.hero {
+    padding: 70px 7%;
+    text-align: center;
+    justify-content: center;
+}
+
+.hero-card {
+    width: 100%;
+    max-width: 290px;
+}
+
+}
+
+/* MEET OUR TEACHERS */
+.teachers {
+    padding: 85px 7%;
+    text-align: center;
+    background: #ffffff;
+}
+
+.teachers h2 {
+    font-size: 34px;
+    margin: 18px 0;
+    color: #071a35;
+}
+
+.teachers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 25px;
+    margin-top: 45px;
+}
+
+.teacher-card {
+    background: #f5f7fb;
+    border-radius: 12px;
+    padding: 30px 22px;
+    border: 1px solid #e4eaf2;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    transition: 0.3s;
+}
+
+.teacher-card:hover {
+    transform: translateY(-6px);
+}
+
+.teacher-photo {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 auto 20px;
+    border: 4px solid #d9ad52;
+    background: #071a35;
+}
+
+.teacher-initials {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    background: #071a35;
+    color: #d9ad52;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    font-weight: bold;
+    border: 4px solid #d9ad52;
+}
+
+.teacher-card h3 {
+    color: #071a35;
+    margin-bottom: 12px;
+}
+
+.teacher-detail {
+    color: #526078;
+    font-size: 14px;
+    line-height: 1.8;
+    margin-top: 8px;
+}
+
+.teacher-badge {
+    display: inline-block;
+    background: #071a35;
+    color: #d9ad52;
+    padding: 7px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    margin-top: 15px;
+}
+
+.teachers-message {
+    grid-column: 1 / -1;
+    color: #718096;
+    padding: 25px;
+    line-height: 1.7;
+}

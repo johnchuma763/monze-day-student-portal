@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Academic Results | Monze Day Secondary School</title>
+
+<style>
+:root {
+    --navy:#102b50;
+    --navy2:#173b68;
+    --gold:#d9ad45;
+    --bg:#f3f5f9;
+    --white:#fff;
+    --text:#263449;
+    --muted:#718096;
+    --border:#e5e9f0;
+    --green:#168653;
+}
+
+* { box-sizing:border-box; }
+
+body {
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+}
+
+header {
+    background:var(--navy);
+    color:white;
+    padding:20px 5%;
+    border-bottom:4px solid var(--gold);
+}
+
+.header-inner {
+    max-width:1200px;
+    margin:auto;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.brand {
+    font-size:18px;
+    font-weight:800;
+    letter-spacing:.5px;
+}
+
+.brand small {
+    display:block;
+    color:#dce5f2;
+    font-size:11px;
+    margin-top:5px;
+    letter-spacing:1px;
+}
+
+.back-link {
+    color:var(--gold);
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.container {
+    max-width:1200px;
+    margin:30px auto;
+    padding:0 18px 40px;
+}
+
+.page-title {
+    margin-bottom:25px;
+}
+
+.page-title h1 {
+    color:var(--navy);
+    margin:0 0 8px;
+    font-size:30px;
+}
+
+.page-title p {
+    color:var(--muted);
+    margin:0;
+    line-height:1.6;
+}
+
+.student-banner {
+    background:linear-gradient(120deg,var(--navy),var(--navy2));
+    color:white;
+    padding:22px;
+    border-radius:12px;
+    margin-bottom:25px;
+    border-left:5px solid var(--gold);
+}
+
+.student-banner h2 {
+    margin:0 0 7px;
+    font-size:19px;
+}
+
+.student-banner p {
+    margin:0;
+    color:#dce5f2;
+    font-size:14px;
+}
+
+.message {
+    padding:14px 16px;
+    border-radius:8px;
+    margin-bottom:20px;
+    background:#fff7df;
+    color:#795b12;
+    display:none;
+    line-height:1.5;
+}
+
+.section-card {
+    background:white;
+    border-radius:12px;
+    padding:22px;
+    margin-bottom:25px;
+    box-shadow:0 3px 15px rgba(16,43,80,.06);
+    border:1px solid var(--border);
+}
+
+.section-heading {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    flex-wrap:wrap;
+    margin-bottom:18px;
+}
+
+.section-heading h2 {
+    margin:0;
+    color:var(--navy);
+    font-size:19px;
+}
+
+.badge {
+    background:#fff4d7;
+    color:#805d13;
+    padding:6px 11px;
+    border-radius:20px;
+    font-size:11px;
+    font-weight:bold;
+}
+
+.table-wrap {
+    overflow-x:auto;
+    border:1px solid var(--border);
+    border-radius:8px;
+}
+
+table {
+    width:100%;
+    min-width:750px;
+    border-collapse:collapse;
+}
+
+th {
+    background:var(--navy);
+    color:white;
+    padding:13px 12px;
+    text-align:left;
+    font-size:12px;
+    white-space:nowrap;
+}
+
+td {
+    padding:13px 12px;
+    border-bottom:1px solid var(--border);
+    font-size:13px;
+}
+
+tbody tr:last-child td {
+    border-bottom:none;
+}
+
+tbody tr:hover {
+    background:#f8faff;
+}
+
+.score {
+    font-weight:bold;
+    color:var(--navy);
+}
+
+.grade {
+    display:inline-block;
+    padding:5px 9px;
+    border-radius:20px;
+    background:#eaf5ee;
+    color:var(--green);
+    font-weight:bold;
+    font-size:11px;
+}
+
+.empty {
+    text-align:center;
+    color:var(--muted);
+    padding:25px 10px;
+    font-size:13px;
+}
+
+.assessment-label {
+    font-weight:bold;
+    color:var(--navy);
+}
+
+footer {
+    background:var(--navy);
+    color:#dce5f2;
+    text-align:center;
+    padding:20px;
+    font-size:12px;
+}
+
+footer strong {
+    color:var(--gold);
+}
+
+@media(max-width:600px) {
+    .container { margin:20px auto; }
+    .page-title h1 { font-size:25px; }
+    .section-card { padding:15px; }
+    .section-heading h2 { font-size:17px; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-inner">
+        <div class="brand">
+            MONZE DAY SECONDARY SCHOOL
+            <small>KNOWLEDGE • DISCIPLINE • EXCELLENCE</small>
+        </div>
+
+        <a class="back-link" href="student-dashboard.html">
+            ← Dashboard
+        </a>
+    </div>
+</header>
+
+<main class="container">
+
+    <div class="page-title">
+        <h1>Academic Results</h1>
+        <p>View your examination performance and other academic assessments.</p>
+    </div>
+
+    <div class="student-banner">
+        <h2>My Academic Performance</h2>
+        <p>Your published academic results are displayed below.</p>
+    </div>
+
+    <div id="message" class="message"></div>
+
+    <section class="section-card">
+        <div class="section-heading">
+            <h2>End-of-Term Examination Results</h2>
+            <span class="badge">OFFICIAL EXAMINATIONS</span>
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Subject</th>
+                        <th>Term</th>
+                        <th>Year</th>
+                        <th>Score</th>
+                        <th>Grade</th>
+                        <th>Remarks</th>
+                    </tr>
+                </thead>
+                <tbody id="endTermBody">
+                    <tr><td colspan="6" class="empty">Loading results...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="section-card">
+        <div class="section-heading">
+            <h2>Other Assessments</h2>
+            <span class="badge">CONTINUOUS ASSESSMENT</span>
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Assessment</th>
+                        <th>Subject</th>
+                        <th>Term</th>
+                        <th>Year</th>
+                        <th>Score</th>
+                        <th>Grade</th>
+                        <th>Remarks</th>
+                    </tr>
+                </thead>
+                <tbody id="otherBody">
+                    <tr><td colspan="7" class="empty">Loading results...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="section-card">
+        <div class="section-heading">
+            <h2>Unclassified Existing Results</h2>
+            <span class="badge">LEGACY RECORDS</span>
+        </div>
+
+        <p style="color:#718096;font-size:13px;margin-top:0">
+            These existing records have not been assigned to either assessment category.
+        </p>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Subject</th>
+                        <th>Term</th>
+                        <th>Year</th>
+                        <th>Score</th>
+                        <th>Grade</th>
+                        <th>Remarks</th>
+                    </tr>
+                </thead>
+                <tbody id="unclassifiedBody">
+                    <tr><td colspan="6" class="empty">Loading results...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    © <span id="currentYear"></span> MONZE DAY SECONDARY SCHOOL
+    <br><br>
+    <strong>Knowledge • Discipline • Excellence</strong>
+</footer>
+
+<script>
+const message = document.getElementById("message");
+
+document.getElementById("currentYear").textContent =
+    new Date().getFullYear();
+
+function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, character => ({
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        '"':"&quot;",
+        "'":"&#39;"
+    })[character]);
+}
+
+function showMessage(text) {
+    message.textContent = text;
+    message.style.display = "block";
+}
+
+function renderTable(elementId, results, columns) {
+    const body = document.getElementById(elementId);
+
+    if (!results.length) {
+        body.innerHTML =
+            `<tr><td colspan="${columns.length}" class="empty">
+                No results have been published in this category yet.
+            </td></tr>`;
+        return;
+    }
+
+    body.innerHTML = results.map(result => `
+        <tr>
+            ${columns.map(column => {
+                const value = result[column.key] ?? "-";
+
+                if (column.key === "score") {
+                    return `<td class="score">${escapeHTML(value)}%</td>`;
+                }
+
+                if (column.key === "grade") {
+                    return `<td><span class="grade">${escapeHTML(value)}</span></td>`;
+                }
+
+                if (column.key === "assessment_name") {
+                    const label = result.assessment_name ||
+                        result.assessment_kind || "Other Assessment";
+                    return `<td class="assessment-label">${escapeHTML(label)}</td>`;
+                }
+
+                return `<td>${escapeHTML(value)}</td>`;
+            }).join("")}
+        </tr>
+    `).join("");
+}
+
+async function loadResults() {
+    try {
+        const response = await fetch("/api/student/results", {
+            credentials: "same-origin"
+        });
+
+        if (response.status === 401) {
+            window.location.href = "student-login.html";
+            return;
+        }
+
+        if (response.status === 403) {
+            const data = await response.json();
+
+            if (data.mustChangePassword) {
+                window.location.href = "student-change-password.html";
+                return;
+            }
+
+            throw new Error(data.message || "Access denied.");
+        }
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message || "Unable to load results.");
+        }
+
+        if (!Array.isArray(data)) {
+            throw new Error("Unexpected results response.");
+        }
+
+        const endTerm = data.filter(
+            result => result.assessment_type === "end_of_term"
+        );
+
+        const other = data.filter(
+            result => result.assessment_type === "other_assessment"
+        );
+
+        const unclassified = data.filter(
+            result => !result.assessment_type ||
+                result.assessment_type === "unclassified"
+        );
+
+        const commonColumns = [
+            {key:"subject"},
+            {key:"term"},
+            {key:"year"},
+            {key:"score"},
+            {key:"grade"},
+            {key:"remarks"}
+        ];
+
+        renderTable("endTermBody", endTerm, commonColumns);
+
+        renderTable("otherBody", other, [
+            {key:"assessment_name"},
+            {key:"subject"},
+            {key:"term"},
+            {key:"year"},
+            {key:"score"},
+            {key:"grade"},
+            {key:"remarks"}
+        ]);
+
+        renderTable("unclassifiedBody", unclassified, commonColumns);
+
+        if (!data.length) {
+            showMessage("No academic results have been published yet.");
+        }
+
+    } catch (error) {
+        console.error("Student results error:", error);
+        showMessage(error.message || "Unable to load academic results.");
+
+        renderTable("endTermBody", [], [
+            {key:"subject"},{key:"term"},{key:"year"},
+            {key:"score"},{key:"grade"},{key:"remarks"}
+        ]);
+
+        renderTable("otherBody", [], [
+            {key:"assessment_name"},{key:"subject"},{key:"term"},
+            {key:"year"},{key:"score"},{key:"grade"},{key:"remarks"}
+        ]);
+
+        renderTable("unclassifiedBody", [], [
+            {key:"subject"},{key:"term"},{key:"year"},
+            {key:"score"},{key:"grade"},{key:"remarks"}
+        ]);
+    }
+}
+
+loadResults();
+</script>
+
+</body>
+</html>

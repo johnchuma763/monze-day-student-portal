@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Administrator Dashboard | Monze Day Secondary School</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f3f6fb;
+    color:#26364b;
+}
+
+header{
+    background:#102b50;
+    color:white;
+    padding:22px;
+    border-top:5px solid #c9a34a;
+}
+
+header h2{
+    margin:0;
+    color:white;
+}
+
+header p{
+    margin:7px 0 0;
+    color:#d9e3f0;
+}
+
+nav{
+    background:white;
+    padding:15px 22px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    flex-wrap:wrap;
+    box-shadow:0 2px 8px #0000000d;
+}
+
+nav a{
+    color:#102b50;
+    text-decoration:none;
+    font-weight:600;
+}
+
+.logout{
+    background:#a83232;
+    color:white;
+    border:0;
+    padding:10px 16px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+main{
+    max-width:1200px;
+    margin:30px auto;
+    padding:0 18px;
+}
+
+.welcome{
+    margin-bottom:25px;
+}
+
+.welcome h1{
+    color:#102b50;
+    margin-bottom:8px;
+}
+
+.welcome p{
+    color:#718096;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+    gap:18px;
+    margin-bottom:30px;
+}
+
+.stat-card{
+    background:white;
+    padding:23px;
+    border-radius:12px;
+    border-left:4px solid #c9a34a;
+    box-shadow:0 4px 15px #102b5010;
+}
+
+.stat-card h3{
+    margin:0;
+    color:#718096;
+    font-size:14px;
+}
+
+.stat-card strong{
+    display:block;
+    font-size:32px;
+    color:#102b50;
+    margin-top:12px;
+}
+
+.card{
+    background:white;
+    padding:24px;
+    border-radius:12px;
+    margin-bottom:25px;
+    box-shadow:0 4px 15px #102b5010;
+}
+
+.card h2{
+    color:#102b50;
+    margin-top:0;
+}
+
+.table-wrap{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:650px;
+}
+
+th,td{
+    padding:14px;
+    text-align:left;
+    border-bottom:1px solid #e6ebf1;
+    font-size:14px;
+}
+
+th{
+    background:#edf2f8;
+    color:#102b50;
+}
+
+.approve{
+    background:#18794e;
+    color:white;
+    border:0;
+    padding:9px 13px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.approved{
+    color:#18794e;
+    font-weight:bold;
+}
+
+.pending{
+    color:#a66a00;
+    font-weight:bold;
+}
+
+#status{
+    margin:15px 0;
+    font-weight:600;
+}
+
+.empty{
+    color:#718096;
+    padding:15px 0;
+}
+
+footer{
+    text-align:center;
+    padding:22px;
+    color:#718096;
+    font-size:13px;
+}
+
+@media(max-width:500px){
+    header{padding:18px}
+    .card{padding:17px}
+}
+
+/* PROFESSIONAL PORTAL LINK DESIGN */
+a {
+    transition: background .2s ease, color .2s ease,
+                box-shadow .2s ease, transform .2s ease;
+}
+
+a:focus-visible {
+    outline: 3px solid #d9ad52;
+    outline-offset: 3px;
+}
+
+/* Navigation links */
+nav a {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 13px;
+    border-radius: 8px;
+    text-decoration: none;
+}
+
+nav a:hover {
+    background: rgba(217, 173, 82, .16);
+    text-decoration: none;
+}
+
+nav a.active {
+    font-weight: 700;
+}
+
+/* Dashboard and card links */
+.card a,
+.cards .card a,
+.sidebar .card a,
+.announcement-button,
+.back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 11px 16px;
+    border-radius: 8px;
+    background: #102b50;
+    color: #ffffff !important;
+    font-weight: 600;
+    text-decoration: none;
+    border: 1px solid #102b50;
+    box-shadow: 0 3px 8px rgba(16, 43, 80, .12);
+}
+
+.card a:hover,
+.cards .card a:hover,
+.announcement-button:hover,
+.back:hover {
+    background: #1b4778;
+    border-color: #1b4778;
+    color: #ffffff !important;
+    transform: translateY(-1px);
+    box-shadow: 0 5px 12px rgba(16, 43, 80, .18);
+}
+
+/* Back button inside the student results header */
+header .back {
+    background: #d9ad52;
+    color: #102b50 !important;
+    border-color: #d9ad52;
+}
+
+header .back:hover {
+    background: #edc875;
+    color: #102b50 !important;
+}
+
+/* Teacher sidebar */
+.sidebar a {
+    transition: background .2s ease, color .2s ease;
+}
+
+/* Mobile-friendly navigation */
+@media (max-width: 600px) {
+    nav {
+        gap: 8px;
+    }
+
+    nav a {
+        padding: 9px 11px;
+        font-size: 13px;
+    }
+
+    .card a,
+    .back,
+    .announcement-button {
+        min-height: 42px;
+    }
+}
+
+
+/* ADMIN NAVIGATION SIDEBAR */
+.topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 75px;
+    padding: 0 25px;
+    display: flex;
+    align-items: center;
+    z-index: 20;
+    border-top: 5px solid #c9a34a;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.brand h2 {
+    font-size: 17px;
+}
+
+.brand p {
+    font-size: 10px;
+    letter-spacing: 2px;
+    margin: 5px 0 0;
+}
+
+.logo {
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #c9a34a;
+    color: #102b50;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.menu-button {
+    display: none;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 27px;
+    cursor: pointer;
+}
+
+.sidebar {
+    position: fixed;
+    top: 75px;
+    left: 0;
+    bottom: 0;
+    width: 250px;
+    background: #102b50;
+    padding: 25px 15px;
+    overflow-y: auto;
+    z-index: 15;
+}
+
+.sidebar-title {
+    color: #c9a34a;
+    font-size: 11px;
+    letter-spacing: 2px;
+    font-weight: bold;
+    padding: 0 12px;
+    margin: 5px 0 20px;
+}
+
+.sidebar a {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 14px 13px;
+    color: #dce5f1;
+    text-decoration: none;
+    font-size: 14px;
+    border-radius: 7px;
+    margin-bottom: 6px;
+    transition: .2s;
+}
+
+.sidebar a:hover,
+.sidebar a.active {
+    background: #1b4778;
+    color: white;
+    border-left: 4px solid #c9a34a;
+}
+
+.sidebar .logout {
+    margin-top: 35px;
+    width: 100%;
+    border: 1px solid #ffffff35;
+    padding: 13px;
+    background: transparent;
+    color: white;
+    border-radius: 7px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.sidebar .logout:hover {
+    background: #a52a2a;
+}
+
+.overlay {
+    display: none;
+}
+
+main {
+    max-width: none;
+    margin: 105px 0 30px 250px;
+    padding: 0 30px;
+}
+
+footer {
+    margin-left: 250px;
+}
+
+@media(max-width:800px) {
+    .menu-button {
+        display: block;
+    }
+
+    .topbar {
+        padding: 0 15px;
+    }
+
+    .brand h2 {
+        font-size: 13px;
+    }
+
+    .sidebar {
+        left: -260px;
+        width: 250px;
+        transition: left .25s ease;
+    }
+
+    .sidebar.open {
+        left: 0;
+    }
+
+    .overlay.show {
+        display: block;
+        position: fixed;
+        inset: 75px 0 0;
+        background: #00000070;
+        z-index: 14;
+    }
+
+    main {
+        margin: 100px 0 30px;
+        padding: 0 18px;
+    }
+
+    footer {
+        margin-left: 0;
+    }
+}
+
+
+/* PROFESSIONAL ADMIN DASHBOARD REDESIGN */
+[hidden] {
+    display: none !important;
+}
+
+body {
+    background: #f4f6fa;
+    color: #26364b;
+    font-family: Arial, sans-serif;
+}
+
+.topbar {
+    background: #102b50;
+    box-shadow: 0 3px 14px rgba(0,0,0,.12);
+}
+
+.sidebar {
+    box-shadow: 3px 0 14px rgba(0,0,0,.08);
+}
+
+.sidebar a {
+    font-size: 14px;
+    font-weight: 600;
+    padding: 15px 14px;
+    border-left: 4px solid transparent;
+}
+
+.sidebar a.active {
+    background: #1b4778;
+    border-left: 4px solid #d9ad52;
+}
+
+.welcome {
+    background: linear-gradient(120deg,#102b50,#1b4778);
+    color: white;
+    padding: 32px;
+    border-radius: 14px;
+    margin-bottom: 28px;
+    box-shadow: 0 7px 22px rgba(16,43,80,.15);
+}
+
+.welcome h1 {
+    color: white;
+    font-size: 27px;
+    margin-top: 0;
+}
+
+.welcome p {
+    color: #e0e8f2;
+    line-height: 1.7;
+}
+
+.stats {
+    gap: 20px;
+}
+
+.stat-card {
+    border: 1px solid #e8edf4;
+    border-left: 4px solid #c9a34a;
+    border-radius: 12px;
+    padding: 25px;
+    transition: transform .2s, box-shadow .2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 9px 22px rgba(16,43,80,.12);
+}
+
+.stat-card h3 {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: .6px;
+}
+
+.stat-card strong {
+    font-size: 35px;
+}
+
+.card {
+    border: 1px solid #e8edf4;
+    border-radius: 13px;
+    box-shadow: 0 5px 18px rgba(16,43,80,.06);
+}
+
+footer {
+    border-top: 1px solid #e5eaf1;
+    background: white;
+}
+
+@media(max-width:600px) {
+    .welcome {
+        padding: 23px 19px;
+    }
+
+    .welcome h1 {
+        font-size: 22px;
+    }
+
+    .stat-card {
+        padding: 20px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+    <div class="brand">
+        <button class="menu-button" onclick="openMenu()" aria-label="Open menu">☰</button>
+        <div class="logo">MD</div>
+        <div>
+            <h2>MONZE DAY SECONDARY SCHOOL</h2>
+            <p>ADMINISTRATOR PORTAL</p>
+        </div>
+    </div>
+</header>
+
+<div class="overlay" id="overlay" onclick="closeMenu()"></div>
+
+<nav class="sidebar" id="sidebar">
+    <div class="sidebar-title">ADMINISTRATOR MENU</div>
+
+    <a href="admin-dashboard.html" class="active" onclick="showDashboard(this); return false;">
+        🏠 Dashboard
+    </a>
+
+    <a href="admin-students.html" onclick="closeMenu()">
+        👨‍🎓 Manage Students
+    </a>
+
+    <a href="admin-teachers.html">
+        👨‍🏫 Manage Teachers
+    </a>
+
+    <a href="admin-create-account.html" onclick="closeMenu()">
+        ➕ Create Account
+    </a>
+
+
+    <a href="admin-subjects.html" onclick="closeMenu()">
+        📚 Manage Subjects
+    </a>
+
+    <a href="admin-academic-results.html" onclick="closeMenu()">
+        📊 Academic Results
+    </a>
+
+    <a href="admin-timetable.html" onclick="closeMenu()">📅 Timetable Management</a>
+    <a href="admin-examinations.html" onclick="closeMenu()">📝 Examination Timetable</a>
+<a href="admin-library.html" onclick="closeMenu()">📚 Manage Digital Library</a>
+    <a href="admin-attendance.html" onclick="closeMenu()">📅 Attendance Records</a>
+    <a href="admin-announcements.html" onclick="closeMenu()">
+        📢 Manage Announcements
+    </a>
+<a href="admin-support.html" onclick="closeMenu()">🛟 Student Help &amp; Support</a>
+
+    <a href="#adminProfile" onclick="showAdminProfile(this)">
+        👤 My Profile
+    </a>
+
+    <button class="logout" id="logoutButton">Logout</button>
+</nav>
+
+<main>
+
+    <div id="dashboardHome">
+<div id="status" role="status" aria-live="polite"></div>
+    <section class="welcome">
+        <h1>Administrator Dashboard</h1>
+        <p>Welcome, <strong id="adminName">Administrator</strong>.</p>
+        <p>Manage school accounts and monitor portal activities.</p>
+    </section>
+
+    <section class="stats">
+
+        <div class="stat-card">
+            <h3>Total Students</h3>
+            <strong id="studentCount">—</strong>
+        </div>
+
+        <div class="stat-card">
+            <h3>Total Teachers</h3>
+            <strong id="teacherCount">—</strong>
+        </div>
+
+        <div class="stat-card">
+            <h3>Pending Approvals</h3>
+            <strong id="pendingCount">—</strong>
+        </div>
+
+        <div class="stat-card">
+            <h3>Academic Results</h3>
+            <strong id="resultCount">—</strong>
+        </div>
+
+        <div class="stat-card">
+            <h3>Announcements</h3>
+            <strong id="announcementCount">—</strong>
+        </div>
+
+    </section>
+
+    <section class="card">
+    <h2>📖 Digital Library</h2>
+    <p>View and manage learning materials uploaded by teachers.</p>
+    <a href="admin-library.html"
+       style="display:inline-block;background:#102b50;color:white;padding:12px 18px;border-radius:6px;text-decoration:none;">
+       Manage Digital Library →
+    </a>
+</section>
+
+
+
+    </div>
+
+    <div id="profileView" hidden>
+
+
+<section class="card" id="adminProfile">
+    <h2>My Profile</h2>
+
+    <div style="display:flex;align-items:center;gap:22px;flex-wrap:wrap;">
+        <img id="adminProfilePhoto"
+             src=""
+             alt="Administrator profile picture"
+             style="width:125px;height:125px;border-radius:50%;object-fit:cover;background:#edf2f8;border:4px solid #c9a34a;">
+
+        <div>
+            <h3 id="profileAdminName">Administrator</h3>
+            <p id="profileAdminEmail">Loading email...</p>
+            <p id="profileAdminCreated"></p>
+
+            <input type="file" id="adminPhotoInput"
+                   accept="image/jpeg,image/png,image/webp"
+                   style="display:none"
+                   onchange="uploadAdminPhoto(this.files[0])">
+
+            <button type="button"
+                    onclick="document.getElementById('adminPhotoInput').click()"
+                    style="background:#102b50;color:white;border:0;padding:12px 18px;border-radius:6px;cursor:pointer;">
+                Change Profile Picture
+            </button>
+
+            <p style="color:#718096;font-size:13px;">
+                JPG, PNG or WEBP. Maximum size: 2 MB.
+            </p>
+            <p id="adminPhotoMessage" role="status"></p>
+        </div>
+    </div>
+</section>
+
+<section class="card">
+    <h2>Administrator Account</h2>
+    <p>Signed in as <strong id="accountAdminName">Administrator</strong>.</p>
+    <p>Deleting your administrator account does not delete students,
+       teachers, academic results or announcements.</p>
+
+    <label for="deleteAdminPassword">Confirm your password</label>
+    <input id="deleteAdminPassword" type="password"
+           autocomplete="current-password"
+           style="display:block;width:100%;max-width:400px;padding:12px;margin:10px 0;">
+
+    <label for="deleteAdminConfirmation">Type DELETE to confirm</label>
+    <input id="deleteAdminConfirmation" type="text"
+           style="display:block;width:100%;max-width:400px;padding:12px;margin:10px 0;">
+
+    <button type="button" onclick="deleteMyAdminAccount()"
+            style="background:#a83232;color:white;border:0;padding:12px 18px;border-radius:6px;cursor:pointer;">
+        Delete My Administrator Account
+    </button>
+
+    <p id="deleteAdminMessage" role="status"></p>
+</section>
+
+    </div>
+</main>
+
+<footer>
+    © 2026 Monze Day Secondary School. All Rights Reserved.
+</footer>
+
+<script>
+
+/* ADMIN SIDEBAR MENU */
+function openMenu() {
+    document.getElementById("sidebar").classList.add("open");
+    document.getElementById("overlay").classList.add("show");
+}
+
+function closeMenu() {
+    document.getElementById("sidebar").classList.remove("open");
+    document.getElementById("overlay").classList.remove("show");
+}
+
+function selectMenu(link) {
+    document.querySelectorAll(".sidebar a").forEach(a => {
+        a.classList.remove("active");
+    });
+    link.classList.add("active");
+    closeMenu();
+}
+
+
+
+function showAdminProfile(link) {
+    document.getElementById("dashboardHome").hidden = true;
+    document.getElementById("profileView").hidden = false;
+
+    document.querySelectorAll(".sidebar a").forEach(a => {
+        a.classList.remove("active");
+    });
+
+    link.classList.add("active");
+    closeMenu();
+}
+
+function showDashboard(link) {
+    document.getElementById("profileView").hidden = true;
+    document.getElementById("dashboardHome").hidden = false;
+
+    document.querySelectorAll(".sidebar a").forEach(a => {
+        a.classList.remove("active");
+    });
+
+    link.classList.add("active");
+    closeMenu();
+}
+
+async function uploadAdminPhoto(file) {
+    const message = document.getElementById("adminPhotoMessage");
+
+    if (!file) return;
+
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+
+    if (!allowedTypes.includes(file.type)) {
+        message.textContent = "Choose a JPG, PNG or WEBP image.";
+        return;
+    }
+
+    if (file.size > 2 * 1024 * 1024) {
+        message.textContent = "The image must not exceed 2 MB.";
+        return;
+    }
+
+    message.textContent = "Uploading profile picture...";
+
+    const formData = new FormData();
+    formData.append("photo", file);
+
+    try {
+        const response = await fetch("/api/admin/photo", {
+            method: "POST",
+            body: formData
+        });
+
+        const responseText = await response.text();
+        let result;
+
+        try {
+            result = JSON.parse(responseText);
+        } catch {
+            throw new Error("Server returned HTTP " + response.status + " (" + (response.headers.get("content-type") || "unknown") + "): " + responseText.slice(0, 300));
+        }
+
+        if (!response.ok) {
+            throw new Error(result.message || "Photo upload failed.");
+        }
+
+        document.getElementById("adminProfilePhoto").src =
+            result.photo_url + "?t=" + Date.now();
+
+        message.textContent = result.message;
+    } catch (error) {
+        message.textContent = error.message;
+    } finally {
+        document.getElementById("adminPhotoInput").value = "";
+    }
+}
+
+async function checkAdmin(){
+    try{
+        const response = await fetch("/api/admin/me");
+
+        if(response.status === 401){
+            location.href = "admin-login.html";
+            return false;
+        }
+
+        if(!response.ok){
+            throw new Error("Unable to verify administrator.");
+        }
+
+        const admin = await response.json();
+        document.getElementById("adminName").textContent = admin.full_name;
+        document.getElementById("accountAdminName").textContent = admin.full_name;
+        document.getElementById("profileAdminName").textContent = admin.full_name;
+        document.getElementById("profileAdminEmail").textContent = admin.email;
+        document.getElementById("profileAdminCreated").textContent =
+            admin.created_at ? "Account created: " +
+            new Date(admin.created_at).toLocaleDateString() : "";
+
+        const profileImage = document.getElementById("adminProfilePhoto");
+        if (admin.photo_url) {
+            profileImage.src = admin.photo_url + "?t=" + Date.now();
+        } else {
+            profileImage.src = "data:image/svg+xml," +
+                encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="125" height="125"><rect width="100%" height="100%" fill="#edf2f8"/><text x="50%" y="55%" text-anchor="middle" font-size="48" fill="#102b50">👤</text></svg>');
+        }
+
+        return true;
+
+    }catch(error){
+        document.getElementById("status").textContent = error.message;
+        return false;
+    }
+}
+
+async function loadStatistics(){
+    const response = await fetch("/api/admin/overview");
+
+    if(!response.ok){
+        throw new Error("Unable to load school statistics.");
+    }
+
+    const data = await response.json();
+
+    document.getElementById("studentCount").textContent = data.students;
+    document.getElementById("teacherCount").textContent = data.teachers;
+    document.getElementById("pendingCount").textContent = data.pendingTeachers;
+    document.getElementById("resultCount").textContent = data.results;
+    document.getElementById("announcementCount").textContent = data.announcements;
+}
+
+async function loadAdminRequests(){
+    const response = await fetch("/api/admin-requests");
+    if(!response.ok) throw new Error("Unable to load administrator requests.");
+
+    const requests = await response.json();
+    const table = document.getElementById("adminRequestTable");
+    table.replaceChildren();
+
+    if(requests.length === 0){
+        const row = document.createElement("tr");
+        const cell = document.createElement("td");
+        cell.colSpan = 6;
+        cell.className = "empty";
+        cell.textContent = "No administrator account requests yet.";
+        row.appendChild(cell);
+        table.appendChild(row);
+        return;
+    }
+
+    requests.forEach(request => {
+        const row = document.createElement("tr");
+
+        const values = [
+            request.full_name,
+            request.email,
+            request.reason,
+            new Date(request.created_at).toLocaleString(),
+            request.status
+        ];
+
+        values.forEach(value => {
+            const cell = document.createElement("td");
+            cell.textContent = value || "";
+            row.appendChild(cell);
+        });
+
+        const action = document.createElement("td");
+
+        if(request.status === "pending"){
+            ["approved", "rejected"].forEach(status => {
+                const button = document.createElement("button");
+                button.textContent = status === "approved" ? "Approve" : "Reject";
+                button.className = status === "approved" ? "approve" : "logout";
+                button.style.margin = "3px";
+                button.addEventListener("click", () => updateAdminRequest(request.id, status));
+                action.appendChild(button);
+            });
+        } else {
+            action.textContent = "No action needed";
+        }
+
+        row.appendChild(action);
+        table.appendChild(row);
+    });
+}
+
+async function updateAdminRequest(id, status){
+    const actionName = status === "approved" ? "approve" : "reject";
+    if(!confirm("Are you sure you want to " + actionName + " this request?")) return;
+
+    const message = document.getElementById("status");
+    try{
+        const response = await fetch("/api/admin-requests/" + id, {
+            method: "PATCH",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({status})
+        });
+
+        const result = await response.json();
+        if(!response.ok) throw new Error(result.message || "Unable to update request.");
+
+        message.textContent = result.message;
+        await loadAdminRequests();
+    }catch(error){
+        message.textContent = error.message;
+    }
+}
+
+document.getElementById("logoutButton").addEventListener("click",async()=>{
+    try{
+        const response = await fetch("/api/admin/logout",{
+            method:"POST"
+        });
+
+        if(response.ok){
+            location.href = "admin-login.html";
+        }else{
+            document.getElementById("status").textContent = "Unable to log out.";
+        }
+    }catch(error){
+        document.getElementById("status").textContent = error.message;
+    }
+});
+
+async function startDashboard(){
+    const authenticated = await checkAdmin();
+
+    if(!authenticated) return;
+
+    try{
+        await Promise.all([
+            loadStatistics(),
+        ]);
+    }catch(error){
+        document.getElementById("status").textContent = error.message;
+    }
+}
+
+
+async function deleteMyAdminAccount() {
+    const password = document.getElementById("deleteAdminPassword").value;
+    const confirmation = document.getElementById("deleteAdminConfirmation").value;
+    const message = document.getElementById("deleteAdminMessage");
+
+    if (!password || confirmation !== "DELETE") {
+        message.textContent = "Enter your password and type DELETE.";
+        return;
+    }
+
+    if (!confirm("Are you sure you want to delete your administrator account?")) {
+        return;
+    }
+
+    message.textContent = "Deleting account...";
+
+    try {
+        const response = await fetch("/api/admin/delete-account", {
+            method: "DELETE",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({password, confirmation})
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.message || "Unable to delete account.");
+        }
+
+        alert(result.message);
+        location.href = result.redirect;
+    } catch (error) {
+        message.textContent = error.message;
+    }
+}
+
+
+startDashboard();
+</script>
+
+</body>
+</html>

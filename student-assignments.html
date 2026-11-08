@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Assignments | Monze Day Secondary School</title>
+
+<style>
+:root{
+ --navy:#071a35;
+ --navy2:#102d55;
+ --navy3:#193e6c;
+ --gold:#d9ad52;
+ --gold-light:#f8efd9;
+ --bg:#f3f6fb;
+ --white:#fff;
+ --text:#26364d;
+ --muted:#7b8798;
+ --border:#e6ebf2;
+ --green:#16845b;
+ --red:#c34646;
+ --orange:#b77a19;
+ --shadow:0 8px 25px rgba(7,26,53,.06);
+}
+
+*{box-sizing:border-box}
+
+body{
+ margin:0;
+ font-family:Arial,Helvetica,sans-serif;
+ background:var(--bg);
+ color:var(--text);
+}
+
+button,input,select{font:inherit}
+
+.topbar{
+ height:76px;
+ background:var(--navy);
+ color:white;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ padding:0 30px;
+ position:sticky;
+ top:0;
+ z-index:20;
+ box-shadow:0 3px 15px #071a3525;
+}
+
+.brand{
+ display:flex;
+ align-items:center;
+ gap:13px;
+}
+
+.logo{
+ width:46px;
+ height:46px;
+ background:var(--gold);
+ color:var(--navy);
+ display:grid;
+ place-items:center;
+ border-radius:11px;
+ font-weight:900;
+ font-size:17px;
+ letter-spacing:-1px;
+}
+
+.brand h2{
+ font-size:14px;
+ margin:0;
+ letter-spacing:.5px;
+}
+
+.brand small{
+ display:block;
+ color:var(--gold);
+ font-size:10px;
+ letter-spacing:2px;
+ margin-top:5px;
+ font-weight:bold;
+}
+
+.top-actions{
+ display:flex;
+ align-items:center;
+ gap:10px;
+}
+
+.btn{
+ border:0;
+ border-radius:8px;
+ padding:11px 16px;
+ background:var(--navy);
+ color:white;
+ font-weight:bold;
+ text-decoration:none;
+ cursor:pointer;
+ display:inline-flex;
+ align-items:center;
+ justify-content:center;
+ gap:8px;
+ transition:.2s;
+ font-size:13px;
+}
+
+.btn:hover{filter:brightness(1.12);transform:translateY(-1px)}
+.btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.btn.gold{background:var(--gold);color:var(--navy)}
+.btn.light{background:#edf1f7;color:var(--navy)}
+.btn.outline{background:transparent;border:1px solid #dce3ed;color:var(--navy)}
+.btn.small{padding:9px 12px;font-size:12px}
+
+.menu{
+ display:none;
+ background:#ffffff15;
+ color:white;
+ font-size:20px;
+ padding:8px 12px;
+}
+
+.layout{
+ display:flex;
+ min-height:calc(100vh - 76px);
+}
+
+.sidebar{
+ width:250px;
+ background:var(--navy);
+ padding:26px 15px;
+ flex-shrink:0;
+}
+
+.side-title{
+ font-size:10px;
+ color:var(--gold);
+ letter-spacing:2px;
+ font-weight:bold;
+ padding:0 13px;
+ margin:5px 0 20px;
+}
+
+.sidebar a{
+ display:flex;
+ align-items:center;
+ gap:12px;
+ padding:14px 13px;
+ margin-bottom:6px;
+ border-radius:8px;
+ color:#dce5f1;
+ text-decoration:none;
+ font-size:13px;
+ transition:.2s;
+}
+
+.sidebar a:hover,
+.sidebar a.active{
+ background:var(--navy2);
+ border-left:4px solid var(--gold);
+ color:white;
+}
+
+.sidebar a.active{font-weight:bold}
+
+.sidebar-bottom{
+ margin-top:35px;
+ border-top:1px solid #ffffff18;
+ padding:20px 12px 0;
+ color:#aebed2;
+ font-size:11px;
+ line-height:1.8;
+}
+
+.main{
+ flex:1;
+ min-width:0;
+ max-width:1500px;
+ width:100%;
+ margin:auto;
+ padding:30px;
+}
+
+.breadcrumb{
+ font-size:12px;
+ color:var(--muted);
+ margin-bottom:18px;
+}
+
+.breadcrumb strong{color:var(--navy)}
+
+.welcome{
+ background:linear-gradient(115deg,var(--navy),#193f70);
+ padding:34px;
+ border-radius:15px;
+ color:white;
+ margin-bottom:25px;
+ position:relative;
+ overflow:hidden;
+ box-shadow:var(--shadow);
+}
+
+.welcome:after{
+ content:"MD";
+ position:absolute;
+ right:35px;
+ top:0;
+ font-size:120px;
+ font-weight:900;
+ color:#ffffff0b;
+ pointer-events:none;
+}
+
+.welcome small{
+ color:var(--gold);
+ letter-spacing:2px;
+ font-weight:bold;
+ font-size:10px;
+}
+
+.welcome h1{
+ font-size:29px;
+ margin:12px 0;
+ position:relative;
+ z-index:1;
+}
+
+.welcome p{
+ font-size:13px;
+ line-height:1.8;
+ color:#d6e0ee;
+ max-width:650px;
+ margin:0;
+ position:relative;
+ z-index:1;
+}
+
+.welcome-tag{
+ display:inline-flex;
+ align-items:center;
+ gap:7px;
+ margin-top:20px;
+ padding:8px 12px;
+ background:#ffffff12;
+ border:1px solid #ffffff22;
+ border-radius:7px;
+ font-size:11px;
+ color:#f3e2bd;
+}
+
+.stats{
+ display:grid;
+ grid-template-columns:repeat(4,minmax(0,1fr));
+ gap:16px;
+ margin-bottom:28px;
+}
+
+.stat{
+ background:white;
+ padding:20px;
+ border:1px solid var(--border);
+ border-radius:12px;
+ box-shadow:var(--shadow);
+ position:relative;
+ overflow:hidden;
+}
+
+.stat:after{
+ content:"";
+ position:absolute;
+ left:0;
+ top:0;
+ bottom:0;
+ width:4px;
+ background:var(--gold);
+}
+
+.stat-top{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:8px;
+}
+
+.stat span{
+ font-size:11px;
+ color:var(--muted);
+ font-weight:bold;
+}
+
+.stat-icon{
+ width:34px;
+ height:34px;
+ display:grid;
+ place-items:center;
+ border-radius:9px;
+ background:#f2f5fa;
+ font-size:16px;
+}
+
+.stat strong{
+ display:block;
+ font-size:28px;
+ color:var(--navy);
+ margin-top:12px;
+}
+
+.stat small{
+ display:block;
+ color:var(--muted);
+ font-size:10px;
+ margin-top:5px;
+}
+
+.section-head{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:12px;
+ flex-wrap:wrap;
+ margin:28px 0 15px;
+}
+
+.section-head h2{
+ font-size:19px;
+ color:var(--navy);
+ margin:0;
+}
+
+.section-head p{
+ color:var(--muted);
+ font-size:12px;
+ margin:6px 0 0;
+}
+
+.panel{
+ background:white;
+ border:1px solid var(--border);
+ border-radius:12px;
+ padding:20px;
+ margin-bottom:17px;
+ box-shadow:var(--shadow);
+}
+
+.filter-heading{
+ font-size:12px;
+ color:var(--navy);
+ font-weight:bold;
+ margin-bottom:13px;
+}
+
+.filters{
+ display:grid;
+ grid-template-columns:minmax(0,1fr) 220px;
+ gap:12px;
+}
+
+.filters input,
+.filters select{
+ width:100%;
+ padding:13px 14px;
+ border:1px solid #dce3ed;
+ border-radius:8px;
+ background:white;
+ color:var(--text);
+ outline:none;
+ font-size:13px;
+}
+
+.filters input:focus,
+.filters select:focus,
+.field input:focus{
+ border-color:var(--gold);
+ box-shadow:0 0 0 3px #d9ad5220;
+}
+
+.assignment{
+ background:white;
+ border:1px solid var(--border);
+ border-radius:13px;
+ padding:22px;
+ box-shadow:var(--shadow);
+ transition:.2s;
+}
+
+.assignment:hover{
+ border-color:#d8c28e;
+ transform:translateY(-2px);
+}
+
+.assignment-top{
+ display:flex;
+ justify-content:space-between;
+ align-items:flex-start;
+ gap:15px;
+}
+
+.assignment h3{
+ color:var(--navy);
+ font-size:17px;
+ margin:0 0 13px;
+ line-height:1.5;
+ overflow-wrap:anywhere;
+}
+
+.meta{
+ display:flex;
+ gap:10px 18px;
+ flex-wrap:wrap;
+ color:var(--muted);
+ font-size:11px;
+}
+
+.meta span{display:inline-flex;align-items:center;gap:5px}
+
+.description{
+ font-size:13px;
+ line-height:1.8;
+ white-space:pre-wrap;
+ overflow-wrap:anywhere;
+ margin:19px 0;
+ color:#536176;
+}
+
+.badge{
+ font-size:10px;
+ font-weight:bold;
+ padding:7px 11px;
+ border-radius:30px;
+ white-space:nowrap;
+ background:#edf1f7;
+ color:var(--navy);
+ display:inline-flex;
+ align-items:center;
+ gap:5px;
+}
+
+.badge.green{background:#e4f5ed;color:#13734e}
+.badge.orange{background:#fff2dc;color:#98600b}
+.badge.red{background:#fdeaea;color:#a83232}
+
+.assignment-divider{
+ border-top:1px solid var(--border);
+ margin-top:18px;
+ padding-top:15px;
+}
+
+.actions{
+ display:flex;
+ gap:9px;
+ flex-wrap:wrap;
+}
+
+.submission-info{
+ margin-top:13px;
+ font-size:11px;
+ color:var(--muted);
+}
+
+.feedback{
+ background:#f5f8fc;
+ border-left:4px solid var(--gold);
+ padding:15px;
+ border-radius:8px;
+ margin-top:17px;
+ font-size:12px;
+ line-height:1.8;
+ color:#536176;
+}
+
+.feedback strong{color:var(--navy);font-size:13px}
+
+.empty{
+ text-align:center;
+ padding:55px 20px;
+ color:var(--muted);
+ background:white;
+ border:1px solid var(--border);
+ border-radius:13px;
+}
+
+.empty .icon{
+ font-size:38px;
+ margin-bottom:14px;
+}
+
+.empty strong{
+ display:block;
+ color:var(--navy);
+ font-size:16px;
+ margin-bottom:8px;
+}
+
+.empty p{
+ font-size:12px;
+ line-height:1.7;
+}
+
+.notice{
+ display:none;
+ padding:12px;
+ border-radius:8px;
+ font-size:12px;
+ margin:12px 0;
+ line-height:1.6;
+}
+
+.notice.error{display:block;background:#fdeaea;color:#a83232}
+.notice.success{display:block;background:#e4f5ed;color:#13734e}
+
+.modal{
+ display:none;
+ position:fixed;
+ inset:0;
+ background:#071a35b8;
+ backdrop-filter:blur(4px);
+ z-index:40;
+ align-items:center;
+ justify-content:center;
+ padding:15px;
+}
+
+.modal.show{display:flex}
+
+.modal-box{
+ background:white;
+ width:100%;
+ max-width:500px;
+ padding:27px;
+ border-radius:15px;
+ box-shadow:0 20px 60px #0004;
+ animation:appear .2s ease;
+}
+
+@keyframes appear{
+ from{opacity:0;transform:translateY(10px)}
+ to{opacity:1;transform:translateY(0)}
+}
+
+.modal-head{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:10px;
+ border-bottom:1px solid var(--border);
+ padding-bottom:16px;
+ margin-bottom:17px;
+}
+
+.modal-head h2{
+ color:var(--navy);
+ font-size:19px;
+ margin:0;
+}
+
+.close{
+ border:0;
+ background:#f0f3f8;
+ border-radius:8px;
+ padding:8px 11px;
+ cursor:pointer;
+ color:var(--navy);
+}
+
+.field{margin:18px 0}
+
+.field label{
+ display:block;
+ font-weight:bold;
+ color:var(--navy);
+ font-size:12px;
+ margin-bottom:9px;
+}
+
+.field input{
+ width:100%;
+ padding:13px;
+ border:1px solid #dce3ed;
+ border-radius:8px;
+ font-size:13px;
+}
+
+.file-help{
+ background:#f4f7fb;
+ border-radius:8px;
+ padding:12px;
+ color:var(--muted);
+ font-size:11px;
+ line-height:1.7;
+ margin:13px 0 18px;
+}
+
+.modal-actions{
+ display:flex;
+ gap:9px;
+ flex-wrap:wrap;
+}
+
+footer{
+ text-align:center;
+ background:white;
+ border-top:1px solid var(--border);
+ padding:23px;
+ color:var(--muted);
+ font-size:11px;
+ line-height:1.9;
+}
+
+footer strong{color:var(--navy)}
+
+@media(max-width:1050px){
+ .sidebar{width:220px}
+ .main{padding:23px}
+ .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
+@media(max-width:800px){
+ .layout{display:block}
+ .sidebar{
+  display:none;
+  width:100%;
+  padding:15px;
+ }
+ .sidebar.open{display:block}
+ .main{padding:18px}
+ .topbar{padding:0 14px;height:68px}
+ .brand h2{font-size:11px}
+ .brand small{font-size:9px}
+ .logo{width:39px;height:39px}
+ .menu{display:inline-flex}
+ .top-actions .dashboard-link{display:none}
+ .welcome{padding:25px 21px}
+ .welcome h1{font-size:24px}
+ .welcome:after{font-size:85px;right:10px}
+ .filters{grid-template-columns:1fr}
+ .assignment-top{flex-direction:column}
+ .assignment{padding:18px}
+}
+
+@media(max-width:450px){
+ .stats{gap:10px}
+ .stat{padding:15px}
+ .stat strong{font-size:24px}
+ .stat span{font-size:10px}
+ .section-head h2{font-size:17px}
+ .topbar{gap:7px}
+ .brand{gap:8px}
+ .brand h2{font-size:10px}
+ .btn{padding:10px 11px;font-size:11px}
+ .welcome p{font-size:12px}
+ .modal-box{padding:20px}
+}
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+ <div class="brand">
+  <div class="logo">MD</div>
+  <div>
+   <h2>MONZE DAY SECONDARY SCHOOL</h2>
+   <small>STUDENT PORTAL</small>
+  </div>
+ </div>
+
+ <div class="top-actions">
+  <button class="btn menu" onclick="toggleMenu()" aria-label="Open menu">☰</button>
+  <a class="btn gold dashboard-link" href="student-dashboard.html">Dashboard</a>
+  <button class="btn light" onclick="logout()">Logout</button>
+ </div>
+</header>
+
+<div class="layout">
+
+<aside class="sidebar" id="sidebar">
+ <div class="side-title">STUDENT MENU</div>
+
+ <a href="student-dashboard.html">🏠 Overview</a>
+ <a href="student-dashboard.html">👤 My Profile</a>
+ <a href="academic-results.html">📊 Academic Results</a>
+ <a href="student-dashboard.html">📚 My Subjects</a>
+ <a href="student-dashboard.html">📅 My Timetable</a>
+ <a href="student-dashboard.html">📅 My Attendance</a>
+ <a href="student-dashboard.html">📢 Announcements</a>
+ <a class="active" href="student-assignments.html">📝 Assignments</a>
+ <a href="student-change-password.html">🔒 Change Password</a>
+
+ <div class="sidebar-bottom">
+  MONZE DAY SECONDARY SCHOOL<br>
+  Knowledge • Discipline • Excellence
+ </div>
+</aside>
+
+<main class="main">
+
+ <div class="breadcrumb">
+  Student Portal &nbsp; / &nbsp; <strong>Assignments</strong>
+ </div>
+
+ <section class="welcome">
+  <small>ACADEMIC WORKSPACE</small>
+  <h1>My Assignments</h1>
+  <p>
+   Access your academic tasks, review your teachers' instructions,
+   download learning materials and submit your completed work
+   before the deadlines.
+  </p>
+  <div class="welcome-tag">✦ &nbsp; Learn. Grow. Succeed.</div>
+ </section>
+
+ <section class="stats">
+
+  <div class="stat">
+   <div class="stat-top">
+    <span>TOTAL ASSIGNMENTS</span>
+    <div class="stat-icon">📚</div>
+   </div>
+   <strong id="total">0</strong>
+   <small>All published assignments</small>
+  </div>
+
+  <div class="stat">
+   <div class="stat-top">
+    <span>AWAITING SUBMISSION</span>
+    <div class="stat-icon">⏳</div>
+   </div>
+   <strong id="pending">0</strong>
+   <small>Work still to be submitted</small>
+  </div>
+
+  <div class="stat">
+   <div class="stat-top">
+    <span>SUBMITTED</span>
+    <div class="stat-icon">📤</div>
+   </div>
+   <strong id="submitted">0</strong>
+   <small>Work sent to your teacher</small>
+  </div>
+
+  <div class="stat">
+   <div class="stat-top">
+    <span>GRADED</span>
+    <div class="stat-icon">✓</div>
+   </div>
+   <strong id="graded">0</strong>
+   <small>Assignments assessed</small>
+  </div>
+
+ </section>
+
+ <div class="section-head">
+  <div>
+   <h2>Assignment Centre</h2>
+   <p>Manage and track your academic work.</p>
+  </div>
+  <button class="btn small" onclick="loadAssignments()">↻ Refresh</button>
+ </div>
+
+ <section class="panel">
+  <div class="filter-heading">FIND AN ASSIGNMENT</div>
+  <div class="filters">
+   <input
+    id="search"
+    type="search"
+    placeholder="Search by title, subject or instructions..."
+    oninput="renderAssignments()"
+   >
+
+   <select id="filter" onchange="renderAssignments()">
+    <option value="all">All assignments</option>
+    <option value="pending">Awaiting submission</option>
+    <option value="submitted">Submitted</option>
+    <option value="graded">Graded</option>
+    <option value="overdue">Overdue</option>
+   </select>
+  </div>
+ </section>
+
+ <section id="assignmentList" style="display:grid;gap:15px">
+  <div class="empty">
+   <div class="icon">⏳</div>
+   <strong>Loading assignments</strong>
+   <p>Please wait while your assignments are retrieved.</p>
+  </div>
+ </section>
+
+</main>
+</div>
+
+<footer>
+ <strong>MONZE DAY SECONDARY SCHOOL</strong><br>
+ Knowledge • Discipline • Excellence<br>
+ <span>Student Academic Workspace</span>
+</footer>
+
+<div class="modal" id="submitModal">
+ <div class="modal-box">
+
+  <div class="modal-head">
+   <h2>Submit Assignment</h2>
+   <button class="close" type="button" onclick="closeModal()">✕</button>
+  </div>
+
+  <p id="assignmentTitle" style="font-size:13px;color:var(--muted);line-height:1.6"></p>
+
+  <div id="notice" class="notice"></div>
+
+  <form id="submissionForm">
+   <input type="hidden" id="assignmentId">
+
+   <div class="field">
+    <label for="submissionFile">SELECT YOUR COMPLETED WORK</label>
+    <input
+     id="submissionFile"
+     type="file"
+     required
+     accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.jpg,.jpeg,.png,.webp"
+    >
+   </div>
+
+   <div class="file-help">
+    <strong>Accepted file formats</strong><br>
+    PDF, Word, Excel, PowerPoint, TXT, JPG and PNG.<br>
+    Make sure you select the correct completed assignment.
+   </div>
+
+   <div class="modal-actions">
+    <button class="btn gold" type="submit">↑ Submit Work</button>
+    <button class="btn light" type="button" onclick="closeModal()">Cancel</button>
+   </div>
+  </form>
+
+ </div>
+</div>
+
+<script>
+let assignments = [];
+
+async function api(url, options = {}) {
+ const response = await fetch(url, {
+  credentials: "same-origin",
+  ...options
+ });
+
+ let data = {};
+
+ try {
+  data = await response.json();
+ } catch (e) {}
+
+ if (!response.ok) {
+  throw new Error(data.message || "Request failed.");
+ }
+
+ return data;
+}
+
+function esc(value) {
+ return String(value ?? "").replace(/[&<>"']/g, c => ({
+  "&": "&amp;",
+  "<": "&lt;",
+  ">": "&gt;",
+  '"': "&quot;",
+  "'": "&#39;"
+ }[c]));
+}
+
+function dateText(value) {
+ if (!value) return "Not specified";
+
+ const d = new Date(value);
+
+ return Number.isNaN(d.getTime())
+  ? "Not specified"
+  : d.toLocaleString();
+}
+
+function stateOf(a) {
+ if (a.graded_at) return "graded";
+ if (a.submission_id) return "submitted";
+
+ if (a.due_at && new Date(a.due_at).getTime() < Date.now()) {
+  return "overdue";
+ }
+
+ return "pending";
+}
+
+async function loadAssignments() {
+ const target = document.getElementById("assignmentList");
+
+ target.innerHTML = `
+  <div class="empty">
+   <div class="icon">⏳</div>
+   <strong>Loading assignments</strong>
+   <p>Please wait while your assignments are retrieved.</p>
+  </div>
+ `;
+
+ try {
+  assignments = await api("/api/student/assignments");
+
+  if (!Array.isArray(assignments)) assignments = [];
+
+  updateStats();
+  renderAssignments();
+
+ } catch (error) {
+  target.innerHTML = `
+   <div class="empty">
+    <div class="icon">⚠️</div>
+    <strong>Unable to load assignments</strong>
+    <p>${esc(error.message)}</p>
+    <button class="btn" onclick="loadAssignments()">Try again</button>
+   </div>
+  `;
+ }
+}
+
+function updateStats() {
+ document.getElementById("total").textContent = assignments.length;
+
+ document.getElementById("pending").textContent =
+  assignments.filter(a => stateOf(a) === "pending").length;
+
+ document.getElementById("submitted").textContent =
+  assignments.filter(a => a.submission_id && !a.graded_at).length;
+
+ document.getElementById("graded").textContent =
+  assignments.filter(a => a.graded_at).length;
+}
+
+function renderAssignments() {
+ const query = document.getElementById("search").value.toLowerCase().trim();
+ const filter = document.getElementById("filter").value;
+
+ const rows = assignments.filter(a => {
+  const state = stateOf(a);
+
+  const text = (
+   (a.title || "") + " " +
+   (a.subject_name || "") + " " +
+   (a.instructions || "")
+  ).toLowerCase();
+
+  return text.includes(query) && (filter === "all" || filter === state);
+ });
+
+ const target = document.getElementById("assignmentList");
+
+ if (!rows.length) {
+  target.innerHTML = `
+   <div class="empty">
+    <div class="icon">📘</div>
+    <strong>No assignments found</strong>
+    <p>There are currently no assignments matching your selection.</p>
+   </div>
+  `;
+  return;
+ }
+
+ target.innerHTML = rows.map(a => {
+  const state = stateOf(a);
+
+  let badge = "";
+
+  if (state === "graded") {
+   badge = '<span class="badge green">✓ Graded</span>';
+  } else if (state === "submitted") {
+   badge = '<span class="badge green">✓ Submitted</span>';
+  } else if (state === "overdue") {
+   badge = '<span class="badge red">Deadline passed</span>';
+  } else {
+   badge = '<span class="badge orange">● Not submitted</span>';
+  }
+
+  let actions = "";
+
+  if (a.has_attachment) {
+   actions += `
+    <a class="btn light small"
+       href="/api/student/assignments/${encodeURIComponent(a.id)}/attachment">
+       ↓ Download attachment
+    </a>
+   `;
+  }
+
+  if (a.submission_id) {
+   actions += `
+    <a class="btn light small"
+       href="/api/student/assignment-submissions/${encodeURIComponent(a.submission_id)}/download">
+       ↓ My submitted file
+    </a>
+   `;
+  }
+
+  if (!a.submission_id && state !== "overdue") {
+   actions += `
+    <button class="btn gold small submit-btn"
+      data-id="${esc(a.id)}"
+      data-title="${esc(a.title)}">
+      ↑ Submit work
+    </button>
+   `;
+  }
+
+  let feedback = "";
+
+  if (a.graded_at) {
+   feedback = `
+    <div class="feedback">
+     <strong>Assessment: ${esc(a.marks)} / ${esc(a.maximum_marks)}</strong>
+     <br>
+     ${esc(a.comments || "No written feedback provided.")}
+     <br>
+     <small>Graded: ${esc(dateText(a.graded_at))}</small>
+    </div>
+   `;
+  }
+
+  return `
+   <article class="assignment">
+
+    <div class="assignment-top">
+     <div style="min-width:0">
+      <h3>${esc(a.title)}</h3>
+
+      <div class="meta">
+       <span>📚 ${esc(a.subject_name)}</span>
+       <span>🏫 ${esc(a.class_name)}</span>
+       <span>📅 Deadline: ${esc(dateText(a.due_at))}</span>
+      </div>
+     </div>
+
+     ${badge}
+    </div>
+
+    <div class="description">${esc(a.instructions || "No additional instructions provided.")}</div>
+
+    ${a.submitted_at ? `
+     <div class="submission-info">
+      ✓ Submitted on: ${esc(dateText(a.submitted_at))}
+     </div>
+    ` : ""}
+
+    <div class="assignment-divider">
+     <div class="actions">
+      ${actions || '<span class="meta">No additional actions available.</span>'}
+     </div>
+    </div>
+
+    ${feedback}
+
+   </article>
+  `;
+ }).join("");
+}
+
+function openSubmit(id, title) {
+ document.getElementById("assignmentId").value = id;
+ document.getElementById("assignmentTitle").textContent = title;
+ document.getElementById("submissionFile").value = "";
+
+ const notice = document.getElementById("notice");
+
+ notice.className = "notice";
+ notice.textContent = "";
+
+ document.getElementById("submitModal").classList.add("show");
+}
+
+document.getElementById("assignmentList").addEventListener("click", event => {
+ const button = event.target.closest(".submit-btn");
+
+ if (!button) return;
+
+ openSubmit(button.dataset.id, button.dataset.title);
+});
+
+function closeModal() {
+ document.getElementById("submitModal").classList.remove("show");
+}
+
+document.getElementById("submitModal").addEventListener("click", event => {
+ if (event.target.id === "submitModal") closeModal();
+});
+
+document.getElementById("submissionForm").addEventListener("submit", async event => {
+ event.preventDefault();
+
+ const file = document.getElementById("submissionFile").files[0];
+ const notice = document.getElementById("notice");
+ const button = event.submitter;
+
+ if (!file) {
+  notice.className = "notice error";
+  notice.textContent = "Please choose a file.";
+  return;
+ }
+
+ const form = new FormData();
+ form.append("submission", file);
+
+ button.disabled = true;
+ button.textContent = "Submitting...";
+
+ try {
+  const result = await api(
+   "/api/student/assignments/" +
+   encodeURIComponent(document.getElementById("assignmentId").value) +
+   "/submit",
+   {
+    method: "POST",
+    body: form
+   }
+  );
+
+  notice.className = "notice success";
+  notice.textContent = result.message || "Assignment submitted successfully.";
+
+  await loadAssignments();
+
+  setTimeout(closeModal, 1200);
+
+ } catch (error) {
+  notice.className = "notice error";
+  notice.textContent = error.message;
+
+ } finally {
+  button.disabled = false;
+  button.textContent = "↑ Submit Work";
+ }
+});
+
+function toggleMenu() {
+ document.getElementById("sidebar").classList.toggle("open");
+}
+
+async function logout() {
+ try {
+  await fetch("/api/logout", {
+   method: "POST",
+   credentials: "same-origin"
+  });
+ } catch (e) {}
+
+ location.href = "student-login.html";
+}
+
+loadAssignments();
+</script>
+
+</body>
+</html>

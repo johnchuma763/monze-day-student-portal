@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Login | Monze Day Secondary School</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    padding: 25px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #091d38, #153c69);
+}
+
+.login-card {
+    width: 100%;
+    max-width: 440px;
+    padding: 35px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 15px 45px rgba(0,0,0,.2);
+}
+
+.logo {
+    width: 68px;
+    height: 68px;
+    margin: 0 auto 18px;
+    display: grid;
+    place-items: center;
+    border-radius: 16px;
+    background: #102b50;
+    color: #d9ad45;
+    font-size: 34px;
+}
+
+.school-name {
+    text-align: center;
+    color: #102b50;
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin: 0 0 9px;
+}
+
+h1 {
+    text-align: center;
+    color: #102b50;
+    font-size: 27px;
+    margin: 0 0 9px;
+}
+
+.subtitle {
+    text-align: center;
+    color: #718096;
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0 0 27px;
+}
+
+label {
+    display: block;
+    margin: 18px 0 8px;
+    color: #263b59;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+input {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #d5deea;
+    border-radius: 8px;
+    outline: none;
+    font-size: 15px;
+    background: #fff;
+}
+
+input:focus {
+    border-color: #c9a34a;
+    box-shadow: 0 0 0 3px rgba(201,163,74,.13);
+}
+
+.password-box {
+    position: relative;
+}
+
+.password-box input {
+    padding-right: 75px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    color: #102b50;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.forgot {
+    display: block;
+    text-align: right;
+    margin-top: 12px;
+    color: #a77c19;
+    font-size: 13px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.forgot:hover,
+.back:hover {
+    text-decoration: underline;
+}
+
+.login-button {
+    width: 100%;
+    margin-top: 25px;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    background: #102b50;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.login-button:hover {
+    background: #1b416e;
+}
+
+.login-button:disabled {
+    opacity: .6;
+    cursor: wait;
+}
+
+#message {
+    min-height: 20px;
+    margin-top: 16px;
+    text-align: center;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.info-box {
+    margin-top: 22px;
+    padding: 15px;
+    border: 1px solid #f0d994;
+    border-left: 4px solid #d9ad45;
+    border-radius: 8px;
+    background: #fff9e9;
+    color: #5f4a19;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.info-box strong {
+    display: block;
+    margin-bottom: 5px;
+    color: #102b50;
+}
+
+.back {
+    display: block;
+    margin-top: 23px;
+    text-align: center;
+    color: #102b50;
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+footer {
+    margin-top: 24px;
+    text-align: center;
+    color: #718096;
+    font-size: 12px;
+}
+
+@media (max-width: 420px) {
+    .login-card {
+        padding: 27px 22px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<main class="login-card">
+
+    <div class="logo">🎓</div>
+
+    <p class="school-name">MONZE DAY SECONDARY SCHOOL</p>
+
+    <h1>Student Login</h1>
+
+    <p class="subtitle">
+        Welcome back! Sign in securely to access your academic information.
+    </p>
+
+    <form id="loginForm">
+
+        <label for="email">Email Address</label>
+        <input
+            type="email"
+            id="email"
+            placeholder="Enter your school email"
+            autocomplete="username"
+            required
+        >
+
+        <label for="password">Password</label>
+
+        <div class="password-box">
+            <input
+                type="password"
+                id="password"
+                placeholder="Enter your password"
+                autocomplete="current-password"
+                required
+            >
+            <button type="button" class="toggle-password" id="togglePassword">
+                Show
+            </button>
+        </div>
+
+        <a href="forgot-password.html" class="forgot">
+            Forgot Password? Reset your password
+        </a>
+
+        <button type="submit" class="login-button" id="loginButton">
+            Sign In
+        </button>
+
+    </form>
+
+    <div id="message" role="status" aria-live="polite"></div>
+
+    <div class="info-box">
+        <strong>Student Account Information</strong>
+        Your student account is created by the school administrator.
+        Use the email address and password provided to you to sign in.
+        If you have problems accessing your account, contact the school administrator.
+    </div>
+
+    <a href="login.html" class="back">
+        ← Back to Account Selection
+    </a>
+
+    <footer>
+        Knowledge • Discipline • Excellence
+    </footer>
+
+</main>
+
+<script>
+const loginForm = document.getElementById("loginForm");
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
+const loginButton = document.getElementById("loginButton");
+const message = document.getElementById("message");
+
+document.getElementById("togglePassword").addEventListener("click", function() {
+    const hidden = passwordInput.type === "password";
+
+    passwordInput.type = hidden ? "text" : "password";
+    this.textContent = hidden ? "Hide" : "Show";
+});
+
+loginForm.addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    message.style.color = "#102b50";
+    message.textContent = "Signing in...";
+    loginButton.disabled = true;
+
+    try {
+        const response = await fetch("/api/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                email: emailInput.value.trim(),
+                password: passwordInput.value
+            })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.message || "Unable to sign in. Check your email and password.");
+        }
+
+        message.style.color = "green";
+        message.textContent = "Login successful. Opening your dashboard...";
+
+        setTimeout(function() {
+            if (result.mustChangePassword) {
+                window.location.href = "student-change-password.html";
+            } else {
+                window.location.href = "student-dashboard.html";
+            }
+        }, 700);
+
+    } catch (error) {
+        message.style.color = "#b42318";
+        message.textContent = error.message || "Unable to connect to the server.";
+        loginButton.disabled = false;
+    }
+});
+</script>
+
+</body>
+</html>

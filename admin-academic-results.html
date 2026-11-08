@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Academic Management | Monze Day Secondary School</title>
+
+<style>
+:root {
+    --navy: #102b50;
+    --gold: #d9ad45;
+    --light: #f4f6fa;
+    --white: #fff;
+    --text: #263449;
+    --danger: #c0392b;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: var(--light);
+    color: var(--text);
+}
+
+header {
+    background: var(--navy);
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+}
+
+.menu-button {
+    border: 0;
+    background: transparent;
+    color: var(--gold);
+    font-size: 28px;
+    cursor: pointer;
+}
+
+.brand strong {
+    color: var(--gold);
+    display: block;
+    font-size: 17px;
+}
+
+.brand small { color: white; }
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -270px;
+    width: 260px;
+    height: 100%;
+    background: var(--navy);
+    padding: 25px 15px;
+    transition: .25s;
+    z-index: 10;
+}
+
+.sidebar.open { left: 0; }
+
+.sidebar h3 {
+    color: var(--gold);
+    margin-bottom: 30px;
+}
+
+.sidebar a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    padding: 14px;
+    border-radius: 7px;
+    margin-bottom: 7px;
+}
+
+.sidebar a:hover,
+.sidebar a.active {
+    background: var(--gold);
+    color: var(--navy);
+}
+
+.overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: #0008;
+    z-index: 8;
+}
+
+.overlay.show { display: block; }
+
+main {
+    max-width: 1250px;
+    margin: auto;
+    padding: 25px 16px;
+}
+
+h1, h2 { color: var(--navy); }
+
+.card {
+    background: white;
+    padding: 22px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    box-shadow: 0 3px 12px #0000000c;
+}
+
+.tabs {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.tabs button,
+button {
+    border: 0;
+    border-radius: 6px;
+    padding: 11px 16px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.tabs button {
+    background: #e4e9f0;
+    color: var(--navy);
+}
+
+.tabs button.active,
+.primary {
+    background: var(--navy);
+    color: white;
+}
+
+.gold {
+    background: var(--gold);
+    color: var(--navy);
+}
+
+.danger {
+    background: var(--danger);
+    color: white;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccd3df;
+    border-radius: 6px;
+    margin: 6px 0 14px;
+    font: inherit;
+}
+
+textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+label {
+    font-weight: bold;
+    color: var(--navy);
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+}
+
+.table-wrap { overflow-x: auto; }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 750px;
+}
+
+th, td {
+    padding: 12px;
+    border-bottom: 1px solid #e4e8ef;
+    text-align: left;
+}
+
+th {
+    background: var(--navy);
+    color: white;
+}
+
+tr:hover { background: #f8f9fc; }
+
+.actions {
+    display: flex;
+    gap: 6px;
+}
+
+.actions button {
+    padding: 8px 10px;
+}
+
+.message {
+    padding: 12px;
+    border-radius: 6px;
+    margin: 10px 0;
+    background: #edf2f8;
+}
+
+.announcement {
+    border: 1px solid #e0e5ec;
+    border-left: 5px solid var(--gold);
+    padding: 16px;
+    margin: 15px 0;
+    border-radius: 7px;
+}
+
+.announcement h3 { color: var(--navy); }
+
+.hidden { display: none; }
+
+footer {
+    text-align: center;
+    padding: 25px;
+    color: #68758a;
+}
+
+@media(max-width:600px) {
+    header { padding: 12px; }
+    .brand strong { font-size: 14px; }
+    .card { padding: 15px; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <button class="menu-button" onclick="openMenu()">☰</button>
+    <div class="brand">
+        <strong>MONZE DAY SECONDARY SCHOOL</strong>
+        <small>Administrator Academic Management</small>
+    </div>
+</header>
+
+<nav class="sidebar" id="sidebar">
+    <h3>ADMIN MENU</h3>
+    <a href="admin-dashboard.html">Dashboard</a>
+    <a href="admin-students.html">Manage Students</a>
+    <a href="admin-teachers.html">Manage Teachers</a>
+    <a href="admin-create-account.html">Create Account</a>
+    <a href="admin-academic-results.html" class="active">Academic Results</a>
+    <a href="admin-login.html" onclick="logout(event)">Logout</a>
+</nav>
+
+<div class="overlay" id="overlay" onclick="closeMenu()"></div>
+
+<main>
+
+<h1>Academic Management</h1>
+<p>Manage student academic results and school announcements.</p>
+
+<div id="status" class="message" role="status" aria-live="polite"></div>
+
+<div class="tabs">
+    <button class="active" onclick="showTab('results',this)">Academic Results</button>
+    <button onclick="showTab('announcements',this)">Announcements</button>
+</div>
+
+<!-- RESULTS -->
+
+<section id="results">
+
+<div class="card">
+    <h2>Publish Academic Result</h2>
+
+    <form id="resultForm">
+
+        <div class="form-grid">
+
+            <div>
+                <label>Student Number</label>
+                <input name="studentNumber" required placeholder="e.g. 001">
+            </div>
+
+            <div>
+                <label>Subject</label>
+                <input name="subject" required placeholder="e.g. Mathematics">
+            </div>
+
+            <div>
+                <label>Term</label>
+                <select name="term" required>
+                    <option value="">Select Term</option>
+                    <option>Term 1</option>
+                    <option>Term 2</option>
+                    <option>Term 3</option>
+                </select>
+            </div>
+
+            <div>
+                <label>Year</label>
+                <input name="year" type="number" min="2000" max="2100" required>
+            </div>
+
+            <div>
+                <label>Score</label>
+                <input name="score" type="number" min="0" max="100" required>
+            </div>
+
+            <div>
+                <label>Grade</label>
+                <select name="grade" required>
+                    <option value="">Select Grade</option>
+                    <option>Distinction</option>
+                    <option>Merit</option>
+                    <option>Credit</option>
+                    <option>Pass</option>
+                    <option>Fail</option>
+                </select>
+            </div>
+
+        </div>
+
+        <label>Remarks</label>
+        <textarea name="remarks" placeholder="Optional remarks"></textarea>
+
+        <button class="primary" type="submit">Publish Result</button>
+    </form>
+</div>
+
+<div class="card">
+    <h2>Published Academic Results</h2>
+
+    <div class="form-grid">
+        <input id="resultSearch" placeholder="Search student..." oninput="loadResults()">
+
+        <select id="termFilter" onchange="loadResults()">
+            <option value="">All Terms</option>
+            <option>Term 1</option>
+            <option>Term 2</option>
+            <option>Term 3</option>
+        </select>
+
+        <input id="classFilter" placeholder="Filter by class" oninput="loadResults()">
+
+        <input id="subjectFilter" placeholder="Filter by subject" oninput="loadResults()">
+    </div>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Student</th>
+                    <th>Student No.</th>
+                    <th>Class</th>
+                    <th>Subject</th>
+                    <th>Term</th>
+                    <th>Year</th>
+                    <th>Score</th>
+                    <th>Grade</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="resultsTable">
+                <tr><td colspan="9">Loading results...</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</section>
+
+<!-- ANNOUNCEMENTS -->
+
+<section id="announcements" class="hidden">
+
+<div class="card">
+    <h2>Post School Announcement</h2>
+
+    <form id="announcementForm">
+
+        <label>Announcement Title</label>
+        <input name="title" maxlength="150" required>
+
+        <label>Announcement Message</label>
+        <textarea name="message" maxlength="5000" required></textarea>
+
+        <button class="primary" type="submit">Publish Announcement</button>
+
+    </form>
+</div>
+
+<div class="card">
+    <h2>School Announcements</h2>
+    <div id="announcementList">Loading announcements...</div>
+</div>
+
+</section>
+
+</main>
+
+<footer>
+    MONZE DAY SECONDARY SCHOOL<br>
+    Knowledge • Discipline • Excellence
+</footer>
+
+<script>
+const statusBox = document.getElementById("status");
+
+function notify(message) {
+    statusBox.textContent = message;
+}
+
+function openMenu() {
+    document.getElementById("sidebar").classList.add("open");
+    document.getElementById("overlay").classList.add("show");
+}
+
+function closeMenu() {
+    document.getElementById("sidebar").classList.remove("open");
+    document.getElementById("overlay").classList.remove("show");
+}
+
+async function api(url, options = {}) {
+    const response = await fetch(url, {
+        credentials: "same-origin",
+        ...options,
+        headers: {
+            "Content-Type": "application/json",
+            ...(options.headers || {})
+        }
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if (response.status === 401) {
+        location.href = "admin-login.html";
+        throw new Error("Administrator login required.");
+    }
+
+    if (!response.ok) {
+        throw new Error(data.message || "Request failed.");
+    }
+
+    return data;
+}
+
+async function checkAdmin() {
+    try {
+        await api("/api/admin/me");
+        return true;
+    } catch (error) {
+        notify(error.message);
+        return false;
+    }
+}
+
+function showTab(tab, button) {
+    document.getElementById("results").classList.toggle("hidden", tab !== "results");
+    document.getElementById("announcements").classList.toggle("hidden", tab !== "announcements");
+
+    document.querySelectorAll(".tabs button").forEach(b => b.classList.remove("active"));
+    button.classList.add("active");
+
+    if (tab === "announcements") loadAnnouncements();
+    if (tab === "results") loadResults();
+}
+
+// RESULTS
+
+async function loadResults() {
+    const params = new URLSearchParams({
+        search: document.getElementById("resultSearch").value,
+        term: document.getElementById("termFilter").value,
+        className: document.getElementById("classFilter").value,
+        subject: document.getElementById("subjectFilter").value
+    });
+
+    const table = document.getElementById("resultsTable");
+
+    try {
+        const results = await api("/api/admin/results?" + params);
+
+        table.replaceChildren();
+
+        if (!results.length) {
+            table.innerHTML = '<tr><td colspan="9">No academic results found.</td></tr>';
+            return;
+        }
+
+        results.forEach(r => {
+            const tr = document.createElement("tr");
+
+            [
+                r.full_name, r.student_number, r.class_name,
+                r.subject, r.term, r.year, r.score, r.grade
+            ].forEach(value => {
+                const td = document.createElement("td");
+                td.textContent = value ?? "";
+                tr.appendChild(td);
+            });
+
+            const actions = document.createElement("td");
+            actions.className = "actions";
+
+            const edit = document.createElement("button");
+            edit.className = "gold";
+            edit.textContent = "Edit";
+            edit.onclick = () => editResult(r);
+
+            const del = document.createElement("button");
+            del.className = "danger";
+            del.textContent = "Delete";
+            del.onclick = () => deleteResult(r.id);
+
+            actions.append(edit, del);
+            tr.appendChild(actions);
+            table.appendChild(tr);
+        });
+
+    } catch (error) {
+        notify(error.message);
+    }
+}
+
+document.getElementById("resultForm").addEventListener("submit", async e => {
+    e.preventDefault();
+
+    const data = Object.fromEntries(new FormData(e.target));
+
+    data.year = Number(data.year);
+    data.score = Number(data.score);
+
+    try {
+        const result = await api("/api/admin/results", {
+            method: "POST",
+            body: JSON.stringify(data)
+        });
+
+        notify(result.message);
+        e.target.reset();
+        await loadResults();
+
+    } catch (error) {
+        notify(error.message);
+    }
+});
+
+async function editResult(r) {
+    const subject = prompt("Subject:", r.subject);
+    if (subject === null) return;
+
+    const term = prompt("Term (Term 1, Term 2 or Term 3):", r.term);
+    if (term === null) return;
+
+    const year = Number(prompt("Year:", r.year));
+    const score = Number(prompt("Score:", r.score));
+
+    const grade = prompt(
+        "Grade (Distinction, Merit, Credit, Pass or Fail):",
+        r.grade
+    );
+
+    if (grade === null) return;
+
+    const remarks = prompt("Remarks:", r.remarks || "");
+    if (remarks === null) return;
+
+    try {
+        const result = await api("/api/admin/results/" + r.id, {
+            method: "PUT",
+            body: JSON.stringify({
+                subject, term, year, score, grade, remarks
+            })
+        });
+
+        notify(result.message);
+        await loadResults();
+
+    } catch (error) {
+        notify(error.message);
+    }
+}
+
+async function deleteResult(id) {
+    if (!confirm("Delete this academic result?")) return;
+
+    try {
+        const result = await api("/api/admin/results/" + id, {
+            method: "DELETE"
+        });
+
+        notify(result.message);
+        await loadResults();
+
+    } catch (error) {
+        notify(error.message);
+    }
+}
+
+// ANNOUNCEMENTS
+
+async function loadAnnouncements() {
+    const container = document.getElementById("announcementList");
+
+    try {
+        const announcements = await api("/api/admin/announcements");
+
+        container.replaceChildren();
+
+        if (!announcements.length) {
+            container.textContent = "No announcements available.";
+            return;
+        }
+
+        announcements.forEach(a => {
+            const box = document.createElement("div");
+            box.className = "announcement";
+
+            const title = document.createElement("h3");
+            title.textContent = a.title;
+
+            const message = document.createElement("p");
+            message.textContent = a.message;
+
+            const author = document.createElement("small");
+            author.textContent = "Posted by " + a.author_name +
+                " (" + a.author_role + ")";
+
+            const edit = document.createElement("button");
+            edit.className = "gold";
+            edit.textContent = "Edit";
+            edit.onclick = () => editAnnouncement(a);
+
+            const del = document.createElement("button");
+            del.className = "danger";
+            del.textContent = "Delete";
+            del.onclick = () => deleteAnnouncement(a.id);
+
+            box.append(title, message, author);
+
+            const actions = document.createElement("div");
+            actions.className = "actions";
+            actions.append(edit, del);
+
+            box.appendChild(actions);
+            container.appendChild(box);
+        });
+
+    } catch (error) {
+        notify(error.message);
+    }
+}
+
+document.getElementById("announcementForm").addEventListener("submit", async e => {
+    e.preventDefault();
+
+    const data = Object.fromEntries(new FormData(e.target));
+
+    try {
+        const result = await api("/api/admin/announcements", {
+            method: "POST",
+            body: JSON.stringify(data)
+        });
+
+        notify(result.message);
+        e.target.reset();
+        await loadAnnouncements();
+
+    } catch (error) {
+        notify(error.message);
+    }
+});
+
+async function editAnnouncement(a) {
+    const title = prompt("Announcement title:", a.title);
+    if (title === null) return;
+
+    const message = prompt("Announcement message:", a.message);
+    if (message === null) return;
+
+    try {
+        const result = await api("/api/admin/announcements/" + a.id, {
+            method: "PUT",
+            body: JSON.stringify({ title, message })
+        });
+
+        notify(result.message);
+        await loadAnnouncements();
+
+    } catch (error) {
+        notify(error.message);
+    }
+}
+
+async function deleteAnnouncement(id) {
+    if (!confirm("Delete this announcement?")) return;
+
+    try {
+        const result = await api("/api/admin/announcements/" + id, {
+            method: "DELETE"
+        });
+
+        notify(result.message);
+        await loadAnnouncements();
+
+    } catch (error) {
+        notify(error.message);
+    }
+}
+
+async function logout(e) {
+    e.preventDefault();
+
+    try {
+        await api("/api/admin/logout", { method: "POST" });
+        location.href = "admin-login.html";
+    } catch (error) {
+        notify(error.message);
+    }
+}
+
+async function startPage() {
+    const authenticated = await checkAdmin();
+    if (!authenticated) return;
+
+    await Promise.all([
+        loadResults(),
+        loadAnnouncements()
+    ]);
+
+    notify("Administrator access verified.");
+}
+
+startPage();
+</script>
+
+</body>
+</html>

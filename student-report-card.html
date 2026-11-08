@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Report Card | Monze Day Secondary School</title>
+
+<style>
+
+:root {
+    --navy:#102b50;
+    --navy-dark:#071a35;
+    --navy-light:#1d4978;
+    --gold:#d9ad45;
+    --gold-light:#f7edcf;
+    --background:#eef2f7;
+    --white:#ffffff;
+    --text:#243247;
+    --muted:#718096;
+    --border:#e1e7ef;
+    --success:#19734b;
+}
+*{box-sizing:border-box}
+body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:var(--background);
+    color:var(--text);
+    line-height:1.55;
+}
+header{
+    background:linear-gradient(120deg,var(--navy-dark),var(--navy-light));
+    color:white;
+    padding:25px 18px;
+    border-bottom:5px solid var(--gold);
+    box-shadow:0 4px 16px rgba(7,26,53,.16);
+}
+.header-inner{max-width:1050px;margin:auto}
+.school-name{
+    font-size:22px;
+    font-weight:800;
+    letter-spacing:1px;
+}
+.school-subtitle{
+    color:#e4ebf5;
+    margin-top:5px;
+    font-size:13px;
+    letter-spacing:.5px;
+}
+.container{
+    max-width:1050px;
+    margin:30px auto;
+    padding:0 16px 40px;
+}
+.toolbar{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:13px;
+    padding:20px;
+    box-shadow:0 5px 20px rgba(20,40,70,.06);
+    margin-bottom:20px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:13px;
+    align-items:end;
+}
+.field{flex:1;min-width:145px}
+label{
+    display:block;
+    font-size:12px;
+    font-weight:800;
+    color:var(--navy);
+    margin-bottom:7px;
+}
+select{
+    width:100%;
+    padding:12px 13px;
+    border:1px solid #d7dfeb;
+    border-radius:8px;
+    background:#fbfcfe;
+    color:var(--text);
+    font-size:14px;
+    outline:none;
+}
+select:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(217,173,69,.15)}
+button,.back-link{
+    border:0;
+    border-radius:8px;
+    padding:12px 17px;
+    font-weight:700;
+    cursor:pointer;
+    text-decoration:none;
+    display:inline-block;
+    font-size:13px;
+    transition:.2s;
+}
+button:hover,.back-link:hover{transform:translateY(-1px);filter:brightness(1.05)}
+.primary{background:var(--navy);color:white}
+.gold{background:var(--gold);color:var(--navy-dark)}
+.back-link{background:#edf1f6;color:var(--navy)}
+#status{
+    padding:14px 17px;
+    border:1px solid #ead9a8;
+    border-left:4px solid var(--gold);
+    border-radius:8px;
+    background:#fffaf0;
+    color:#75520b;
+    font-size:13px;
+    margin-bottom:16px;
+}
+.report-card{
+    background:white;
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:32px;
+    box-shadow:0 8px 28px rgba(20,40,70,.07);
+}
+.report-heading{
+    text-align:center;
+    padding:8px 10px 22px;
+    border-bottom:2px solid var(--gold);
+    margin-bottom:23px;
+    position:relative;
+}
+.report-heading h2{
+    color:var(--navy);
+    margin:0 0 5px;
+    font-size:25px;
+    font-weight:900;
+    letter-spacing:.7px;
+}
+.report-heading p{
+    margin:3px 0;
+    color:var(--muted);
+    font-size:12px;
+}
+.report-title{
+    display:inline-block;
+    margin-top:17px;
+    padding:8px 20px;
+    background:var(--navy);
+    color:white;
+    border-radius:5px;
+    font-size:15px;
+    font-weight:800;
+    letter-spacing:1px;
+}
+.student-details{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:12px;
+    margin-bottom:25px;
+}
+.detail{
+    border:1px solid var(--border);
+    border-radius:9px;
+    padding:14px 15px;
+    background:#fbfcfe;
+    font-size:14px;
+    overflow-wrap:anywhere;
+}
+.detail strong{
+    display:block;
+    color:var(--muted);
+    font-size:10px;
+    margin-bottom:5px;
+    text-transform:uppercase;
+    letter-spacing:.8px;
+}
+.detail span{font-weight:700;color:var(--navy)}
+h3{
+    color:var(--navy);
+    font-size:16px;
+    font-weight:800;
+    margin:27px 0 12px;
+    padding-left:11px;
+    border-left:4px solid var(--gold);
+}
+table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:13px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    overflow:hidden;
+}
+th,td{
+    padding:12px 11px;
+    border-bottom:1px solid var(--border);
+    text-align:left;
+}
+th{
+    background:var(--navy);
+    color:white;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.5px;
+}
+tbody tr:nth-child(even){background:#f7f9fc}
+tbody tr:last-child td{border-bottom:0}
+.summary{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:13px;
+    margin-top:20px;
+}
+.summary-box{
+    background:linear-gradient(145deg,#f7f9fc,#edf2f8);
+    border:1px solid var(--border);
+    border-top:3px solid var(--gold);
+    border-radius:10px;
+    padding:18px 12px;
+    text-align:center;
+}
+.summary-box span{
+    display:block;
+    font-size:10px;
+    font-weight:800;
+    color:var(--muted);
+    margin-bottom:8px;
+    text-transform:uppercase;
+    letter-spacing:.6px;
+}
+.summary-box strong{
+    color:var(--navy);
+    font-size:23px;
+    font-weight:900;
+}
+.note{
+    font-size:11px;
+    color:var(--muted);
+    line-height:1.7;
+    background:#f8fafc;
+    border-left:3px solid var(--gold);
+    padding:11px 13px;
+    margin-top:15px;
+}
+.signatures{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:55px;
+    margin-top:65px;
+}
+.signature{
+    border-top:1px solid #687386;
+    padding-top:9px;
+    text-align:center;
+    font-size:11px;
+    font-weight:700;
+    color:var(--navy);
+}
+.footer{
+    text-align:center;
+    color:var(--muted);
+    font-size:10px;
+    margin-top:35px;
+    padding-top:14px;
+    border-top:1px solid var(--border);
+    letter-spacing:.3px;
+}
+.empty{padding:25px;text-align:center;color:var(--muted)}
+@media(max-width:650px){
+    .container{margin:18px auto;padding:0 11px 25px}
+    .report-card{padding:19px 13px;border-radius:10px}
+    .school-name{font-size:18px}
+    .report-heading h2{font-size:19px}
+    .report-title{font-size:12px;padding:8px 12px}
+    .student-details{grid-template-columns:1fr}
+    .summary{grid-template-columns:1fr 1fr}
+    .toolbar button,.toolbar .back-link{width:100%;text-align:center}
+    table{font-size:10px}
+    th,td{padding:9px 5px}
+    .signatures{gap:25px}
+}
+@media print{
+    body{background:white;color:#111}
+    header,.toolbar,#status{display:none!important}
+    .container{max-width:none;margin:0;padding:0}
+    .report-card{
+        display:block!important;
+        box-shadow:none;
+        border:0;
+        border-radius:0;
+        padding:5px;
+        margin:0;
+    }
+    .report-card[hidden]{display:none!important}
+    .report-heading h2{font-size:21px}
+    .detail,.summary-box{break-inside:avoid}
+    table{font-size:10px}
+    th,td{padding:8px}
+    .signatures{margin-top:55px}
+    @page{size:A4;margin:14mm}
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-inner">
+        <div class="school-name">MONZE DAY SECONDARY SCHOOL</div>
+        <div class="school-subtitle">Knowledge • Discipline • Excellence</div>
+    </div>
+</header>
+
+<main class="container">
+<div style="margin-bottom:20px;">
+    <a href="student-dashboard.html" id="back-dashboard-btn"
+       style="display:inline-flex;align-items:center;gap:9px;
+       padding:11px 19px;background:#102b50;color:#fff;
+       text-decoration:none;border-radius:9px;font-weight:700;
+       border:1px solid #d9ad45;box-shadow:0 3px 10px rgba(7,26,53,.12);">
+       ← Back to Student Dashboard
+    </a>
+</div>
+
+
+    <div class="toolbar">
+        <div class="field">
+            <label for="yearSelect">Academic Year</label>
+            <select id="yearSelect">
+                <option value="">Loading years...</option>
+            </select>
+        </div>
+
+        <div class="field">
+            <label for="termSelect">Academic Term</label>
+            <select id="termSelect">
+                <option value="">Select term</option>
+            </select>
+        </div>
+
+        <button class="primary" onclick="loadReport()">View Report</button>
+        <button class="gold" onclick="window.print()">Print / Save PDF</button>
+        <a class="back-link" href="student-dashboard.html">Back to Dashboard</a>
+    </div>
+
+    <div id="status">Loading your student information and results...</div>
+
+    <section class="report-card" id="reportCard" hidden>
+
+        <div class="report-heading">
+            <h2>MONZE DAY SECONDARY SCHOOL</h2>
+            <p>Knowledge • Discipline • Excellence</p>
+            <div class="report-title">STUDENT ACADEMIC REPORT CARD</div>
+            <p id="periodText"></p>
+        </div>
+
+        <div class="student-details">
+            <div class="detail">
+                <strong>Student Name</strong>
+                <span id="studentName">—</span>
+            </div>
+            <div class="detail">
+                <strong>Student Number</strong>
+                <span id="studentNumber">—</span>
+            </div>
+            <div class="detail">
+                <strong>Class</strong>
+                <span id="studentClass">—</span>
+            </div>
+            <div class="detail">
+                <strong>Email</strong>
+                <span id="studentEmail">—</span>
+            </div>
+        </div>
+
+        <h3>Academic Performance</h3>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Subject</th>
+                    <th>Assessments</th>
+                    <th>Average (%)</th>
+                    <th>Grade</th>
+                </tr>
+            </thead>
+            <tbody id="subjectRows"></tbody>
+        </table>
+
+        <div class="summary">
+            <div class="summary-box">
+                <span>Overall Average</span>
+                <strong id="overallAverage">—</strong>
+            </div>
+            <div class="summary-box">
+                <span>Subjects</span>
+                <strong id="subjectCount">—</strong>
+            </div>
+            <div class="summary-box">
+                <span>Published Assessments</span>
+                <strong id="assessmentCount">—</strong>
+            </div>
+        </div>
+
+        <p class="note">
+            Subject averages are calculated from the published assessment marks
+            for each subject. The overall average is calculated from the subject
+            averages. Grades are displayed using the grades recorded by the school.
+        </p>
+
+        <h3>Assessment Details</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Subject</th>
+                    <th>Assessment</th>
+                    <th>Score (%)</th>
+                    <th>Grade</th>
+                    <th>Remarks</th>
+                </tr>
+            </thead>
+            <tbody id="assessmentRows"></tbody>
+        </table>
+
+        <div class="signatures">
+            <div class="signature">Class Teacher's Signature</div>
+            <div class="signature">Head Teacher's Signature</div>
+        </div>
+
+        <div class="footer">
+            MONZE DAY SECONDARY SCHOOL · Knowledge • Discipline • Excellence
+        </div>
+    </section>
+</main>
+
+<script>
+let studentProfile = null;
+let allResults = [];
+
+const statusBox = document.getElementById("status");
+const yearSelect = document.getElementById("yearSelect");
+const termSelect = document.getElementById("termSelect");
+
+function showStatus(message) {
+    statusBox.textContent = message;
+    statusBox.hidden = false;
+}
+
+function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&":"&amp;",
+        "<":"&lt;",
+        ">":"&gt;",
+        '"':"&quot;",
+        "'":"&#039;"
+    })[char]);
+}
+
+async function api(url) {
+    const response = await fetch(url, {
+        credentials:"same-origin",
+        headers:{"Accept":"application/json"}
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+        if (data.mustChangePassword) {
+            location.href = "student-change-password.html";
+            throw new Error("Please change your temporary password.");
+        }
+
+        if (response.status === 401) {
+            location.href = "student-login.html";
+            throw new Error("Please sign in again.");
+        }
+
+        throw new Error(data.message || "Unable to load information.");
+    }
+
+    return data;
+}
+
+function populateFilters() {
+    const years = [...new Set(allResults.map(row => Number(row.year)))]
+        .filter(Number.isFinite)
+        .sort((a,b) => b-a);
+
+    const terms = [...new Set(allResults.map(row => String(row.term)))];
+
+    yearSelect.innerHTML = years.map(year =>
+        `<option value="${year}">${year}</option>`
+    ).join("");
+
+    termSelect.innerHTML = terms.map(term =>
+        `<option value="${escapeHTML(term)}">${escapeHTML(term)}</option>`
+    ).join("");
+
+    if (years.length && terms.length) {
+        loadReport();
+    } else {
+        document.getElementById("reportCard").hidden = true;
+        showStatus("No published academic results are currently available.");
+    }
+}
+
+function loadReport() {
+    const year = Number(yearSelect.value);
+    const term = termSelect.value;
+
+    const selected = allResults.filter(row =>
+        Number(row.year) === year && String(row.term) === term
+    );
+
+    if (!selected.length) {
+        document.getElementById("reportCard").hidden = true;
+        showStatus("No published results are available for this term and year.");
+        return;
+    }
+
+    const groups = new Map();
+
+    selected.forEach(row => {
+        const subject = String(row.subject || "Unknown");
+        if (!groups.has(subject)) groups.set(subject, []);
+        groups.get(subject).push(row);
+    });
+
+    const subjectSummaries = [...groups.entries()].map(([subject, rows]) => {
+        const average = rows.reduce((sum,row) => sum + Number(row.score),0) / rows.length;
+
+        const grades = [...new Set(
+            rows.map(row => String(row.grade || "").trim()).filter(Boolean)
+        )];
+
+        return {
+            subject,
+            rows,
+            average,
+            grade:grades.length ? grades.join(", ") : "—"
+        };
+    });
+
+    const overall = subjectSummaries.reduce((sum,item) => sum + item.average,0)
+        / subjectSummaries.length;
+
+    document.getElementById("studentName").textContent = studentProfile.full_name || "—";
+    document.getElementById("studentNumber").textContent = studentProfile.student_number || "—";
+    document.getElementById("studentClass").textContent = studentProfile.class_name || "—";
+    document.getElementById("studentEmail").textContent = studentProfile.email || "—";
+
+    document.getElementById("periodText").textContent = `${term} · ${year}`;
+
+    document.getElementById("subjectRows").innerHTML =
+        subjectSummaries.map(item => `
+            <tr>
+                <td>${escapeHTML(item.subject)}</td>
+                <td>${item.rows.length}</td>
+                <td>${item.average.toFixed(2)}%</td>
+                <td>${escapeHTML(item.grade)}</td>
+            </tr>
+        `).join("");
+
+    document.getElementById("assessmentRows").innerHTML =
+        selected.map(row => `
+            <tr>
+                <td>${escapeHTML(row.subject)}</td>
+                <td>${escapeHTML(row.assessment_name || row.assessment_kind || row.assessment_type || "Assessment")}</td>
+                <td>${Number(row.score).toFixed(2)}%</td>
+                <td>${escapeHTML(row.grade || "—")}</td>
+                <td>${escapeHTML(row.remarks || "—")}</td>
+            </tr>
+        `).join("");
+
+    document.getElementById("overallAverage").textContent = overall.toFixed(2) + "%";
+    document.getElementById("subjectCount").textContent = subjectSummaries.length;
+    document.getElementById("assessmentCount").textContent = selected.length;
+
+    document.getElementById("reportCard").hidden = false;
+    statusBox.hidden = true;
+}
+
+async function initialise() {
+    try {
+        const [profile, results] = await Promise.all([
+            api("/api/student/me"),
+            api("/api/student/results")
+        ]);
+
+        studentProfile = profile;
+        allResults = Array.isArray(results) ? results : [];
+        populateFilters();
+
+    } catch (error) {
+        showStatus(error.message || "Unable to load your report card.");
+    }
+}
+
+initialise();
+</script>
+
+</body>
+</html>

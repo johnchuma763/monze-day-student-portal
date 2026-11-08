@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Announcements | Monze Day Secondary School</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f3f6fb;
+    color: #24344d;
+}
+
+header {
+    background: #102b50;
+    color: white;
+    padding: 20px 6%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+header h2 {
+    margin: 0;
+}
+
+nav {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+nav a:hover,
+nav a.active {
+    color: #e2bd61;
+}
+
+.container {
+    max-width: 950px;
+    margin: 35px auto;
+    padding: 0 18px;
+}
+
+.heading {
+    margin-bottom: 25px;
+}
+
+.heading h1 {
+    color: #102b50;
+    margin-bottom: 8px;
+}
+
+.card {
+    background: white;
+    padding: 28px;
+    border-radius: 15px;
+    margin-bottom: 22px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 5px 18px rgba(16,43,80,.06);
+}
+
+.card h3 {
+    color: #102b50;
+    margin-top: 0;
+}
+
+label {
+    display: block;
+    font-weight: 600;
+    margin: 18px 0 8px;
+}
+
+input,
+textarea {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 15px;
+    font-family: Arial, sans-serif;
+}
+
+textarea {
+    min-height: 150px;
+    resize: vertical;
+}
+
+button {
+    background: #102b50;
+    color: white;
+    border: none;
+    padding: 13px 22px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 18px;
+}
+
+button:hover {
+    background: #c49a35;
+}
+
+button:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+}
+
+#status {
+    margin-top: 15px;
+    font-weight: 600;
+}
+
+.announcement {
+    border: 1px solid #e2e8f0;
+    border-left: 5px solid #c49a35;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 18px;
+    background: #fff;
+}
+
+.announcement h3 {
+    color: #102b50;
+    margin: 0 0 12px;
+}
+
+.announcement p {
+    line-height: 1.7;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.announcement small {
+    color: #64748b;
+}
+
+.empty {
+    color: #64748b;
+    text-align: center;
+    padding: 25px;
+}
+
+footer {
+    text-align: center;
+    padding: 25px;
+    color: #64748b;
+}
+
+@media(max-width:600px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .card {
+        padding: 20px;
+    }
+}
+
+/* PROFESSIONAL PORTAL LINK DESIGN */
+a {
+    transition: background .2s ease, color .2s ease,
+                box-shadow .2s ease, transform .2s ease;
+}
+
+a:focus-visible {
+    outline: 3px solid #d9ad52;
+    outline-offset: 3px;
+}
+
+/* Navigation links */
+nav a {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 13px;
+    border-radius: 8px;
+    text-decoration: none;
+}
+
+nav a:hover {
+    background: rgba(217, 173, 82, .16);
+    text-decoration: none;
+}
+
+nav a.active {
+    font-weight: 700;
+}
+
+/* Dashboard and card links */
+.card a,
+.cards .card a,
+.sidebar .card a,
+.announcement-button,
+.back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 11px 16px;
+    border-radius: 8px;
+    background: #102b50;
+    color: #ffffff !important;
+    font-weight: 600;
+    text-decoration: none;
+    border: 1px solid #102b50;
+    box-shadow: 0 3px 8px rgba(16, 43, 80, .12);
+}
+
+.card a:hover,
+.cards .card a:hover,
+.announcement-button:hover,
+.back:hover {
+    background: #1b4778;
+    border-color: #1b4778;
+    color: #ffffff !important;
+    transform: translateY(-1px);
+    box-shadow: 0 5px 12px rgba(16, 43, 80, .18);
+}
+
+/* Back button inside the student results header */
+header .back {
+    background: #d9ad52;
+    color: #102b50 !important;
+    border-color: #d9ad52;
+}
+
+header .back:hover {
+    background: #edc875;
+    color: #102b50 !important;
+}
+
+/* Teacher sidebar */
+.sidebar a {
+    transition: background .2s ease, color .2s ease;
+}
+
+/* Mobile-friendly navigation */
+@media (max-width: 600px) {
+    nav {
+        gap: 8px;
+    }
+
+    nav a {
+        padding: 9px 11px;
+        font-size: 13px;
+    }
+
+    .card a,
+    .back,
+    .announcement-button {
+        min-height: 42px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+    <h2>MONZE DAY SECONDARY SCHOOL</h2>
+
+    <nav>
+        <a href="teacher-dashboard.html">Home</a>
+        <a href="teacher-profile.html">My Profile</a>
+        <a href="teacher-settings.html">Settings</a>
+        <a href="teacher-announcements.html" class="active">Announcements</a>
+    </nav>
+</header>
+
+<main class="container">
+
+    <div class="heading">
+        <h1>School Announcements</h1>
+        <p>Publish important information and keep students informed.</p>
+    </div>
+
+    <section class="card">
+        <h3>📢 Create Announcement</h3>
+
+        <form id="announcementForm">
+
+            <label for="title">Announcement Title</label>
+            <input
+                type="text"
+                id="title"
+                maxlength="150"
+                placeholder="Enter announcement title"
+                required
+            >
+
+            <label for="message">Announcement Message</label>
+            <textarea
+                id="message"
+                maxlength="5000"
+                placeholder="Write your announcement here..."
+                required
+            ></textarea>
+
+            <button type="submit" id="publishButton">
+                Publish Announcement
+            </button>
+
+            <div id="status" role="status"></div>
+
+        </form>
+    </section>
+
+    <section class="card">
+        <h3>📋 Published Announcements</h3>
+        <div id="announcementList">
+            <p class="empty">Loading announcements...</p>
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    © Monze Day Secondary School · Teacher Portal
+</footer>
+
+<script>
+const form = document.getElementById("announcementForm");
+const statusBox = document.getElementById("status");
+const publishButton = document.getElementById("publishButton");
+
+async function loadAnnouncements() {
+    const list = document.getElementById("announcementList");
+
+    try {
+        const response = await fetch("/api/announcements");
+
+        if (!response.ok) {
+            throw new Error("Unable to load announcements.");
+        }
+
+        const announcements = await response.json();
+
+        list.replaceChildren();
+
+        if (announcements.length === 0) {
+            const empty = document.createElement("p");
+            empty.className = "empty";
+            empty.textContent = "No announcements have been published yet.";
+            list.appendChild(empty);
+            return;
+        }
+
+        announcements.forEach(item => {
+            const card = document.createElement("article");
+            card.className = "announcement";
+
+            const title = document.createElement("h3");
+            title.textContent = item.title;
+
+            const message = document.createElement("p");
+            message.textContent = item.message;
+
+            const details = document.createElement("small");
+
+            const date = item.created_at
+                ? new Date(item.created_at.replace(" ", "T") + "Z")
+                    .toLocaleString()
+                : "Date unavailable";
+
+            details.textContent =
+                "Posted by " + item.author_name +
+                " (" + item.author_role + ") · " + date;
+
+            card.append(title, message, details);
+            list.appendChild(card);
+        });
+
+    } catch (error) {
+        list.textContent = "Unable to load announcements. Please refresh the page.";
+        console.error(error);
+    }
+}
+
+form.addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    statusBox.textContent = "";
+    publishButton.disabled = true;
+    publishButton.textContent = "Publishing...";
+
+    try {
+        const response = await fetch("/api/teacher/announcements", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                title: document.getElementById("title").value.trim(),
+                message: document.getElementById("message").value.trim()
+            })
+        });
+
+        const result = await response.json();
+
+        if (response.status === 401) {
+            window.location.href = "teacher-login.html";
+            return;
+        }
+
+        if (!response.ok) {
+            throw new Error(result.message || "Unable to publish announcement.");
+        }
+
+        statusBox.textContent = result.message;
+        statusBox.style.color = "green";
+
+        form.reset();
+        await loadAnnouncements();
+
+    } catch (error) {
+        statusBox.textContent = error.message;
+        statusBox.style.color = "red";
+    } finally {
+        publishButton.disabled = false;
+        publishButton.textContent = "Publish Announcement";
+    }
+});
+
+loadAnnouncements();
+</script>
+
+</body>
+</html>

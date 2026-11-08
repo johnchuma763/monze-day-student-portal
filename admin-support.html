@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Student Support Management | Monze Day Secondary School</title>
+<style>
+:root{--navy:#102b50;--navy2:#173b68;--gold:#d9ad45;--bg:#f3f5f9;--border:#e3e8f0;--muted:#718096}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);font-family:Arial,sans-serif;color:#263449}
+header{background:var(--navy);color:white;padding:18px 5%;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.brand{font-weight:800}.brand small{display:block;color:var(--gold);font-size:11px;margin-top:5px}
+header a{color:white;text-decoration:none;border:1px solid #ffffff55;padding:10px 13px;border-radius:8px}
+.container{max-width:1250px;margin:28px auto;padding:0 16px}
+.hero{background:linear-gradient(120deg,var(--navy),var(--navy2));color:white;padding:25px;border-radius:14px;margin-bottom:20px}
+.hero h1{margin:0 0 8px}.hero p{margin:0;color:#e1e9f4;line-height:1.5}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:20px}
+.stat,.card{background:white;border:1px solid var(--border);border-radius:12px;padding:19px;box-shadow:0 4px 15px #102b5008}
+.stat span{color:var(--muted);font-size:13px}.stat strong{display:block;color:var(--navy);font-size:28px;margin-top:8px}
+.layout{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
+h2{color:var(--navy);font-size:19px;margin:0 0 16px}
+.filters{display:flex;gap:9px;margin-bottom:15px}
+input,select,textarea{width:100%;padding:11px;border:1px solid #d7deea;border-radius:8px;font:inherit;background:white}
+textarea{min-height:90px;resize:vertical}
+button{cursor:pointer;border:0;border-radius:8px;padding:10px 13px;font-weight:700}
+.primary{background:var(--navy);color:white}
+.gold{background:var(--gold);color:var(--navy)}
+.request{border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px}
+.request h3{color:var(--navy);font-size:15px;margin:0 0 7px}
+.request p{font-size:12px;color:var(--muted);margin:5px 0}
+.request.active{border:2px solid var(--gold);background:#fffdf7}
+.status{display:inline-block;padding:5px 9px;border-radius:20px;font-size:11px;font-weight:800;background:#fff3d7;color:#8c6500}
+.status.progress{background:#e8f0ff;color:#245b9a}
+.status.resolved{background:#e6f6ed;color:#16734c}
+.request button{margin-top:8px;background:#edf1f7;color:var(--navy)}
+#requestList{max-height:660px;overflow:auto}
+#details{display:none}
+.meta{font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:15px}
+.message{background:#f0f3f8;padding:12px;border-radius:9px;margin:9px 0;font-size:13px;line-height:1.6;overflow-wrap:anywhere}
+.message.student{border-left:3px solid #8094b0}
+.message.admin{background:#eaf2ff;border-left:3px solid var(--gold)}
+.message small{display:block;color:var(--muted);margin-bottom:5px}
+#messages{max-height:330px;overflow:auto;margin:15px 0}
+.notice{display:none;padding:12px;border-radius:8px;margin-bottom:14px}
+.notice.show{display:block}.notice.error{background:#fff0ef;color:#b52e26}.notice.success{background:#eaf8f1;color:#16845b}
+.empty{text-align:center;color:var(--muted);padding:30px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+footer{text-align:center;padding:25px;color:var(--muted);font-size:12px}
+@media(max-width:850px){.layout{grid-template-columns:1fr}.stats{gap:8px}.stat{padding:13px}.stat strong{font-size:23px}}
+@media(max-width:500px){.filters{flex-direction:column}.hero h1{font-size:22px}}
+</style>
+</head>
+<body>
+<header>
+<div class="brand">MONZE DAY SECONDARY SCHOOL<small>ADMINISTRATOR SUPPORT CENTRE</small></div>
+<a href="admin-dashboard.html">← Dashboard</a>
+</header>
+
+<div class="container">
+<section class="hero">
+<h1>Student Support Management</h1>
+<p>Review student enquiries, manage complaints and provide assistance through the support centre.</p>
+</section>
+
+<div id="notice" class="notice" role="status"></div>
+
+<section class="stats">
+<div class="stat"><span>Total Requests</span><strong id="totalCount">—</strong></div>
+<div class="stat"><span>Pending</span><strong id="pendingCount">—</strong></div>
+<div class="stat"><span>Resolved</span><strong id="resolvedCount">—</strong></div>
+</section>
+
+<div class="layout">
+<section class="card">
+<h2>Student Requests</h2>
+<div class="filters">
+<input id="search" placeholder="Search student or subject...">
+<select id="statusFilter">
+<option value="">All statuses</option>
+<option>Pending</option>
+<option>In Progress</option>
+<option>Resolved</option>
+</select>
+</div>
+<div id="requestList"><div class="empty">Loading requests...</div></div>
+</section>
+
+<section class="card">
+<div id="emptyDetails" class="empty">Select a student request to view its details and respond.</div>
+<div id="details">
+<h2 id="requestTitle">Request Details</h2>
+<div class="meta" id="requestMeta"></div>
+<div id="messages"></div>
+
+<label for="reply">Administrator Response</label>
+<textarea id="reply" maxlength="3000" placeholder="Write a helpful response to the student..."></textarea>
+<button class="primary" id="sendReply" style="margin-top:9px">Send Response →</button>
+
+<hr style="border:0;border-top:1px solid var(--border);margin:20px 0">
+
+<label for="newStatus">Update Request Status</label>
+<select id="newStatus">
+<option>Pending</option>
+<option>In Progress</option>
+<option>Resolved</option>
+</select>
+<div class="actions">
+<button class="gold" id="updateStatus">Save Status</button>
+<button type="button" onclick="loadRequests()" style="background:#edf1f7;color:var(--navy)">Refresh Requests</button>
+</div>
+</div>
+</section>
+</div>
+</div>
+
+<footer>MONZE DAY SECONDARY SCHOOL · Knowledge • Discipline • Excellence</footer>
+
+<script>
+let requests=[];
+let activeId=null;
+
+const notice=document.getElementById("notice");
+
+function showNotice(message,type="success"){
+ notice.textContent=message;
+ notice.className="notice show "+type;
+}
+
+function escapeHTML(value){
+ return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+
+function dateText(value){
+ return value?new Date(value).toLocaleString():"";
+}
+
+function statusClass(status){
+ return status==="Resolved"?"resolved":status==="In Progress"?"progress":"";
+}
+
+async function api(url,options={}){
+ const response=await fetch(url,{
+  credentials:"same-origin",
+  ...options,
+  headers:{"Content-Type":"application/json",...(options.headers||{})}
+ });
+ const data=await response.json().catch(()=>({message:"Unexpected server response."}));
+ if(response.status===401){
+  location.href="admin-login.html";
+  throw new Error("Administrator login required.");
+ }
+ if(!response.ok)throw new Error(data.message||"Request failed.");
+ return data;
+}
+
+async function loadRequests(){
+ try{
+  const params=new URLSearchParams({
+   search:document.getElementById("search").value,
+   status:document.getElementById("statusFilter").value
+  });
+  const data=await api("/api/admin/support?"+params);
+  requests=data.requests||[];
+
+  document.getElementById("totalCount").textContent=requests.length;
+  document.getElementById("pendingCount").textContent=requests.filter(r=>r.status==="Pending").length;
+  document.getElementById("resolvedCount").textContent=requests.filter(r=>r.status==="Resolved").length;
+
+  const list=document.getElementById("requestList");
+  if(!requests.length){
+   list.innerHTML='<div class="empty">No matching support requests found.</div>';
+   return;
+  }
+
+  list.innerHTML=requests.map(r=>`
+   <article class="request ${String(r.id)===String(activeId)?"active":""}">
+    <h3>#${escapeHTML(r.id)} · ${escapeHTML(r.subject)}</h3>
+    <p><strong>${escapeHTML(r.full_name)}</strong> · ${escapeHTML(r.student_number)}</p>
+    <p>${escapeHTML(r.class_name)} · ${escapeHTML(r.category)}</p>
+    <p><span class="status ${statusClass(r.status)}">${escapeHTML(r.status)}</span> · ${Number(r.message_count)||0} messages</p>
+    <p>${escapeHTML(dateText(r.created_at))}</p>
+    <button type="button" onclick="openRequest('${escapeHTML(r.id)}')">Review Request →</button>
+   </article>
+  `).join("");
+ }catch(error){showNotice(error.message,"error");}
+}
+
+async function openRequest(id){
+ activeId=id;
+ document.getElementById("emptyDetails").style.display="none";
+ document.getElementById("details").style.display="block";
+ document.getElementById("messages").innerHTML='<div class="empty">Loading conversation...</div>';
+ try{
+  const data=await api("/api/admin/support/"+encodeURIComponent(id)+"/messages");
+  const r=data.request;
+  document.getElementById("requestTitle").textContent="Request #"+r.id+" · "+r.subject;
+  document.getElementById("requestMeta").innerHTML=
+   "<strong>Student:</strong> "+escapeHTML(r.full_name)+
+   "<br><strong>Student number:</strong> "+escapeHTML(r.student_number)+
+   "<br><strong>Class:</strong> "+escapeHTML(r.class_name)+
+   "<br><strong>Email:</strong> "+escapeHTML(r.email)+
+   "<br><strong>Category:</strong> "+escapeHTML(r.category)+
+   "<br><strong>Status:</strong> "+escapeHTML(r.status)+
+   "<br><strong>Submitted:</strong> "+escapeHTML(dateText(r.created_at))+
+   "<br><strong>Description:</strong><br>"+escapeHTML(r.description).replace(/\n/g,"<br>");
+
+  document.getElementById("messages").innerHTML=data.messages.length?
+   data.messages.map(m=>`
+    <div class="message ${m.sender_type}">
+     <small>${m.sender_type==="admin"?"Administrator":"Student"} · ${escapeHTML(dateText(m.created_at))}</small>
+     ${escapeHTML(m.message).replace(/\n/g,"<br>")}
+    </div>`).join("")
+   :'<div class="empty">No follow-up messages yet.</div>';
+
+  document.getElementById("newStatus").value=r.status;
+  document.getElementById("reply").value="";
+  await loadRequests();
+ }catch(error){showNotice(error.message,"error");}
+}
+
+document.getElementById("sendReply").addEventListener("click",async()=>{
+ if(!activeId)return;
+ const input=document.getElementById("reply");
+ if(input.value.trim().length<2){
+  showNotice("Enter a response before sending.","error");
+  return;
+ }
+ try{
+  const data=await api("/api/admin/support/"+encodeURIComponent(activeId)+"/reply",{
+   method:"POST",body:JSON.stringify({message:input.value})
+  });
+  input.value="";
+  showNotice(data.message);
+  await openRequest(activeId);
+ }catch(error){showNotice(error.message,"error");}
+});
+
+document.getElementById("updateStatus").addEventListener("click",async()=>{
+ if(!activeId)return;
+ try{
+  const data=await api("/api/admin/support/"+encodeURIComponent(activeId)+"/status",{
+   method:"PATCH",
+   body:JSON.stringify({status:document.getElementById("newStatus").value})
+  });
+  showNotice(data.message);
+  await openRequest(activeId);
+ }catch(error){showNotice(error.message,"error");}
+});
+
+let searchTimer;
+document.getElementById("search").addEventListener("input",()=>{
+ clearTimeout(searchTimer);
+ searchTimer=setTimeout(loadRequests,350);
+});
+document.getElementById("statusFilter").addEventListener("change",loadRequests);
+
+loadRequests();
+</script>
+</body>
+</html>

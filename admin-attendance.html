@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Attendance Records | Monze Day Secondary School</title>
+<style>
+:root {
+    --navy: #102b50;
+    --dark: #091d38;
+    --gold: #d9ad45;
+    --light: #f4f6fa;
+    --white: #fff;
+    --muted: #68758a;
+}
+* { box-sizing: border-box; }
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: var(--light);
+    color: #243247;
+}
+header {
+    background: var(--dark);
+    color: white;
+    padding: 22px 16px;
+    text-align: center;
+    border-bottom: 4px solid var(--gold);
+}
+.logo {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 9px;
+    display: grid;
+    place-items: center;
+    border: 2px solid var(--gold);
+    border-radius: 12px;
+    color: var(--gold);
+    font-weight: bold;
+    font-size: 19px;
+}
+header h1 {
+    margin: 0;
+    font-size: 21px;
+}
+header p {
+    margin: 7px 0 0;
+    color: #e3c77e;
+    font-size: 12px;
+    letter-spacing: 1px;
+}
+main {
+    width: min(1100px, 94%);
+    margin: 25px auto;
+}
+.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+h2 { margin: 0; color: var(--navy); }
+button, .back {
+    border: 0;
+    border-radius: 8px;
+    padding: 11px 16px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+}
+.back {
+    background: var(--navy);
+    color: white;
+}
+.refresh {
+    background: var(--gold);
+    color: var(--dark);
+}
+.filters, .panel {
+    background: white;
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow: 0 3px 14px rgba(15, 35, 65, .07);
+    margin-bottom: 20px;
+}
+.filters {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+}
+label {
+    display: block;
+    font-weight: bold;
+    color: var(--navy);
+    font-size: 13px;
+    margin-bottom: 7px;
+}
+select, input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d5dce6;
+    border-radius: 8px;
+    background: white;
+    font-size: 14px;
+}
+.cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 13px;
+    margin-bottom: 20px;
+}
+.card {
+    background: white;
+    padding: 17px;
+    border-radius: 11px;
+    border-left: 4px solid var(--gold);
+    box-shadow: 0 3px 12px rgba(15, 35, 65, .06);
+}
+.card span {
+    display: block;
+    color: var(--muted);
+    font-size: 13px;
+}
+.card strong {
+    display: block;
+    color: var(--navy);
+    font-size: 27px;
+    margin-top: 8px;
+}
+.panel h3 {
+    color: var(--navy);
+    margin: 0 0 15px;
+}
+.table-wrap { overflow-x: auto; }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 700px;
+}
+th, td {
+    padding: 13px 12px;
+    border-bottom: 1px solid #e8edf3;
+    text-align: left;
+    font-size: 13px;
+}
+th {
+    background: #f1f4f8;
+    color: var(--navy);
+}
+.badge {
+    display: inline-block;
+    padding: 5px 9px;
+    border-radius: 20px;
+    background: #edf1f6;
+    color: var(--navy);
+    font-weight: bold;
+}
+.message {
+    display: none;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    background: #fff1e9;
+    color: #9a3c18;
+    font-size: 14px;
+}
+.empty {
+    text-align: center;
+    padding: 28px;
+    color: var(--muted);
+}
+footer {
+    text-align: center;
+    padding: 20px;
+    color: var(--muted);
+    font-size: 12px;
+}
+@media(max-width: 700px) {
+    .filters { grid-template-columns: 1fr; }
+    .cards { grid-template-columns: repeat(2, 1fr); }
+    .topbar { align-items: flex-start; }
+    header h1 { font-size: 18px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+    <div class="logo">MD</div>
+    <h1>MONZE DAY SECONDARY SCHOOL</h1>
+    <p>KNOWLEDGE • DISCIPLINE • EXCELLENCE</p>
+</header>
+
+<main>
+    <div class="topbar">
+        <div>
+            <h2>Attendance Records</h2>
+            <p style="color:#68758a;margin:7px 0 0;">School-wide attendance reports</p>
+        </div>
+        <div>
+            <a class="back" href="admin-dashboard.html">← Dashboard</a>
+            <button class="refresh" onclick="loadAttendance()">↻ Refresh</button>
+        </div>
+    </div>
+
+    <div id="message" class="message"></div>
+
+    <section class="filters">
+        <div>
+            <label for="classFilter">Filter by class</label>
+            <select id="classFilter" onchange="loadAttendance()">
+                <option value="">All Classes</option>
+                <option>Form 1A</option><option>Form 1B</option>
+                <option>Form 1C</option><option>Form 1D</option>
+                <option>Form 2A</option><option>Form 2B</option>
+                <option>Form 2C</option><option>Form 2D</option>
+                <option>Form 3A</option><option>Form 3B</option>
+                <option>Form 3C</option><option>Form 3D</option>
+                <option>Form 4A</option><option>Form 4B</option>
+                <option>Form 4C</option><option>Form 4D</option>
+            </select>
+        </div>
+        <div>
+            <label for="dateFilter">Filter by date</label>
+            <input type="date" id="dateFilter" onchange="loadAttendance()">
+        </div>
+        <div>
+            <label>&nbsp;</label>
+            <button class="refresh" style="width:100%" onclick="clearFilters()">Clear Filters</button>
+        </div>
+    </section>
+
+    <section class="cards">
+        <div class="card"><span>Attendance Sessions</span><strong id="totalSessions">0</strong></div>
+        <div class="card"><span>Students Marked</span><strong id="totalMarked">0</strong></div>
+        <div class="card"><span>Present</span><strong id="totalPresent">0</strong></div>
+        <div class="card"><span>Absent</span><strong id="totalAbsent">0</strong></div>
+    </section>
+
+    <section class="panel">
+        <h3>Attendance History</h3>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Class</th>
+                        <th>Teacher</th>
+                        <th>Marked</th>
+                        <th>Present</th>
+                        <th>Absent</th>
+                        <th>Late</th>
+                    </tr>
+                </thead>
+                <tbody id="attendanceTable">
+                    <tr><td colspan="7" class="empty">Loading attendance records...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+
+<footer>© Monze Day Secondary School · Knowledge • Discipline • Excellence</footer>
+
+<script>
+const tableBody = document.getElementById("attendanceTable");
+const messageBox = document.getElementById("message");
+
+function showMessage(message) {
+    messageBox.textContent = message;
+    messageBox.style.display = "block";
+}
+
+function hideMessage() {
+    messageBox.style.display = "none";
+}
+
+function clearFilters() {
+    document.getElementById("classFilter").value = "";
+    document.getElementById("dateFilter").value = "";
+    loadAttendance();
+}
+
+function safe(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;",
+        '"': "&quot;", "'": "&#039;"
+    })[char]);
+}
+
+function formatDate(value) {
+    if (!value) return "—";
+    const date = String(value).slice(0, 10);
+    const parts = date.split("-");
+    return parts.length === 3 ? `${parts[2]}/${parts[1]}/${parts[0]}` : safe(value);
+}
+
+async function loadAttendance() {
+    hideMessage();
+    tableBody.innerHTML = '<tr><td colspan="7" class="empty">Loading attendance records...</td></tr>';
+
+    const params = new URLSearchParams();
+    const className = document.getElementById("classFilter").value;
+    const date = document.getElementById("dateFilter").value;
+
+    if (className) params.set("class_name", className);
+    if (date) params.set("date", date);
+
+    try {
+        const response = await fetch(
+            "/api/admin/attendance?" + params.toString(),
+            { credentials: "same-origin" }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.message || "Unable to load attendance records.");
+        }
+
+        const sessions = data.sessions || [];
+
+        let marked = 0, present = 0, absent = 0, late = 0;
+
+        sessions.forEach(session => {
+            marked += Number(session.total_marked || 0);
+            present += Number(session.present || 0);
+            absent += Number(session.absent || 0);
+            late += Number(session.late || 0);
+        });
+
+        document.getElementById("totalSessions").textContent = sessions.length;
+        document.getElementById("totalMarked").textContent = marked;
+        document.getElementById("totalPresent").textContent = present;
+        document.getElementById("totalAbsent").textContent = absent;
+
+        if (!sessions.length) {
+            tableBody.innerHTML = '<tr><td colspan="7" class="empty">No attendance records found for the selected filters.</td></tr>';
+            return;
+        }
+
+        tableBody.innerHTML = sessions.map(session => `
+            <tr>
+                <td>${formatDate(session.attendance_date)}</td>
+                <td><span class="badge">${safe(session.class_name)}</span></td>
+                <td>${safe(session.teacher_name || "Not available")}</td>
+                <td>${Number(session.total_marked || 0)}</td>
+                <td>${Number(session.present || 0)}</td>
+                <td>${Number(session.absent || 0)}</td>
+                <td>${Number(session.late || 0)}</td>
+            </tr>
+        `).join("");
+
+    } catch (error) {
+        tableBody.innerHTML = '<tr><td colspan="7" class="empty">Could not load attendance records.</td></tr>';
+        showMessage(error.message);
+    }
+}
+
+loadAttendance();
+</script>
+</body>
+</html>

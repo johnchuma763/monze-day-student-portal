@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Attendance History | Monze Day Secondary School</title>
+
+<style>
+:root {
+    --navy: #102b50;
+    --dark: #091d38;
+    --gold: #d9ad45;
+    --gold-light: #f0cf78;
+    --bg: #f3f6fa;
+    --white: #fff;
+    --text: #25364b;
+    --muted: #718096;
+    --border: #e5eaf1;
+    --green: #168653;
+    --red: #c43d3d;
+    --orange: #b87913;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
+
+header {
+    background: linear-gradient(120deg, var(--dark), var(--navy));
+    color: white;
+    padding: 22px 5%;
+    border-bottom: 4px solid var(--gold);
+}
+
+.header-inner {
+    max-width: 1250px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.logo {
+    width: 49px;
+    height: 49px;
+    border: 2px solid var(--gold);
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    font-size: 25px;
+    color: var(--gold-light);
+    flex-shrink: 0;
+}
+
+.brand h2 {
+    margin: 0 0 6px;
+    font-size: 19px;
+    letter-spacing: .5px;
+}
+
+.brand p {
+    margin: 0;
+    color: var(--gold-light);
+    font-size: 11px;
+    letter-spacing: 1.5px;
+}
+
+.header-label {
+    border: 1px solid #ffffff35;
+    padding: 9px 13px;
+    border-radius: 30px;
+    font-size: 12px;
+    color: #f5e5bb;
+}
+
+main {
+    max-width: 1250px;
+    margin: 30px auto;
+    padding: 0 20px 35px;
+}
+
+.page-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.page-heading h1 {
+    color: var(--navy);
+    font-size: 27px;
+    margin: 0 0 8px;
+}
+
+.page-heading p {
+    color: var(--muted);
+    margin: 0;
+    font-size: 14px;
+}
+
+.back-button {
+    text-decoration: none;
+    color: var(--navy);
+    background: white;
+    border: 1px solid var(--border);
+    padding: 11px 15px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.back-button:hover {
+    background: #edf2f8;
+}
+
+.card {
+    background: white;
+    border-radius: 13px;
+    padding: 22px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border);
+    box-shadow: 0 5px 20px rgba(16,43,80,.045);
+}
+
+.section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 19px;
+}
+
+.section-heading h3 {
+    color: var(--navy);
+    font-size: 17px;
+    margin: 0;
+}
+
+.section-heading span {
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.filters {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr 1fr auto auto;
+    gap: 11px;
+    align-items: center;
+}
+
+input, select {
+    width: 100%;
+    min-width: 0;
+    padding: 12px 13px;
+    border: 1px solid #dce3ec;
+    border-radius: 8px;
+    background: #fff;
+    color: var(--text);
+    font-size: 13px;
+    outline: none;
+}
+
+input:focus, select:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px #d9ad4520;
+}
+
+button {
+    border: none;
+    border-radius: 8px;
+    padding: 12px 16px;
+    background: var(--navy);
+    color: white;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: .2s;
+}
+
+button:hover {
+    background: var(--dark);
+    transform: translateY(-1px);
+}
+
+button.gold {
+    background: var(--gold);
+    color: var(--dark);
+}
+
+button.gold:hover {
+    background: var(--gold-light);
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+
+.stat {
+    padding: 19px;
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    background: #fff;
+    position: relative;
+    overflow: hidden;
+}
+
+.stat::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--gold);
+}
+
+.stat-label {
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.stat strong {
+    display: block;
+    color: var(--navy);
+    font-size: 29px;
+    margin-top: 10px;
+}
+
+.stat small {
+    display: block;
+    margin-top: 5px;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 700px;
+}
+
+th {
+    text-align: left;
+    background: #f2f5f9;
+    color: var(--navy);
+    padding: 15px 13px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    white-space: nowrap;
+}
+
+td {
+    padding: 15px 13px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+}
+
+tbody tr:hover {
+    background: #fafbfd;
+}
+
+.badge {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 11px;
+}
+
+.Present {
+    background: #e0f5e9;
+    color: var(--green);
+}
+
+.Absent {
+    background: #ffe7e7;
+    color: var(--red);
+}
+
+.Late {
+    background: #fff1d5;
+    color: var(--orange);
+}
+
+.view-button {
+    padding: 8px 13px;
+    font-size: 11px;
+    background: #edf2f8;
+    color: var(--navy);
+}
+
+.view-button:hover {
+    background: var(--navy);
+    color: white;
+}
+
+#status {
+    margin: 15px 0 0;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+#details {
+    display: none;
+    border-top: 4px solid var(--gold);
+}
+
+.empty {
+    text-align: center;
+    padding: 28px;
+    color: var(--muted);
+}
+
+.details-close {
+    margin-top: 17px;
+}
+
+footer {
+    text-align: center;
+    padding: 22px 15px;
+    background: var(--dark);
+    color: #d7e0eb;
+    font-size: 12px;
+}
+
+footer strong {
+    color: var(--gold-light);
+}
+
+@media(max-width: 850px) {
+    .filters {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media(max-width: 520px) {
+    header {
+        padding: 17px 15px;
+    }
+
+    .header-inner {
+        align-items: flex-start;
+    }
+
+    .logo {
+        width: 42px;
+        height: 42px;
+    }
+
+    .brand h2 {
+        font-size: 15px;
+    }
+
+    .brand p {
+        font-size: 9px;
+    }
+
+    .header-label {
+        display: none;
+    }
+
+    main {
+        margin-top: 23px;
+        padding: 0 13px 25px;
+    }
+
+    .page-heading h1 {
+        font-size: 23px;
+    }
+
+    .card {
+        padding: 16px;
+        border-radius: 11px;
+    }
+
+    .filters {
+        grid-template-columns: 1fr;
+    }
+
+    .stats {
+        gap: 10px;
+    }
+
+    .stat {
+        padding: 15px;
+    }
+
+    .stat strong {
+        font-size: 25px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-inner">
+        <div class="brand">
+            <div class="logo">🎓</div>
+            <div>
+                <h2>MONZE DAY SECONDARY SCHOOL</h2>
+                <p>KNOWLEDGE • DISCIPLINE • EXCELLENCE</p>
+            </div>
+        </div>
+        <div class="header-label">TEACHER PORTAL</div>
+    </div>
+</header>
+
+<main>
+
+    <div class="page-heading">
+        <div>
+            <h1>Attendance History</h1>
+            <p>Review and monitor your previously recorded class attendance.</p>
+        </div>
+        <a class="back-button" href="teacher-dashboard.html">← Dashboard</a>
+    </div>
+
+    <section class="card">
+        <div class="section-heading">
+            <h3>Find Attendance Records</h3>
+            <span>RECORD FILTERS</span>
+        </div>
+
+        <div class="filters">
+            <input type="search" id="searchFilter"
+                placeholder="Search class...">
+
+            <select id="classFilter">
+                <option value="">All my classes</option>
+            </select>
+
+            <input type="date" id="dateFilter">
+
+            <button class="gold" onclick="loadHistory()">Apply</button>
+            <button onclick="resetFilters()">Reset</button>
+        </div>
+
+        <p id="status" role="status">Loading attendance history...</p>
+    </section>
+
+    <section class="card">
+        <div class="section-heading">
+            <h3>Attendance Overview</h3>
+            <span>SUMMARY</span>
+        </div>
+
+        <div class="stats">
+            <div class="stat">
+                <span class="stat-label">TOTAL SESSIONS</span>
+                <strong id="total">0</strong>
+                <small>Recorded sessions</small>
+            </div>
+
+            <div class="stat">
+                <span class="stat-label">PRESENT</span>
+                <strong id="present">0</strong>
+                <small>Students present</small>
+            </div>
+
+            <div class="stat">
+                <span class="stat-label">ABSENT</span>
+                <strong id="absent">0</strong>
+                <small>Students absent</small>
+            </div>
+
+            <div class="stat">
+                <span class="stat-label">LATE</span>
+                <strong id="late">0</strong>
+                <small>Students late</small>
+            </div>
+        </div>
+    </section>
+
+    <section class="card">
+        <div class="section-heading">
+            <h3>Recorded Attendance Sessions</h3>
+            <span id="sessionCount">0 RECORDS</span>
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Class</th>
+                        <th>Students</th>
+                        <th>Present</th>
+                        <th>Absent</th>
+                        <th>Late</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="sessions">
+                    <tr>
+                        <td colspan="7" class="empty">Loading records...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="card" id="details">
+        <div class="section-heading">
+            <h3 id="detailTitle">Attendance Details</h3>
+            <span>STUDENT RECORDS</span>
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Student Number</th>
+                        <th>Student Name</th>
+                        <th>Attendance Status</th>
+                        <th>Marked At</th>
+                    </tr>
+                </thead>
+                <tbody id="detailRows"></tbody>
+            </table>
+        </div>
+
+        <button class="details-close" onclick="closeDetails()">
+            Close Details
+        </button>
+    </section>
+
+</main>
+
+<footer>
+    MONZE DAY SECONDARY SCHOOL<br>
+    <strong>Knowledge • Discipline • Excellence</strong>
+</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+let allSessions = [];
+
+async function api(url) {
+    const response = await fetch(url, {
+        credentials: "same-origin",
+        cache: "no-store"
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if (response.status === 401) {
+        location.href = "teacher-login.html";
+        throw new Error("Please sign in again.");
+    }
+
+    if (!response.ok) {
+        throw new Error(data.message || "Unable to load records.");
+    }
+
+    return data;
+}
+
+function escapeHtml(value) {
+    return String(value ?? "").replace(/[&<>"']/g, c => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    }[c]));
+}
+
+function dateText(value) {
+    return String(value).slice(0, 10);
+}
+
+function formatDate(value) {
+    const date = new Date(dateText(value) + "T00:00:00");
+    return date.toLocaleDateString(undefined, {
+        day: "numeric",
+        month: "short",
+        year: "numeric"
+    });
+}
+
+async function loadHistory() {
+    $("status").textContent = "Loading attendance history...";
+    $("sessions").innerHTML =
+        '<tr><td colspan="7" class="empty">Loading records...</td></tr>';
+
+    try {
+        const data = await api("/api/teacher/attendance/history");
+
+        allSessions = data.sessions || [];
+
+        const classes = [...new Set(
+            allSessions.map(s => s.class_name)
+        )];
+
+        const selected = $("classFilter").value;
+
+        $("classFilter").innerHTML =
+            '<option value="">All my classes</option>' +
+            classes.map(c =>
+                '<option value="' + escapeHtml(c) + '">' +
+                escapeHtml(c) + '</option>'
+            ).join("");
+
+        $("classFilter").value = selected;
+
+        renderSessions();
+
+        $("status").textContent = allSessions.length
+            ? "Attendance records loaded successfully."
+            : "No attendance sessions have been recorded under your account yet.";
+
+    } catch (error) {
+        $("status").textContent = error.message;
+
+        $("sessions").innerHTML =
+            '<tr><td colspan="7" class="empty">' +
+            'Unable to load attendance history.' +
+            '</td></tr>';
+    }
+}
+
+function renderSessions() {
+    const cls = $("classFilter").value;
+    const date = $("dateFilter").value;
+    const search = $("searchFilter").value.trim().toLowerCase();
+
+    const rows = allSessions.filter(s =>
+        (!cls || s.class_name === cls) &&
+        (!date || dateText(s.attendance_date) === date) &&
+        (!search || String(s.class_name).toLowerCase().includes(search))
+    );
+
+    $("total").textContent = rows.length;
+
+    $("present").textContent = rows.reduce(
+        (n, s) => n + Number(s.present || 0), 0
+    );
+
+    $("absent").textContent = rows.reduce(
+        (n, s) => n + Number(s.absent || 0), 0
+    );
+
+    $("late").textContent = rows.reduce(
+        (n, s) => n + Number(s.late || 0), 0
+    );
+
+    $("sessionCount").textContent = rows.length + " RECORDS";
+
+    $("sessions").innerHTML = rows.length
+        ? rows.map(s => `
+            <tr>
+                <td>${escapeHtml(formatDate(s.attendance_date))}</td>
+                <td><strong>${escapeHtml(s.class_name)}</strong></td>
+                <td>${Number(s.total_students || 0)}</td>
+                <td><span class="badge Present">${Number(s.present || 0)}</span></td>
+                <td><span class="badge Absent">${Number(s.absent || 0)}</span></td>
+                <td><span class="badge Late">${Number(s.late || 0)}</span></td>
+                <td>
+                    <button class="view-button"
+                        onclick="viewDetails('${escapeHtml(s.id)}')">
+                        View Details
+                    </button>
+                </td>
+            </tr>
+        `).join("")
+        : '<tr><td colspan="7" class="empty">' +
+          'No matching attendance sessions found.' +
+          '</td></tr>';
+}
+
+async function viewDetails(id) {
+    $("details").style.display = "block";
+    $("detailTitle").textContent = "Loading attendance details...";
+    $("detailRows").innerHTML = "";
+
+    try {
+        const data = await api(
+            "/api/teacher/attendance/history/" + encodeURIComponent(id)
+        );
+
+        $("detailTitle").textContent =
+            data.session.class_name + " · " +
+            formatDate(data.session.attendance_date);
+
+        $("detailRows").innerHTML = data.records.length
+            ? data.records.map(r => `
+                <tr>
+                    <td>${escapeHtml(r.student_number)}</td>
+                    <td><strong>${escapeHtml(r.full_name)}</strong></td>
+                    <td>
+                        <span class="badge ${escapeHtml(r.status)}">
+                            ${escapeHtml(r.status)}
+                        </span>
+                    </td>
+                    <td>${escapeHtml(
+                        r.marked_at
+                            ? new Date(r.marked_at).toLocaleTimeString()
+                            : "—"
+                    )}</td>
+                </tr>
+            `).join("")
+            : '<tr><td colspan="4" class="empty">' +
+              'No student records found.' +
+              '</td></tr>';
+
+        $("details").scrollIntoView({ behavior: "smooth" });
+
+    } catch (error) {
+        $("detailTitle").textContent = error.message;
+    }
+}
+
+function closeDetails() {
+    $("details").style.display = "none";
+}
+
+function resetFilters() {
+    $("classFilter").value = "";
+    $("dateFilter").value = "";
+    $("searchFilter").value = "";
+    renderSessions();
+}
+
+$("classFilter").addEventListener("change", renderSessions);
+$("dateFilter").addEventListener("change", renderSessions);
+$("searchFilter").addEventListener("input", renderSessions);
+
+loadHistory();
+</script>
+
+</body>
+</html>

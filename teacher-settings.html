@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Settings | Monze Day Secondary School</title>
+<style>
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f3f6fb;
+    color: #24344d;
+}
+
+header {
+    background: #102b50;
+    color: white;
+    padding: 20px 6%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+header h2 { margin: 0; }
+
+nav {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav a.active, nav a:hover { color: #e2bd61; }
+
+.container {
+    max-width: 850px;
+    margin: 35px auto;
+    padding: 0 18px;
+}
+
+h1, h3 { color: #102b50; }
+
+.card {
+    background: white;
+    padding: 28px;
+    border-radius: 15px;
+    margin-bottom: 24px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 5px 18px rgba(16,43,80,.06);
+}
+
+label {
+    display: block;
+    margin: 17px 0 7px;
+    font-weight: bold;
+}
+
+input, select {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+button {
+    background: #102b50;
+    color: white;
+    border: none;
+    padding: 13px 22px;
+    border-radius: 8px;
+    margin-top: 20px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button:hover { background: #c49a35; }
+
+.message {
+    margin-top: 13px;
+    font-weight: bold;
+}
+
+footer {
+    text-align: center;
+    padding: 25px;
+    color: #64748b;
+}
+
+@media(max-width:600px) {
+    header { padding: 18px; }
+    nav { gap: 12px; }
+    .card { padding: 20px; }
+}
+
+/* PROFESSIONAL PORTAL LINK DESIGN */
+a {
+    transition: background .2s ease, color .2s ease,
+                box-shadow .2s ease, transform .2s ease;
+}
+
+a:focus-visible {
+    outline: 3px solid #d9ad52;
+    outline-offset: 3px;
+}
+
+/* Navigation links */
+nav a {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 13px;
+    border-radius: 8px;
+    text-decoration: none;
+}
+
+nav a:hover {
+    background: rgba(217, 173, 82, .16);
+    text-decoration: none;
+}
+
+nav a.active {
+    font-weight: 700;
+}
+
+/* Dashboard and card links */
+.card a,
+.cards .card a,
+.sidebar .card a,
+.announcement-button,
+.back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 11px 16px;
+    border-radius: 8px;
+    background: #102b50;
+    color: #ffffff !important;
+    font-weight: 600;
+    text-decoration: none;
+    border: 1px solid #102b50;
+    box-shadow: 0 3px 8px rgba(16, 43, 80, .12);
+}
+
+.card a:hover,
+.cards .card a:hover,
+.announcement-button:hover,
+.back:hover {
+    background: #1b4778;
+    border-color: #1b4778;
+    color: #ffffff !important;
+    transform: translateY(-1px);
+    box-shadow: 0 5px 12px rgba(16, 43, 80, .18);
+}
+
+/* Back button inside the student results header */
+header .back {
+    background: #d9ad52;
+    color: #102b50 !important;
+    border-color: #d9ad52;
+}
+
+header .back:hover {
+    background: #edc875;
+    color: #102b50 !important;
+}
+
+/* Teacher sidebar */
+.sidebar a {
+    transition: background .2s ease, color .2s ease;
+}
+
+/* Mobile-friendly navigation */
+@media (max-width: 600px) {
+    nav {
+        gap: 8px;
+    }
+
+    nav a {
+        padding: 9px 11px;
+        font-size: 13px;
+    }
+
+    .card a,
+    .back,
+    .announcement-button {
+        min-height: 42px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+    <h2>MONZE DAY | TEACHER PORTAL</h2>
+    <nav>
+        <a href="teacher-dashboard.html">Home</a>
+        <a href="teacher-profile.html">My Profile</a>
+        <a href="teacher-settings.html" class="active">Settings</a>
+    </nav>
+</header>
+
+<main class="container">
+    <h1>Account Settings</h1>
+    <p>Manage your teaching information and account security.</p>
+
+    <section class="card">
+        <h3>Edit Teacher Information</h3>
+
+        <form id="teacherProfileForm">
+            <label>Full Name</label>
+            <input type="text" id="editFullName" required>
+
+            <label>Email Address</label>
+            <input type="email" id="editEmail" required>
+
+            <label>Subjects You Teach</label>
+            <input type="text" id="editSubjects" required>
+
+            <label>Classes You Teach</label>
+            <input type="text" id="editClasses" required>
+
+            <label>Are You a Class Teacher?</label>
+            <select id="editClassTeacher" required>
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+            </select>
+
+            <label>Assigned Class</label>
+            <select id="editAssignedClass">
+                <option value="">Select Class</option>
+                <option value="Form 1A">Form 1A</option>
+                <option value="Form 1B">Form 1B</option>
+                <option value="Form 1C">Form 1C</option>
+                <option value="Form 1D">Form 1D</option>
+                <option value="Form 2A">Form 2A</option>
+                <option value="Form 2B">Form 2B</option>
+                <option value="Form 2C">Form 2C</option>
+                <option value="Form 2D">Form 2D</option>
+                <option value="Form 3A">Form 3A</option>
+                <option value="Form 3B">Form 3B</option>
+                <option value="Form 3C">Form 3C</option>
+                <option value="Form 3D">Form 3D</option>
+                <option value="Form 4A">Form 4A</option>
+                <option value="Form 4B">Form 4B</option>
+                <option value="Form 4C">Form 4C</option>
+                <option value="Form 4D">Form 4D</option>
+            </select>
+
+            <button type="submit">Save Changes</button>
+        </form>
+
+        <p id="profileMessage" class="message"></p>
+    </section>
+
+    <section class="card">
+        <h3>Change Password</h3>
+
+        <form id="teacherPasswordForm">
+            <label>Current Password</label>
+            <input type="password" id="currentPassword" required>
+
+            <label>New Password</label>
+            <input type="password" id="newPassword" minlength="8" required>
+
+            <label>Confirm New Password</label>
+            <input type="password" id="confirmPassword" minlength="8" required>
+
+            <button type="submit">Change Password</button>
+        </form>
+
+        <p id="passwordMessage" class="message"></p>
+    </section>
+</main>
+
+<footer>
+    © Monze Day Secondary School · Teacher Portal
+</footer>
+
+<script>
+async function loadTeacherSettings() {
+    try {
+        const response = await fetch("/api/teacher/me");
+        const teacher = await response.json();
+
+        if (response.status === 401) {
+            window.location.href = "teacher-login.html";
+            return;
+        }
+
+        if (!response.ok) {
+            throw new Error(teacher.message || "Unable to load settings.");
+        }
+
+        document.getElementById("editFullName").value = teacher.full_name || "";
+        document.getElementById("editEmail").value = teacher.email || "";
+        document.getElementById("editSubjects").value = teacher.subjects || "";
+        document.getElementById("editClasses").value = teacher.classes || "";
+        document.getElementById("editClassTeacher").value =
+            teacher.is_class_teacher ? "yes" : "no";
+        document.getElementById("editAssignedClass").value =
+            teacher.assigned_class || "";
+
+    } catch (error) {
+        document.getElementById("profileMessage").textContent = error.message;
+    }
+}
+
+document.getElementById("teacherProfileForm").addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const message = document.getElementById("profileMessage");
+
+    const data = {
+        full_name: document.getElementById("editFullName").value,
+        email: document.getElementById("editEmail").value,
+        subjects: document.getElementById("editSubjects").value,
+        classes: document.getElementById("editClasses").value,
+        is_class_teacher: document.getElementById("editClassTeacher").value,
+        assigned_class: document.getElementById("editAssignedClass").value
+    };
+
+    try {
+        const response = await fetch("/api/teacher/profile", {
+            method: "PUT",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        if (response.status === 401) {
+            window.location.href = "teacher-login.html";
+            return;
+        }
+
+        if (!response.ok) throw new Error(result.message || "Could not save changes.");
+
+        message.textContent = result.message;
+        message.style.color = "green";
+
+    } catch (error) {
+        message.textContent = error.message;
+        message.style.color = "red";
+    }
+});
+
+document.getElementById("teacherPasswordForm").addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const message = document.getElementById("passwordMessage");
+    const currentPassword = document.getElementById("currentPassword").value;
+    const newPassword = document.getElementById("newPassword").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+
+    if (newPassword !== confirmPassword) {
+        message.textContent = "New passwords do not match.";
+        message.style.color = "red";
+        return;
+    }
+
+    try {
+        const response = await fetch("/api/teacher/change-password", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({currentPassword, newPassword})
+        });
+
+        const result = await response.json();
+
+        if (response.status === 401) {
+            window.location.href = "teacher-login.html";
+            return;
+        }
+
+        if (!response.ok) throw new Error(result.message || "Could not change password.");
+
+        message.textContent = result.message;
+        message.style.color = "green";
+        document.getElementById("teacherPasswordForm").reset();
+
+    } catch (error) {
+        message.textContent = error.message;
+        message.style.color = "red";
+    }
+});
+
+loadTeacherSettings();
+</script>
+
+</body>
+</html>

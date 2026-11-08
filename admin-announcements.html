@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manage Announcements | Monze Day Secondary School</title>
+
+<style>
+:root {
+    --navy: #102b50;
+    --navy2: #1b4778;
+    --gold: #d9ad45;
+    --background: #f4f6fa;
+    --white: #ffffff;
+    --text: #26364b;
+    --muted: #718096;
+    --border: #e5eaf1;
+    --red: #b83232;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--background);
+    color: var(--text);
+    font-family: Arial, sans-serif;
+}
+
+header {
+    background: var(--navy);
+    color: white;
+    padding: 20px;
+    box-shadow: 0 3px 14px rgba(0,0,0,.12);
+}
+
+.header-inner {
+    max-width: 1150px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.logo {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    border: 2px solid var(--gold);
+    border-radius: 12px;
+    color: var(--gold);
+    font-weight: bold;
+    font-size: 20px;
+}
+
+header h2 {
+    margin: 0;
+    font-size: 17px;
+}
+
+header p {
+    margin: 6px 0 0;
+    color: #dce5f1;
+    font-size: 12px;
+    letter-spacing: 1px;
+}
+
+main {
+    max-width: 1150px;
+    margin: 30px auto;
+    padding: 0 18px;
+}
+
+.top-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 22px;
+}
+
+h1 {
+    color: var(--navy);
+    margin: 0 0 8px;
+    font-size: 27px;
+}
+
+.subtitle {
+    color: var(--muted);
+    margin: 0;
+    line-height: 1.6;
+}
+
+.card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+    margin-bottom: 22px;
+    box-shadow: 0 5px 18px rgba(16,43,80,.05);
+}
+
+.card h2 {
+    color: var(--navy);
+    font-size: 19px;
+    margin: 0 0 20px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    font-size: 14px;
+    margin: 16px 0 8px;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #dce3ed;
+    border-radius: 8px;
+    font: inherit;
+    outline: none;
+}
+
+input:focus, textarea:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(217,173,69,.13);
+}
+
+textarea {
+    min-height: 150px;
+    resize: vertical;
+    line-height: 1.6;
+}
+
+button, .back-button {
+    border: 0;
+    border-radius: 8px;
+    padding: 12px 17px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 14px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.primary {
+    background: var(--navy);
+    color: white;
+}
+
+.primary:hover {
+    background: var(--navy2);
+}
+
+.secondary {
+    background: #edf2f8;
+    color: var(--navy);
+}
+
+.danger {
+    background: #fff0f0;
+    color: var(--red);
+}
+
+.gold {
+    background: var(--gold);
+    color: var(--navy);
+}
+
+.buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.message {
+    margin-top: 13px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.announcement {
+    border: 1px solid var(--border);
+    border-left: 5px solid var(--gold);
+    border-radius: 10px;
+    padding: 19px;
+    margin-bottom: 15px;
+    background: white;
+}
+
+.announcement h3 {
+    color: var(--navy);
+    margin: 0 0 10px;
+    font-size: 18px;
+    overflow-wrap: anywhere;
+}
+
+.announcement p {
+    white-space: pre-wrap;
+    line-height: 1.75;
+    overflow-wrap: anywhere;
+    margin: 0 0 14px;
+}
+
+.meta {
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.status {
+    display: inline-block;
+    background: #e9f7ef;
+    color: #207443;
+    padding: 5px 9px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+
+.empty {
+    color: var(--muted);
+    text-align: center;
+    padding: 28px 10px;
+}
+
+footer {
+    text-align: center;
+    padding: 22px;
+    color: var(--muted);
+    font-size: 13px;
+    border-top: 1px solid var(--border);
+    background: white;
+}
+
+@media(max-width:600px) {
+    header {
+        padding: 16px;
+    }
+
+    header h2 {
+        font-size: 14px;
+    }
+
+    main {
+        margin-top: 22px;
+        padding: 0 13px;
+    }
+
+    h1 {
+        font-size: 23px;
+    }
+
+    .card {
+        padding: 18px;
+    }
+
+    .buttons button {
+        flex: 1;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="header-inner">
+        <div class="logo">MD</div>
+        <div>
+            <h2>MONZE DAY SECONDARY SCHOOL</h2>
+            <p>ADMINISTRATOR PORTAL</p>
+        </div>
+    </div>
+</header>
+
+<main>
+
+    <div class="top-actions">
+        <div>
+            <h1>📢 Manage Announcements</h1>
+            <p class="subtitle">
+                Publish important school information for students and teachers.
+            </p>
+        </div>
+
+        <a class="back-button secondary" href="admin-dashboard.html">
+            ← Back to Dashboard
+        </a>
+    </div>
+
+    <section class="card">
+        <h2 id="formHeading">Create New Announcement</h2>
+
+        <form id="announcementForm">
+            <label for="title">Announcement Title</label>
+            <input
+                id="title"
+                type="text"
+                maxlength="150"
+                placeholder="Enter announcement title"
+                required
+            >
+
+            <label for="message">Announcement Message</label>
+            <textarea
+                id="message"
+                maxlength="5000"
+                placeholder="Write your announcement here..."
+                required
+            ></textarea>
+
+            <div class="buttons">
+                <button class="primary" id="submitButton" type="submit">
+                    Publish Announcement
+                </button>
+
+                <button
+                    class="secondary"
+                    id="cancelButton"
+                    type="button"
+                    hidden
+                >
+                    Cancel Editing
+                </button>
+            </div>
+
+            <p class="message" id="formMessage" role="status"></p>
+        </form>
+    </section>
+
+    <section class="card">
+        <h2>Published Announcements</h2>
+
+        <div id="announcementList">
+            <p class="empty">Loading announcements...</p>
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    © 2026 Monze Day Secondary School. All Rights Reserved.
+    <br><br>
+    Knowledge • Discipline • Excellence
+</footer>
+
+<script>
+const form = document.getElementById("announcementForm");
+const titleInput = document.getElementById("title");
+const messageInput = document.getElementById("message");
+const formMessage = document.getElementById("formMessage");
+const list = document.getElementById("announcementList");
+const submitButton = document.getElementById("submitButton");
+const cancelButton = document.getElementById("cancelButton");
+
+let editingId = null;
+
+async function api(url, options = {}) {
+    const response = await fetch(url, {
+        credentials: "same-origin",
+        ...options,
+        headers: {
+            "Content-Type": "application/json",
+            ...(options.headers || {})
+        }
+    });
+
+    const data = await response.json().catch(() => ({}));
+
+    if (response.status === 401) {
+        window.location.href = "admin-login.html";
+        throw new Error("Administrator login required.");
+    }
+
+    if (!response.ok) {
+        throw new Error(data.message || "Something went wrong.");
+    }
+
+    return data;
+}
+
+function showMessage(text, success = false) {
+    formMessage.textContent = text;
+    formMessage.style.color = success ? "#207443" : "#b83232";
+}
+
+function resetForm() {
+    editingId = null;
+    form.reset();
+
+    document.getElementById("formHeading").textContent =
+        "Create New Announcement";
+
+    submitButton.textContent = "Publish Announcement";
+    cancelButton.hidden = true;
+    showMessage("");
+}
+
+cancelButton.addEventListener("click", resetForm);
+
+form.addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const title = titleInput.value.trim();
+    const message = messageInput.value.trim();
+
+    if (!title || !message) {
+        showMessage("Please enter both the title and message.");
+        return;
+    }
+
+    const isEditing = editingId !== null;
+
+    submitButton.disabled = true;
+    submitButton.textContent = isEditing ? "Saving..." : "Publishing...";
+
+    try {
+        const url = isEditing
+            ? `/api/admin/announcements/${editingId}`
+            : "/api/admin/announcements";
+
+        const result = await api(url, {
+            method: isEditing ? "PUT" : "POST",
+            body: JSON.stringify({ title, message })
+        });
+
+        resetForm();
+        showMessage(result.message, true);
+        await loadAnnouncements();
+
+    } catch (error) {
+        showMessage(error.message);
+    } finally {
+        submitButton.disabled = false;
+
+        if (editingId !== null) {
+            submitButton.textContent = "Save Changes";
+        } else {
+            submitButton.textContent = "Publish Announcement";
+        }
+    }
+});
+
+function formatDate(value) {
+    if (!value) return "Date unavailable";
+
+    const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) {
+        return String(value);
+    }
+
+    return date.toLocaleString();
+}
+
+function editAnnouncement(item) {
+    editingId = item.id;
+
+    titleInput.value = item.title;
+    messageInput.value = item.message;
+
+    document.getElementById("formHeading").textContent =
+        "Edit Announcement";
+
+    submitButton.textContent = "Save Changes";
+    cancelButton.hidden = false;
+
+    showMessage("You are editing an existing announcement.", true);
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+async function deleteAnnouncement(id) {
+    if (!confirm("Are you sure you want to delete this announcement?")) {
+        return;
+    }
+
+    try {
+        const result = await api(`/api/admin/announcements/${id}`, {
+            method: "DELETE"
+        });
+
+        if (editingId === id) {
+            resetForm();
+        }
+
+        await loadAnnouncements();
+        alert(result.message);
+
+    } catch (error) {
+        alert(error.message);
+    }
+}
+
+function createAnnouncementCard(item) {
+    const card = document.createElement("article");
+    card.className = "announcement";
+
+    const status = document.createElement("span");
+    status.className = "status";
+    status.textContent = item.is_published ? "PUBLISHED" : "NOT PUBLISHED";
+
+    const heading = document.createElement("h3");
+    heading.textContent = item.title;
+
+    const message = document.createElement("p");
+    message.textContent = item.message;
+
+    const meta = document.createElement("div");
+    meta.className = "meta";
+
+    const author = document.createElement("div");
+    author.textContent =
+        `Posted by ${item.author_name || "Unknown"} (${item.author_role || "School"})`;
+
+    const date = document.createElement("div");
+    date.textContent = `Date: ${formatDate(item.created_at)}`;
+
+    meta.append(author, date);
+
+    const buttons = document.createElement("div");
+    buttons.className = "buttons";
+
+    const editButton = document.createElement("button");
+    editButton.className = "gold";
+    editButton.textContent = "Edit";
+    editButton.addEventListener("click", () => editAnnouncement(item));
+
+    const deleteButton = document.createElement("button");
+    deleteButton.className = "danger";
+    deleteButton.textContent = "Delete";
+    deleteButton.addEventListener("click", () => deleteAnnouncement(item.id));
+
+    buttons.append(editButton, deleteButton);
+    card.append(status, heading, message, meta, buttons);
+
+    return card;
+}
+
+async function loadAnnouncements() {
+    list.replaceChildren();
+
+    const loading = document.createElement("p");
+    loading.className = "empty";
+    loading.textContent = "Loading announcements...";
+    list.appendChild(loading);
+
+    try {
+        const announcements = await api("/api/admin/announcements");
+
+        list.replaceChildren();
+
+        if (!Array.isArray(announcements) || announcements.length === 0) {
+            const empty = document.createElement("p");
+            empty.className = "empty";
+            empty.textContent = "No announcements have been created yet.";
+            list.appendChild(empty);
+            return;
+        }
+
+        announcements.forEach(item => {
+            list.appendChild(createAnnouncementCard(item));
+        });
+
+    } catch (error) {
+        list.replaceChildren();
+
+        const errorMessage = document.createElement("p");
+        errorMessage.className = "empty";
+        errorMessage.textContent = error.message;
+        list.appendChild(errorMessage);
+    }
+}
+
+async function checkAdmin() {
+    try {
+        await api("/api/admin/me");
+        await loadAnnouncements();
+    } catch (error) {
+        if (!window.location.href.includes("admin-login.html")) {
+            list.textContent = error.message;
+        }
+    }
+}
+
+checkAdmin();
+</script>
+
+</body>
+</html>

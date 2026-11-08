@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Digital Library | Monze Day Secondary School</title>
+
+<style>
+:root {
+    --navy: #071a35;
+    --navy-light: #102b50;
+    --gold: #d9ad45;
+    --gold-dark: #a77b18;
+    --white: #ffffff;
+    --background: #f3f5f9;
+    --text: #182b43;
+    --muted: #667085;
+    --border: #e1e6ed;
+    --green: #168653;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--background);
+    color: var(--text);
+}
+
+/* HEADER */
+
+header {
+    background: linear-gradient(135deg, var(--navy), var(--navy-light));
+    color: var(--white);
+    padding: 25px 18px;
+    text-align: center;
+    border-bottom: 5px solid var(--gold);
+}
+
+.school-name {
+    margin: 0;
+    font-size: 23px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.school-slogan {
+    margin: 9px 0 0;
+    color: #e8ca80;
+    font-size: 13px;
+    letter-spacing: .5px;
+}
+
+/* MAIN */
+
+main {
+    width: 100%;
+    max-width: 1050px;
+    margin: 0 auto;
+    padding: 25px 16px 45px;
+}
+
+/* BACK BUTTON */
+
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--navy-light);
+    color: white;
+    text-decoration: none;
+    padding: 11px 17px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 22px;
+    transition: .2s;
+}
+
+.back-button:hover {
+    background: var(--gold-dark);
+}
+
+/* LIBRARY PANEL */
+
+.library-panel {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 5px 22px rgba(0,0,0,.06);
+}
+
+.library-heading {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 22px;
+}
+
+.library-icon {
+    width: 53px;
+    height: 53px;
+    background: #fff5dc;
+    color: var(--gold-dark);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 27px;
+}
+
+.library-heading h2 {
+    margin: 0;
+    font-size: 22px;
+    color: var(--navy);
+}
+
+.library-heading p {
+    margin: 6px 0 0;
+    font-size: 13px;
+    color: var(--muted);
+}
+
+/* FILTERS */
+
+.filters {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+input, select {
+    width: 100%;
+    min-width: 0;
+    padding: 13px;
+    border: 1px solid #ccd4df;
+    border-radius: 8px;
+    background: white;
+    color: var(--text);
+    font-size: 14px;
+    outline: none;
+}
+
+input:focus, select:focus {
+    border-color: var(--gold-dark);
+    box-shadow: 0 0 0 3px rgba(217,173,69,.15);
+}
+
+/* MESSAGE */
+
+#message {
+    padding: 12px 15px;
+    background: #f5f7fa;
+    border-radius: 8px;
+    color: var(--muted);
+    font-size: 13px;
+    margin: 0 0 18px;
+}
+
+/* MATERIAL CARDS */
+
+.materials-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.material-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 19px;
+    transition: .2s;
+}
+
+.material-card:hover {
+    border-color: var(--gold);
+    box-shadow: 0 5px 15px rgba(0,0,0,.06);
+    transform: translateY(-2px);
+}
+
+.material-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 13px;
+}
+
+.file-icon {
+    width: 43px;
+    height: 43px;
+    flex-shrink: 0;
+    background: #edf2f8;
+    color: var(--navy-light);
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 21px;
+}
+
+.material-title {
+    margin: 2px 0 7px;
+    font-size: 16px;
+    color: var(--navy);
+    overflow-wrap: anywhere;
+}
+
+.material-description {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+    margin: 13px 0;
+    overflow-wrap: anywhere;
+}
+
+.material-info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin: 12px 0 16px;
+}
+
+.badge {
+    background: #f1f4f8;
+    color: #475467;
+    border-radius: 20px;
+    padding: 6px 10px;
+    font-size: 11px;
+}
+
+.download-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    width: 100%;
+    background: var(--navy-light);
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 13px;
+    transition: .2s;
+}
+
+.download-button:hover {
+    background: var(--gold-dark);
+}
+
+/* EMPTY STATE */
+
+.empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 45px 15px;
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    border-radius: 12px;
+}
+
+.empty-state .empty-icon {
+    font-size: 38px;
+    margin-bottom: 10px;
+}
+
+.empty-state h3 {
+    margin: 0 0 8px;
+    color: var(--navy);
+}
+
+.empty-state p {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+/* FOOTER */
+
+footer {
+    text-align: center;
+    padding: 20px;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+/* MOBILE */
+
+@media(max-width: 700px) {
+    main {
+        padding: 18px 12px 35px;
+    }
+
+    .filters {
+        grid-template-columns: 1fr;
+        gap: 9px;
+    }
+
+    .materials-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .library-panel {
+        padding: 18px 14px;
+    }
+
+    .school-name {
+        font-size: 19px;
+    }
+
+    .library-heading h2 {
+        font-size: 19px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1 class="school-name">MONZE DAY SECONDARY SCHOOL</h1>
+    <p class="school-slogan">
+        DIGITAL LIBRARY · KNOWLEDGE • DISCIPLINE • EXCELLENCE
+    </p>
+</header>
+
+<main>
+
+    <a href="student-dashboard.html" class="back-button">
+        ← Back to Student Portal
+    </a>
+
+    <section class="library-panel">
+
+        <div class="library-heading">
+            <div class="library-icon">📚</div>
+
+            <div>
+                <h2>Learning Materials</h2>
+                <p>Access notes, revision materials, past papers and textbooks.</p>
+            </div>
+        </div>
+
+        <div class="filters">
+
+            <input
+                id="search"
+                type="search"
+                placeholder="🔍 Search learning materials..."
+                oninput="loadMaterials()"
+            >
+
+            <select id="subject" onchange="loadMaterials()">
+                <option value="">All subjects</option>
+            </select>
+
+            <select id="category" onchange="loadMaterials()">
+                <option value="">All categories</option>
+                <option value="notes">Notes</option>
+                <option value="revision">Revision</option>
+                <option value="past_paper">Past Papers</option>
+                <option value="textbook">Textbooks</option>
+                <option value="other">Other</option>
+            </select>
+
+        </div>
+
+        <p id="message">Loading learning materials...</p>
+
+        <div id="materials" class="materials-grid"></div>
+
+    </section>
+
+</main>
+
+<footer>
+    MONZE DAY SECONDARY SCHOOL<br>
+    Knowledge • Discipline • Excellence
+</footer>
+
+<script>
+async function api(url) {
+    const r = await fetch(url, {
+        credentials: "same-origin"
+    });
+
+    const d = await r.json();
+
+    if (!r.ok) {
+        throw Error(d.message || "Request failed");
+    }
+
+    return d;
+}
+
+async function loadMaterials() {
+    const box = document.getElementById("materials");
+    const msg = document.getElementById("message");
+
+    msg.textContent = "Loading learning materials...";
+    box.innerHTML = "";
+
+    try {
+        const p = new URLSearchParams({
+            search: document.getElementById("search").value,
+            subject: document.getElementById("subject").value,
+            category: document.getElementById("category").value
+        });
+
+        const d = await api("/api/library/resources?" + p);
+
+        const resources = d.resources || [];
+
+        const subjects = [
+            ...new Set(resources.map(x => x.subject_name).filter(Boolean))
+        ];
+
+        const select = document.getElementById("subject");
+        const old = select.value;
+
+        if (select.options.length === 1) {
+            subjects.sort().forEach(subject => {
+                select.add(new Option(subject, subject));
+            });
+        }
+
+        if (old) {
+            select.value = old;
+        }
+
+        msg.textContent = resources.length
+            ? resources.length + " learning material(s) found."
+            : "No materials found for your class yet.";
+
+        if (!resources.length) {
+            const empty = document.createElement("div");
+            empty.className = "empty-state";
+
+            const icon = document.createElement("div");
+            icon.className = "empty-icon";
+            icon.textContent = "📚";
+
+            const heading = document.createElement("h3");
+            heading.textContent = "No materials found";
+
+            const description = document.createElement("p");
+            description.textContent =
+                "Try another search or check back later for new learning materials.";
+
+            empty.append(icon, heading, description);
+            box.append(empty);
+            return;
+        }
+
+        resources.forEach(x => {
+            const card = document.createElement("article");
+            card.className = "material-card";
+
+            const top = document.createElement("div");
+            top.className = "material-top";
+
+            const icon = document.createElement("div");
+            icon.className = "file-icon";
+            icon.textContent = "📄";
+
+            const titleArea = document.createElement("div");
+
+            const title = document.createElement("h3");
+            title.className = "material-title";
+            title.textContent = x.title;
+
+            titleArea.append(title);
+            top.append(icon, titleArea);
+
+            const description = document.createElement("p");
+            description.className = "material-description";
+            description.textContent =
+                x.description || "No description provided.";
+
+            const info = document.createElement("div");
+            info.className = "material-info";
+
+            const subject = document.createElement("span");
+            subject.className = "badge";
+            subject.textContent = x.subject_name;
+
+            const className = document.createElement("span");
+            className.className = "badge";
+            className.textContent = x.class_name;
+
+            const category = document.createElement("span");
+            category.className = "badge";
+            category.textContent = (x.category || "other")
+                .replaceAll("_", " ");
+
+            info.append(subject, className, category);
+
+            const download = document.createElement("a");
+            download.className = "download-button";
+            download.textContent = "⬇ Download Material";
+            download.href =
+                "/api/library/resources/" +
+                encodeURIComponent(x.id) +
+                "/download";
+
+            card.append(top, description, info, download);
+            box.append(card);
+        });
+
+    } catch (e) {
+        msg.textContent = e.message || "Unable to load learning materials.";
+        box.innerHTML = "";
+    }
+}
+
+loadMaterials();
+</script>
+
+</body>
+</html>

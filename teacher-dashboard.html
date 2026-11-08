@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Teacher Dashboard | Monze Day Secondary School</title>
+
+<style>
+:root {
+    --navy: #071a35;
+    --navy-light: #102d55;
+    --gold: #d9ad52;
+    --white: #ffffff;
+    --background: #f3f6fb;
+    --text: #25344d;
+    --muted: #7b8798;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: var(--background);
+    color: var(--text);
+}
+
+/* TOP HEADER */
+.topbar {
+    height: 75px;
+    background: var(--navy);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 25px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 20;
+    box-shadow: 0 3px 12px #00000018;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo {
+    width: 43px;
+    height: 43px;
+    background: var(--gold);
+    color: var(--navy);
+    display: grid;
+    place-items: center;
+    border-radius: 9px;
+    font-weight: bold;
+    font-size: 19px;
+}
+
+.brand h2 {
+    font-size: 16px;
+    margin: 0;
+}
+
+.brand p {
+    color: var(--gold);
+    font-size: 10px;
+    letter-spacing: 2px;
+    margin: 5px 0 0;
+}
+
+.menu-button {
+    display: none;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 27px;
+    cursor: pointer;
+}
+
+/* SIDEBAR */
+.sidebar {
+    position: fixed;
+    top: 75px;
+    left: 0;
+    bottom: 0;
+    width: 250px;
+    background: var(--navy);
+    padding: 25px 15px;
+    overflow-y: auto;
+    z-index: 15;
+}
+
+.sidebar-title {
+    color: var(--gold);
+    font-size: 11px;
+    letter-spacing: 2px;
+    font-weight: bold;
+    padding: 0 12px;
+    margin: 5px 0 20px;
+}
+
+.sidebar a {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 14px 13px;
+    color: #dce5f1;
+    text-decoration: none;
+    font-size: 14px;
+    border-radius: 7px;
+    margin-bottom: 6px;
+    transition: .2s;
+}
+
+.sidebar a:hover,
+.sidebar a.active {
+    background: var(--navy-light);
+    color: white;
+    border-left: 4px solid var(--gold);
+}
+
+.sidebar .logout {
+    margin-top: 35px;
+    width: 100%;
+    border: 1px solid #ffffff35;
+    padding: 13px;
+    background: transparent;
+    color: white;
+    border-radius: 7px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.sidebar .logout:hover {
+    background: #a52a2a;
+    border-color: #a52a2a;
+}
+
+/* MAIN */
+main {
+    margin-left: 250px;
+    padding: 105px 30px 35px;
+    min-height: 100vh;
+    max-width: 1600px;
+}
+
+.welcome {
+    background: linear-gradient(115deg, #071a35, #163b69);
+    padding: 35px;
+    border-radius: 13px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 28px;
+}
+
+.welcome::after {
+    content: "MD";
+    position: absolute;
+    right: 35px;
+    top: 15px;
+    font-size: 110px;
+    font-weight: bold;
+    color: #ffffff0b;
+}
+
+.welcome small {
+    color: var(--gold);
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.welcome h1 {
+    font-size: 29px;
+    margin: 12px 0;
+}
+
+.welcome p {
+    color: #d6e0ee;
+    margin: 7px 0;
+    font-size: 14px;
+}
+
+/* STATISTICS */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 18px;
+    margin-bottom: 28px;
+}
+
+.stat-card {
+    background: white;
+    padding: 23px;
+    border-radius: 11px;
+    box-shadow: 0 3px 14px #071a350c;
+    border-bottom: 3px solid var(--gold);
+}
+
+.stat-card .icon {
+    font-size: 25px;
+}
+
+.stat-card p {
+    color: var(--muted);
+    font-size: 13px;
+    margin: 14px 0 7px;
+}
+
+.stat-card h2 {
+    margin: 0;
+    color: var(--navy);
+    font-size: 29px;
+}
+
+/* SECTION HEADING */
+.section-heading {
+    margin: 30px 0 17px;
+}
+
+.section-heading h2 {
+    color: var(--navy);
+    font-size: 21px;
+    margin: 0;
+}
+
+.section-heading p {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+/* DASHBOARD CARDS */
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+}
+
+.card {
+    background: white;
+    padding: 24px;
+    border-radius: 11px;
+    box-shadow: 0 3px 14px #071a350c;
+    transition: transform .2s;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+}
+
+.card-icon {
+    width: 48px;
+    height: 48px;
+    background: #fff4dc;
+    display: grid;
+    place-items: center;
+    border-radius: 10px;
+    font-size: 23px;
+}
+
+.card h3 {
+    color: var(--navy);
+    margin: 17px 0 8px;
+}
+
+.card p {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.6;
+    min-height: 40px;
+}
+
+.card a {
+    display: inline-block;
+    text-decoration: none;
+    background: var(--navy);
+    color: white;
+    padding: 10px 15px;
+    border-radius: 6px;
+    font-size: 13px;
+    margin-top: 8px;
+}
+
+.card a:hover {
+    background: var(--gold);
+    color: var(--navy);
+}
+
+/* INFORMATION PANELS */
+.info-panel {
+    background: white;
+    padding: 23px;
+    border-radius: 11px;
+    margin-top: 25px;
+    box-shadow: 0 3px 14px #071a350c;
+    border-left: 4px solid var(--gold);
+}
+
+.info-panel h3 {
+    color: var(--navy);
+    margin-top: 0;
+}
+
+.info-panel p {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.badge {
+    display: inline-block;
+    background: #fff4dc;
+    color: #916b22;
+    padding: 6px 11px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+/* FOOTER */
+footer {
+    margin-left: 250px;
+    text-align: center;
+    padding: 22px;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+/* MOBILE */
+.overlay {
+    display: none;
+}
+
+@media(max-width: 800px) {
+
+    .menu-button {
+        display: block;
+    }
+
+    .topbar {
+        padding: 0 15px;
+    }
+
+    .brand h2 {
+        font-size: 13px;
+    }
+
+    .sidebar {
+        left: -260px;
+        width: 250px;
+        transition: left .25s ease;
+    }
+
+    .sidebar.open {
+        left: 0;
+    }
+
+    .overlay.show {
+        display: block;
+        position: fixed;
+        inset: 75px 0 0;
+        background: #00000070;
+        z-index: 14;
+    }
+
+    main {
+        margin-left: 0;
+        padding: 100px 15px 25px;
+    }
+
+    footer {
+        margin-left: 0;
+    }
+
+    .welcome {
+        padding: 25px 20px;
+    }
+
+    .welcome h1 {
+        font-size: 23px;
+    }
+
+    .welcome::after {
+        font-size: 75px;
+        right: 15px;
+    }
+}
+
+/* PROFESSIONAL PORTAL LINK DESIGN */
+a {
+    transition: background .2s ease, color .2s ease,
+                box-shadow .2s ease, transform .2s ease;
+}
+
+a:focus-visible {
+    outline: 3px solid #d9ad52;
+    outline-offset: 3px;
+}
+
+/* Navigation links */
+nav a {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 13px;
+    border-radius: 8px;
+    text-decoration: none;
+}
+
+nav a:hover {
+    background: rgba(217, 173, 82, .16);
+    text-decoration: none;
+}
+
+nav a.active {
+    font-weight: 700;
+}
+
+/* Dashboard and card links */
+.card a,
+.cards .card a,
+.sidebar .card a,
+.announcement-button,
+.back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 11px 16px;
+    border-radius: 8px;
+    background: #102b50;
+    color: #ffffff !important;
+    font-weight: 600;
+    text-decoration: none;
+    border: 1px solid #102b50;
+    box-shadow: 0 3px 8px rgba(16, 43, 80, .12);
+}
+
+.card a:hover,
+.cards .card a:hover,
+.announcement-button:hover,
+.back:hover {
+    background: #1b4778;
+    border-color: #1b4778;
+    color: #ffffff !important;
+    transform: translateY(-1px);
+    box-shadow: 0 5px 12px rgba(16, 43, 80, .18);
+}
+
+/* Back button inside the student results header */
+header .back {
+    background: #d9ad52;
+    color: #102b50 !important;
+    border-color: #d9ad52;
+}
+
+header .back:hover {
+    background: #edc875;
+    color: #102b50 !important;
+}
+
+/* Teacher sidebar */
+.sidebar a {
+    transition: background .2s ease, color .2s ease;
+}
+
+/* Mobile-friendly navigation */
+@media (max-width: 600px) {
+    nav {
+        gap: 8px;
+    }
+
+    nav a {
+        padding: 9px 11px;
+        font-size: 13px;
+    }
+
+    .card a,
+    .back,
+    .announcement-button {
+        min-height: 42px;
+    }
+}
+
+
+/* NOTIFICATION CENTRE */
+.notification-wrap {
+    position: relative;
+    margin-left: auto;
+    margin-right: 14px;
+}
+.notification-bell {
+    position: relative;
+    border: 1px solid #e5e9f0;
+    background: white;
+    color: #102b50;
+    border-radius: 10px;
+    padding: 10px 13px;
+    font-size: 21px;
+    cursor: pointer;
+}
+.notification-bell:hover { background: #f5f7fb; }
+.notification-badge {
+    position: absolute;
+    top: -7px;
+    right: -7px;
+    background: #d9ad45;
+    color: #102b50;
+    border-radius: 20px;
+    min-width: 19px;
+    height: 19px;
+    padding: 0 4px;
+    font-size: 11px;
+    font-weight: bold;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+.notification-panel {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 48px;
+    width: min(360px, calc(100vw - 30px));
+    max-height: 430px;
+    overflow-y: auto;
+    background: white;
+    border: 1px solid #e5e9f0;
+    border-radius: 13px;
+    box-shadow: 0 12px 35px #102b5025;
+    z-index: 100;
+    color: #102b50;
+}
+.notification-panel.open { display: block; }
+.notification-heading {
+    padding: 15px;
+    border-bottom: 1px solid #edf0f5;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+}
+.notification-heading h3 { margin: 0; font-size: 16px; }
+.notification-heading button {
+    border: 0;
+    background: #102b50;
+    color: white;
+    padding: 7px 10px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 11px;
+}
+.notification-item {
+    padding: 13px 15px;
+    border-bottom: 1px solid #edf0f5;
+}
+.notification-item.unread { background: #fff9e9; }
+.notification-item h4 { margin: 0 0 6px; font-size: 14px; }
+.notification-item p {
+    margin: 0 0 8px;
+    color: #536174;
+    font-size: 13px;
+    line-height: 1.5;
+}
+.notification-item small { color: #778397; font-size: 11px; }
+.notification-item button {
+    display: block;
+    margin-top: 8px;
+    border: 0;
+    background: transparent;
+    color: #9a741b;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 0;
+}
+.notification-empty {
+    padding: 25px 15px;
+    text-align: center;
+    color: #778397;
+    font-size: 13px;
+}
+@media(max-width:500px) {
+    .notification-wrap { margin-right: 8px; }
+    .notification-panel { position: fixed; top: 70px; right: 10px; }
+}
+
+
+/* ==========================================
+   PROFESSIONAL TEACHER DASHBOARD ENHANCEMENTS
+   ========================================== */
+
+:root {
+    --navy: #102b50;
+    --navy-light: #183e6b;
+    --gold: #d9ad45;
+    --background: #f4f6fa;
+    --text: #25344d;
+    --muted: #718096;
+}
+
+body {
+    background:
+        radial-gradient(circle at 90% 5%, #e9eef7 0, transparent 30%),
+        #f4f6fa;
+    line-height: 1.5;
+}
+
+.topbar {
+    background: linear-gradient(110deg, #071a35, #153b68);
+    border-bottom: 2px solid var(--gold);
+    padding: 0 30px;
+}
+
+.logo {
+    border-radius: 12px;
+    box-shadow: 0 3px 12px #00000030;
+}
+
+.brand h2 {
+    letter-spacing: .5px;
+    font-weight: 800;
+}
+
+.sidebar {
+    background: linear-gradient(180deg, #071a35, #102b50);
+    padding: 28px 16px;
+    box-shadow: 5px 0 18px #071a3510;
+}
+
+.sidebar-title {
+    padding-bottom: 13px;
+    border-bottom: 1px solid #ffffff20;
+}
+
+.sidebar a {
+    min-height: 45px;
+    border: 1px solid transparent;
+    border-left: 4px solid transparent;
+    font-weight: 500;
+    letter-spacing: .1px;
+}
+
+.sidebar a:hover {
+    background: #ffffff12;
+    border-color: #ffffff12;
+    border-left-color: var(--gold);
+    transform: translateX(2px);
+}
+
+.sidebar a.active {
+    background: linear-gradient(90deg, #24466f, #18385f);
+    border-left: 4px solid var(--gold);
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.sidebar .logout {
+    min-height: 45px;
+    transition: .2s ease;
+}
+
+main {
+    padding-top: 110px;
+    padding-left: 35px;
+    padding-right: 35px;
+}
+
+.welcome {
+    min-height: 190px;
+    padding: 38px;
+    border: 1px solid #ffffff20;
+    border-bottom: 4px solid var(--gold);
+    border-radius: 17px;
+    background: linear-gradient(115deg, #071a35, #173f70);
+    box-shadow: 0 10px 28px #102b501c;
+}
+
+.welcome small {
+    display: inline-block;
+    padding: 6px 11px;
+    background: #d9ad4520;
+    border: 1px solid #d9ad4560;
+    border-radius: 20px;
+}
+
+.welcome h1 {
+    font-weight: 800;
+    letter-spacing: -.5px;
+}
+
+.welcome p {
+    line-height: 1.7;
+}
+
+.stats {
+    gap: 20px;
+}
+
+.stat-card {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #e8edf4;
+    border-bottom: 4px solid var(--gold);
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 5px 18px #102b500c;
+    transition: transform .2s, box-shadow .2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 24px #102b5015;
+}
+
+.stat-card .icon {
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    background: #fff5df;
+    border-radius: 12px;
+}
+
+.stat-card p {
+    font-weight: 700;
+    letter-spacing: .7px;
+}
+
+.stat-card h2 {
+    font-weight: 800;
+}
+
+.section-heading {
+    margin-top: 38px;
+    margin-bottom: 20px;
+}
+
+.section-heading h2 {
+    font-size: 23px;
+    font-weight: 800;
+    letter-spacing: -.3px;
+}
+
+.section-heading p {
+    margin-top: 5px;
+}
+
+.cards {
+    gap: 22px;
+}
+
+.card {
+    border: 1px solid #e8edf4;
+    border-radius: 15px;
+    padding: 26px;
+    box-shadow: 0 5px 18px #102b500c;
+    transition: transform .22s ease, box-shadow .22s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 27px #102b5018;
+}
+
+.card-icon {
+    width: 54px;
+    height: 54px;
+    border: 1px solid #f2e3bf;
+    border-radius: 14px;
+}
+
+.card h3 {
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.card p {
+    line-height: 1.75;
+}
+
+.card a {
+    min-height: 42px;
+    padding: 11px 16px;
+    border-radius: 8px;
+    font-weight: 700;
+}
+
+.notification-bell {
+    border: 1px solid #ffffff35;
+    background: #ffffff12;
+    color: white;
+    border-radius: 11px;
+    transition: .2s ease;
+}
+
+.notification-bell:hover {
+    background: #ffffff25;
+    color: var(--gold);
+}
+
+.notification-panel {
+    border-radius: 14px;
+    box-shadow: 0 15px 40px #071a3530;
+}
+
+footer {
+    border-top: 1px solid #e5eaf1;
+    background: #ffffff80;
+    margin-top: 30px;
+    padding: 25px;
+    letter-spacing: .3px;
+}
+
+/* Tablet and mobile improvements */
+@media (max-width: 800px) {
+    .topbar {
+        padding: 0 15px;
+    }
+
+    main {
+        padding: 100px 17px 25px;
+    }
+
+    .welcome {
+        padding: 27px 22px;
+        border-radius: 14px;
+    }
+
+    .stats {
+        grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+        gap: 13px;
+    }
+
+    .stat-card {
+        padding: 18px;
+    }
+
+    .cards {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .card {
+        padding: 22px;
+    }
+
+    .section-heading h2 {
+        font-size: 21px;
+    }
+}
+
+@media (max-width: 380px) {
+    .brand h2 {
+        font-size: 11px;
+    }
+
+    .brand p {
+        font-size: 9px;
+        letter-spacing: 1px;
+    }
+
+    .logo {
+        width: 37px;
+        height: 37px;
+        font-size: 16px;
+    }
+
+    .welcome h1 {
+        font-size: 21px;
+    }
+}
+
+
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header class="topbar">
+
+    <div class="brand">
+        <button class="menu-button" onclick="openMenu()">☰</button>
+
+        <div class="logo">MD</div>
+
+        <div>
+            <h2>MONZE DAY SECONDARY SCHOOL</h2>
+            <p>TEACHER PORTAL</p>
+        </div>
+    </div>
+
+
+<div class="notification-wrap">
+    <button class="notification-bell" id="notificationBell"
+        type="button" aria-label="Notifications"
+        aria-expanded="false" onclick="toggleNotifications()">
+        🔔
+        <span class="notification-badge" id="notificationBadge">0</span>
+    </button>
+    <div class="notification-panel" id="notificationPanel">
+        <div class="notification-heading">
+            <h3>Notifications</h3>
+            <button type="button" onclick="markAllNotificationsRead()">
+                Mark all read
+            </button>
+        </div>
+        <div id="notificationList">
+            <div class="notification-empty">Loading notifications...</div>
+        </div>
+    </div>
+</div>
+
+</header>
+
+<div class="overlay" id="overlay" onclick="closeMenu()"></div>
+
+<!-- SIDEBAR -->
+<nav class="sidebar" id="sidebar">
+
+    <div class="sidebar-title">TEACHER MENU</div>
+
+    <a href="#dashboard" class="active" onclick="selectMenu(this)">
+        🏠 Dashboard
+    </a>
+
+    <a href="teacher-students.html">
+        👨‍🎓 Student Management
+    </a>
+    <a href="teacher-attendance-history.html">
+        📋 Attendance History
+    </a>
+    <a href="teacher-attendance.html">
+        📅 Attendance Records
+    </a>
+
+
+    <a href="teacher-results.html">
+        📊 Academic Results
+    </a>
+
+    <a href="teacher-assignments.html">📝 Assignments</a>
+<a href="teacher-library.html" onclick="closeMenu()">📚 Digital Library</a>
+<a href="#announcements" onclick="selectMenu(this)">
+        📢 Announcements
+    </a>
+
+    <a href="teacher-subjects.html">
+        📚 Subjects
+    </a>
+
+    <a href="teacher-profile.html">
+        👤 My Profile
+    </a>
+
+    <a href="teacher-settings.html">
+        ⚙️ Settings
+    </a>
+
+
+
+    <button class="logout" onclick="logout()">
+        ↪ Sign Out
+    </button>
+
+</nav>
+
+<!-- MAIN CONTENT -->
+<main>
+
+    <!-- WELCOME -->
+    <section class="welcome" id="dashboard">
+
+        <small>TEACHER DASHBOARD</small>
+
+        <h1>Welcome, <span id="teacherName">Teacher</span></h1>
+
+        <p id="teacherEmail">Loading teacher information...</p>
+
+        <p>Manage your students, academic results and school activities.</p>
+
+    </section>
+
+    <!-- STATISTICS -->
+    <section class="stats">
+
+        <div class="stat-card">
+            <div class="icon">👨‍🎓</div>
+            <p>REGISTERED STUDENTS</p>
+            <h2 id="studentCount">—</h2>
+        </div>
+
+        <div class="stat-card">
+            <div class="icon">📊</div>
+            <p>ACADEMIC MANAGEMENT</p>
+            <h2>Results</h2>
+        </div>
+
+        <div class="stat-card">
+            <div class="icon">🏫</div>
+            <p>SCHOOL</p>
+            <h2>Monze Day</h2>
+        </div>
+
+    </section>
+
+    <!-- QUICK ACCESS -->
+    <section>
+
+        <div class="section-heading">
+            <h2>Quick Access</h2>
+            <p>Choose a service to continue.</p>
+        </div>
+
+        <div class="cards">
+
+            <div class="card">
+                <div class="card-icon">👨‍🎓</div>
+                <h3>Students</h3>
+                <p>View registered students and their class information.</p>
+                <a href="teacher-students.html">Manage Students →</a>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">📊</div>
+                <h3>Academic Results</h3>
+                <p>Enter and manage student academic results.</p>
+                <a href="teacher-results.html">Manage Results →</a>
+            </div>
+
+            <div class="card">
+                <div class="card-icon">📖</div>
+                <h3>Digital Library</h3>
+                <p>Upload and manage learning materials for your students.</p>
+                <a href="teacher-library.html">Open Digital Library →</a>
+            </div>
+
+            <div class="card" id="announcements">
+                <div class="card-icon">📢</div>
+                <h3>Announcements</h3>
+                <p>Create and publish important school announcements.</p>
+                <a href="teacher-announcements.html">Manage Announcements →</a>
+            </div>
+
+            <div class="card" id="subjects">
+                <div class="card-icon">📚</div>
+                <h3>Subjects & Classes</h3>
+                <p>View, add and remove your assigned subjects, and view your classes.</p>
+                <a href="teacher-subjects.html">Manage Subjects →</a>
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+</main>
+
+<footer>
+    © Monze Day Secondary School · Teacher Portal
+</footer>
+
+<script>
+
+/* MENU */
+function openMenu() {
+    document.getElementById("sidebar").classList.add("open");
+    document.getElementById("overlay").classList.add("show");
+}
+
+function closeMenu() {
+    document.getElementById("sidebar").classList.remove("open");
+    document.getElementById("overlay").classList.remove("show");
+}
+
+function selectMenu(link) {
+
+    document.querySelectorAll(".sidebar a").forEach(a => {
+        a.classList.remove("active");
+    });
+
+    link.classList.add("active");
+    closeMenu();
+}
+
+/* LOAD TEACHER PROFILE */
+async function loadTeacher() {
+
+    try {
+
+        const response = await fetch("/api/teacher/me");
+
+        if (response.status === 401) {
+            window.location.href = "teacher-login.html";
+            return;
+        }
+
+        if (!response.ok) {
+            throw new Error("Profile unavailable");
+        }
+
+        const teacher = await response.json();
+
+        document.getElementById("teacherName").textContent =
+            teacher.full_name;
+
+        document.getElementById("teacherEmail").textContent =
+            teacher.email;
+
+    } catch (error) {
+
+        document.getElementById("teacherEmail").textContent =
+            "Unable to load teacher information.";
+
+        console.error(error);
+    }
+}
+
+/* LOAD STUDENT COUNT */
+async function loadStudentCount() {
+
+    try {
+
+        const response = await fetch("/api/teacher/students");
+
+        if (response.status === 401) {
+            window.location.href = "teacher-login.html";
+            return;
+        }
+
+        if (!response.ok) {
+            throw new Error("Unable to load students");
+        }
+
+        const students = await response.json();
+
+        document.getElementById("studentCount").textContent =
+            students.length;
+
+    } catch (error) {
+
+        document.getElementById("studentCount").textContent = "—";
+
+        console.error(error);
+    }
+}
+
+/* SIGN OUT */
+async function logout() {
+
+    try {
+
+        await fetch("/api/logout", {
+            method: "POST"
+        });
+
+    } finally {
+
+        window.location.href = "teacher-login.html";
+
+    }
+}
+
+/* INITIALISE DASHBOARD */
+loadTeacher();
+loadStudentCount();
+
+
+/* NOTIFICATION CENTRE */
+async function loadNotificationCount() {
+    try {
+        const response = await fetch("/api/notifications/unread-count");
+        if (response.status === 401) return;
+        if (!response.ok) throw new Error("Unable to load notification count");
+        const data = await response.json();
+        const badge = document.getElementById("notificationBadge");
+        const count = Number(data.unreadCount || 0);
+        badge.textContent = count > 99 ? "99+" : count;
+        badge.style.display = count > 0 ? "flex" : "none";
+    } catch (error) {
+        console.error("Notification count:", error);
+    }
+}
+
+function toggleNotifications() {
+    const panel = document.getElementById("notificationPanel");
+    const bell = document.getElementById("notificationBell");
+    const isOpen = panel.classList.toggle("open");
+    bell.setAttribute("aria-expanded", String(isOpen));
+    if (isOpen) loadNotifications();
+}
+
+async function loadNotifications() {
+    const list = document.getElementById("notificationList");
+    list.textContent = "Loading notifications...";
+
+    try {
+        const response = await fetch("/api/notifications");
+        if (response.status === 401) {
+            window.location.href = window.location.pathname.includes("teacher")
+                ? "teacher-login.html" : "student-login.html";
+            return;
+        }
+        if (!response.ok) throw new Error("Unable to load notifications");
+
+        const notifications = await response.json();
+        list.replaceChildren();
+
+        if (!notifications.length) {
+            const empty = document.createElement("div");
+            empty.className = "notification-empty";
+            empty.textContent = "You're all caught up. No notifications yet.";
+            list.appendChild(empty);
+            return;
+        }
+
+        notifications.forEach(item => {
+            const card = document.createElement("article");
+            card.className = "notification-item" + (item.read_at ? "" : " unread");
+
+            const title = document.createElement("h4");
+            title.textContent = item.title;
+
+            const message = document.createElement("p");
+            message.textContent = item.message;
+
+            const date = document.createElement("small");
+            date.textContent = item.created_at
+                ? new Date(item.created_at).toLocaleString()
+                : "Date unavailable";
+
+            card.append(title, message, date);
+
+            if (!item.read_at) {
+                const button = document.createElement("button");
+                button.type = "button";
+                button.textContent = "Mark as read";
+                button.addEventListener("click", () =>
+                    markNotificationRead(item.id)
+                );
+                card.appendChild(button);
+            }
+
+            list.appendChild(card);
+        });
+    } catch (error) {
+        list.textContent = "Unable to load notifications. Please try again.";
+        console.error(error);
+    }
+}
+
+async function markNotificationRead(id) {
+    try {
+        const response = await fetch("/api/notifications/" + encodeURIComponent(id) + "/read", {
+            method: "PATCH"
+        });
+        if (!response.ok) throw new Error("Unable to mark notification as read");
+        await loadNotifications();
+        await loadNotificationCount();
+    } catch (error) {
+        alert(error.message);
+    }
+}
+
+async function markAllNotificationsRead() {
+    try {
+        const response = await fetch("/api/notifications/read-all", {
+            method: "PATCH"
+        });
+        if (!response.ok) throw new Error("Unable to mark notifications as read");
+        await loadNotifications();
+        await loadNotificationCount();
+    } catch (error) {
+        alert(error.message);
+    }
+}
+
+loadNotificationCount();
+setInterval(loadNotificationCount, 30000);
+
+</script>
+
+</body>
+</html>
