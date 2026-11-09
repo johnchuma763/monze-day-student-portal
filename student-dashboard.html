@@ -1229,6 +1229,119 @@ footer {
     }
 }
 
+
+/* PROFESSIONAL STUDENT MENU UPGRADE */
+
+:root {
+    --navy-dark: #071a35;
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #d9ad45 #102b50;
+    background: linear-gradient(180deg, #071a35 0%, #102b50 65%, #163b64 100%);
+}
+
+.brand {
+    padding: 12px 10px 25px;
+    gap: 14px;
+}
+
+.brand .logo {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    border-radius: 14px;
+    background: linear-gradient(145deg, #f3d27d, #d9ad45);
+    color: #071a35;
+    font-size: 19px;
+    box-shadow: 0 5px 15px rgba(217,173,69,.2);
+}
+
+.brand h3 {
+    font-size: 12px;
+    line-height: 1.6;
+    letter-spacing: .8px;
+}
+
+.menu-label {
+    padding: 25px 13px 12px;
+    font-size: 10px;
+    color: #e3bd65;
+    letter-spacing: 2px;
+}
+
+.nav-item {
+    position: relative;
+    min-height: 46px;
+    padding: 12px 14px;
+    margin: 3px 0;
+    border: 1px solid transparent;
+    border-radius: 11px;
+    color: #dce6f2;
+    font-size: 13.5px;
+    font-weight: 600;
+    letter-spacing: .1px;
+    transition: background .2s ease, color .2s ease, transform .2s ease;
+}
+
+.nav-item:hover {
+    background: rgba(255,255,255,.08);
+    color: #f3d27d;
+    transform: translateX(3px);
+}
+
+.nav-item.active {
+    background: linear-gradient(100deg, #f0cd78, #d9ad45);
+    color: #071a35;
+    border-color: rgba(255,255,255,.2);
+    font-weight: 800;
+    box-shadow: 0 5px 14px rgba(0,0,0,.15);
+}
+
+.nav-item:focus-visible {
+    outline: 2px solid #f3d27d;
+    outline-offset: 3px;
+}
+
+.sidebar-bottom {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    right: auto;
+    margin-top: auto;
+    padding-top: 15px;
+    padding-bottom: 5px;
+    border-top: 1px solid rgba(255,255,255,.15);
+}
+
+.sidebar-bottom .nav-item {
+    color: #ffd2d2;
+}
+
+.sidebar-bottom .nav-item:hover {
+    background: rgba(255,100,100,.12);
+    color: #ffaaaa;
+    transform: none;
+}
+
+@media(max-width:768px) {
+    .sidebar {
+        width: 280px;
+        max-width: 85vw;
+        height: 100vh;
+    }
+}
+
+@media(prefers-reduced-motion:reduce) {
+    .nav-item {
+        transition: none;
+    }
+}
+
 </style>
 </head>
 
