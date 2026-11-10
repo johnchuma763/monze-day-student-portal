@@ -190,6 +190,23 @@ app.use(session({
 }));
 
 // Serve website pages
+
+app.get("/api/health", async (req, res) => {
+    try {
+        await pool.query("SELECT 1");
+        res.json({
+            status: "healthy",
+            database: "connected"
+        });
+    } catch (error) {
+        console.error("Health check failed:", error.message);
+        res.status(503).json({
+            status: "unhealthy",
+            database: "disconnected"
+        });
+    }
+});
+
 app.use(express.static(__dirname));
 
 

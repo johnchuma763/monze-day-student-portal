@@ -429,6 +429,7 @@ module.exports = function registerAssignmentRoutes(app, { pool }) {
                         a.created_at,
                         a.attachment_name IS NOT NULL AS has_attachment,
                         s.id AS submission_id,
+                        s.file_name IS NOT NULL AS has_submitted_file,
                         s.submitted_at,
                         s.status AS submission_status,
                         s.answer_text,

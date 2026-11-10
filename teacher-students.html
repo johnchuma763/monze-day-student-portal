@@ -14,13 +14,12 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background: #f4f6fa;
+    background: #f3f6fb;
     color: #17243b;
 }
 
-/* HEADER */
 header {
-    background: #071a35;
+    background: linear-gradient(120deg,#071a35,#12345e);
     color: white;
     padding: 20px 6%;
     display: flex;
@@ -37,15 +36,15 @@ header {
 }
 
 .logo-icon {
+    width: 46px;
+    height: 46px;
     background: #d9ad52;
     color: #071a35;
-    width: 45px;
-    height: 45px;
     display: grid;
     place-items: center;
-    font-weight: bold;
     font-size: 19px;
-    border-radius: 10px;
+    font-weight: bold;
+    border-radius: 11px;
 }
 
 .logo h2 {
@@ -55,24 +54,30 @@ header {
 
 .logo p {
     margin: 5px 0 0;
-    color: #d9ad52;
+    color: #e7c36f;
     font-size: 11px;
     letter-spacing: 1px;
 }
 
-/* MAIN */
 main {
-    max-width: 1200px;
+    max-width: 1250px;
     margin: 35px auto;
     padding: 0 20px;
 }
 
 .back {
-    display: inline-block;
+    display: inline-flex;
+    padding: 11px 16px;
+    background: #102b50;
+    color: white;
     text-decoration: none;
-    color: #071a35;
+    border-radius: 8px;
     font-weight: bold;
     margin-bottom: 25px;
+}
+
+.back:hover {
+    background: #1b4778;
 }
 
 .page-heading {
@@ -97,40 +102,38 @@ main {
     margin: 0;
 }
 
-/* STAT CARD */
 .stats {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit,minmax(190px,1fr));
+    gap: 17px;
     margin-bottom: 25px;
 }
 
 .stat-card {
     background: white;
-    padding: 23px;
-    border-radius: 12px;
-    box-shadow: 0 3px 15px #071a3510;
+    padding: 22px;
+    border-radius: 13px;
     border-left: 4px solid #d9ad52;
+    box-shadow: 0 4px 15px #071a3510;
 }
 
 .stat-card p {
-    margin: 0;
     color: #718096;
-    font-size: 14px;
+    margin: 0;
+    font-size: 13px;
 }
 
 .stat-card h2 {
     color: #071a35;
-    font-size: 30px;
-    margin: 12px 0 0;
+    font-size: 29px;
+    margin: 10px 0 0;
 }
 
-/* STUDENT PANEL */
 .panel {
     background: white;
-    border-radius: 12px;
-    padding: 25px;
-    box-shadow: 0 3px 15px #071a3510;
+    padding: 24px;
+    border-radius: 14px;
+    box-shadow: 0 4px 18px #071a3510;
 }
 
 .panel-top {
@@ -139,11 +142,12 @@ main {
     align-items: center;
     flex-wrap: wrap;
     gap: 15px;
+    margin-bottom: 20px;
 }
 
 .panel-top h2 {
-    color: #071a35;
     margin: 0;
+    color: #071a35;
     font-size: 20px;
 }
 
@@ -154,56 +158,140 @@ main {
 }
 
 .search {
-    width: 100%;
-    max-width: 350px;
+    width: 300px;
+    max-width: 100%;
     padding: 12px 15px;
     border: 1px solid #dce2eb;
-    border-radius: 7px;
+    border-radius: 8px;
     outline: none;
     font-size: 14px;
 }
 
 .search:focus {
     border-color: #d9ad52;
+    box-shadow: 0 0 0 3px #d9ad5220;
 }
 
 .refresh {
     border: none;
-    background: #071a35;
+    background: #102b50;
     color: white;
     padding: 12px 17px;
-    border-radius: 7px;
+    border-radius: 8px;
     cursor: pointer;
     font-weight: bold;
 }
 
 .refresh:hover {
-    background: #123461;
+    background: #1b4778;
 }
 
-/* TABLE */
+.message {
+    text-align: center;
+    padding: 18px;
+    color: #718096;
+    font-size: 14px;
+}
+
+.class-list {
+    display: grid;
+    gap: 18px;
+    margin-top: 15px;
+}
+
+.class-card {
+    border: 1px solid #e3e9f1;
+    border-radius: 12px;
+    overflow: hidden;
+    background: white;
+}
+
+.class-heading {
+    width: 100%;
+    border: none;
+    background: #f8f9fc;
+    padding: 17px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    text-align: left;
+    cursor: pointer;
+}
+
+.class-heading:hover {
+    background: #f1f4f9;
+}
+
+.class-title {
+    color: #071a35;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.class-subtitle {
+    display: block;
+    color: #8792a5;
+    font-size: 12px;
+    margin-top: 5px;
+    font-weight: normal;
+}
+
+.class-right {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.student-count {
+    background: #fff2d3;
+    color: #8b641c;
+    border-radius: 20px;
+    padding: 7px 12px;
+    font-size: 12px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.arrow {
+    color: #102b50;
+    font-size: 17px;
+    transition: transform .2s;
+}
+
+.class-card.closed .arrow {
+    transform: rotate(-90deg);
+}
+
+.class-content {
+    padding: 0 18px 15px;
+}
+
+.class-card.closed .class-content {
+    display: none;
+}
+
 .table-wrapper {
     width: 100%;
     overflow-x: auto;
-    margin-top: 22px;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
-    min-width: 550px;
+    min-width: 450px;
 }
 
 th {
-    background: #071a35;
-    color: white;
     text-align: left;
-    padding: 15px;
-    font-size: 13px;
+    background: #102b50;
+    color: white;
+    padding: 13px;
+    font-size: 12px;
 }
 
 td {
-    padding: 15px;
+    padding: 14px 13px;
     border-bottom: 1px solid #edf0f5;
     font-size: 14px;
 }
@@ -214,30 +302,19 @@ tr:hover td {
 
 .student-name {
     font-weight: bold;
-    color: #071a35;
+    color: #102b50;
 }
 
 .student-number {
-    color: #526078;
+    color: #64748b;
 }
 
-.class-badge {
-    display: inline-block;
-    background: #fff5dc;
-    color: #8b641c;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: bold;
-}
-
-.message {
+.empty {
+    padding: 30px;
     text-align: center;
-    padding: 25px;
     color: #718096;
 }
 
-/* FOOTER */
 footer {
     text-align: center;
     padding: 25px;
@@ -245,17 +322,22 @@ footer {
     font-size: 12px;
 }
 
-@media(max-width: 600px) {
+@media(max-width:600px) {
     header {
         padding: 17px;
     }
 
+    main {
+        padding: 0 13px;
+        margin: 25px auto;
+    }
+
     .page-heading h1 {
-        font-size: 24px;
+        font-size: 25px;
     }
 
     .panel {
-        padding: 17px;
+        padding: 15px;
     }
 
     .panel-top {
@@ -267,105 +349,21 @@ footer {
     }
 
     .search {
-        max-width: 100%;
-    }
-}
-
-/* PROFESSIONAL PORTAL LINK DESIGN */
-a {
-    transition: background .2s ease, color .2s ease,
-                box-shadow .2s ease, transform .2s ease;
-}
-
-a:focus-visible {
-    outline: 3px solid #d9ad52;
-    outline-offset: 3px;
-}
-
-/* Navigation links */
-nav a {
-    display: inline-flex;
-    align-items: center;
-    padding: 10px 13px;
-    border-radius: 8px;
-    text-decoration: none;
-}
-
-nav a:hover {
-    background: rgba(217, 173, 82, .16);
-    text-decoration: none;
-}
-
-nav a.active {
-    font-weight: 700;
-}
-
-/* Dashboard and card links */
-.card a,
-.cards .card a,
-.sidebar .card a,
-.announcement-button,
-.back {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 11px 16px;
-    border-radius: 8px;
-    background: #102b50;
-    color: #ffffff !important;
-    font-weight: 600;
-    text-decoration: none;
-    border: 1px solid #102b50;
-    box-shadow: 0 3px 8px rgba(16, 43, 80, .12);
-}
-
-.card a:hover,
-.cards .card a:hover,
-.announcement-button:hover,
-.back:hover {
-    background: #1b4778;
-    border-color: #1b4778;
-    color: #ffffff !important;
-    transform: translateY(-1px);
-    box-shadow: 0 5px 12px rgba(16, 43, 80, .18);
-}
-
-/* Back button inside the student results header */
-header .back {
-    background: #d9ad52;
-    color: #102b50 !important;
-    border-color: #d9ad52;
-}
-
-header .back:hover {
-    background: #edc875;
-    color: #102b50 !important;
-}
-
-/* Teacher sidebar */
-.sidebar a {
-    transition: background .2s ease, color .2s ease;
-}
-
-/* Mobile-friendly navigation */
-@media (max-width: 600px) {
-    nav {
-        gap: 8px;
+        width: 100%;
     }
 
-    nav a {
-        padding: 9px 11px;
-        font-size: 13px;
+    .refresh {
+        width: 100%;
     }
 
-    .card a,
-    .back,
-    .announcement-button {
-        min-height: 42px;
+    .class-heading {
+        padding: 15px 12px;
+    }
+
+    .class-content {
+        padding: 0 10px 12px;
     }
 }
-
 </style>
 </head>
 
@@ -385,61 +383,59 @@ header .back:hover {
 
 <main>
 
-    <a class="back" href="teacher-dashboard.html">
-        ← Back to Dashboard
-    </a>
+<a class="back" href="teacher-dashboard.html">
+    ← Back to Dashboard
+</a>
 
-    <section class="page-heading">
-        <span>TEACHER MANAGEMENT</span>
-        <h1>Student Management</h1>
-        <p>View and search registered students at Monze Day Secondary School.</p>
-    </section>
+<section class="page-heading">
+    <span>TEACHER MANAGEMENT</span>
+    <h1>Student Management</h1>
+    <p>Manage and view registered students by their respective classes.</p>
+</section>
 
-    <section class="stats">
-        <div class="stat-card">
-            <p>Total Registered Students</p>
-            <h2 id="totalStudents">—</h2>
+<section class="stats">
+    <div class="stat-card">
+        <p>Total Registered Students</p>
+        <h2 id="totalStudents">—</h2>
+    </div>
+
+    <div class="stat-card">
+        <p>Total Classes</p>
+        <h2 id="totalClasses">—</h2>
+    </div>
+
+    <div class="stat-card">
+        <p>Matching Students</p>
+        <h2 id="matchingStudents">—</h2>
+    </div>
+</section>
+
+<section class="panel">
+
+    <div class="panel-top">
+        <h2>Students by Class</h2>
+
+        <div class="actions">
+            <input
+                type="search"
+                id="search"
+                class="search"
+                placeholder="Search name, number or class..."
+            >
+
+            <button class="refresh" id="refreshButton">
+                ↻ Refresh
+            </button>
         </div>
-    </section>
+    </div>
 
-    <section class="panel">
+    <div id="message" class="message">
+        Loading student records...
+    </div>
 
-        <div class="panel-top">
-            <h2>Registered Students</h2>
+    <div id="classList" class="class-list"></div>
 
-            <div class="actions">
-                <input
-                    type="search"
-                    id="search"
-                    class="search"
-                    placeholder="Search students..."
-                >
-
-                <button class="refresh" onclick="loadStudents()">
-                    ↻ Refresh
-                </button>
-            </div>
-        </div>
-
-        <div id="message" class="message">
-            Loading student records...
-        </div>
-
-        <div class="table-wrapper">
-            <table>
-                <thead>
-                    <tr>
-                        <th>FULL NAME</th>
-                        <th>STUDENT NUMBER</th>
-                        <th>CLASS</th>
-                    </tr>
-                </thead>
-
-                <tbody id="studentRows"></tbody>
-            </table>
-        </div>
-
-    </section>
+</section>
 
 </main>
 
@@ -450,14 +446,58 @@ header .back:hover {
 <script>
 let students = [];
 
+function groupStudents(list) {
+    const groups = {};
+
+    list.forEach(student => {
+        const className = String(
+            student.class_name || "Unassigned"
+        ).trim() || "Unassigned";
+
+        if (!groups[className]) {
+            groups[className] = [];
+        }
+
+        groups[className].push(student);
+    });
+
+    return groups;
+}
+
+function createCell(row, value, className) {
+    const cell = document.createElement("td");
+    cell.textContent = value ?? "—";
+
+    if (className) {
+        cell.className = className;
+    }
+
+    row.appendChild(cell);
+}
+
 function displayStudents(list) {
-    const rows = document.getElementById("studentRows");
+    const container = document.getElementById("classList");
     const message = document.getElementById("message");
 
-    rows.replaceChildren();
+    container.replaceChildren();
+
+    const groups = groupStudents(list);
+
+    const classNames = Object.keys(groups).sort((a, b) =>
+        a.localeCompare(b, undefined, {
+            numeric: true,
+            sensitivity: "base"
+        })
+    );
 
     document.getElementById("totalStudents").textContent =
         students.length;
+
+    document.getElementById("totalClasses").textContent =
+        Object.keys(groupStudents(students)).length;
+
+    document.getElementById("matchingStudents").textContent =
+        list.length;
 
     if (list.length === 0) {
         message.textContent = students.length === 0
@@ -467,35 +507,118 @@ function displayStudents(list) {
         return;
     }
 
-    message.textContent = list.length + " student(s) displayed.";
+    message.textContent =
+        list.length + " student(s) displayed across " +
+        classNames.length + " class(es).";
 
-    list.forEach(student => {
-        const row = document.createElement("tr");
+    classNames.forEach(className => {
+        const classStudents = groups[className];
 
-        const name = document.createElement("td");
-        name.textContent = student.full_name;
-        name.className = "student-name";
+        const card = document.createElement("section");
+        card.className = "class-card";
 
-        const number = document.createElement("td");
-        number.textContent = student.student_number;
-        number.className = "student-number";
+        const heading = document.createElement("button");
+        heading.className = "class-heading";
+        heading.type = "button";
+        heading.setAttribute("aria-expanded", "true");
 
-        const classCell = document.createElement("td");
-        const badge = document.createElement("span");
-        badge.className = "class-badge";
-        badge.textContent = student.class_name;
+        const titleArea = document.createElement("span");
 
-        classCell.appendChild(badge);
+        const title = document.createElement("span");
+        title.className = "class-title";
+        title.textContent = className;
 
-        row.append(name, number, classCell);
-        rows.appendChild(row);
+        const subtitle = document.createElement("span");
+        subtitle.className = "class-subtitle";
+        subtitle.textContent = "Registered students";
+
+        titleArea.append(title, subtitle);
+
+        const right = document.createElement("span");
+        right.className = "class-right";
+
+        const count = document.createElement("span");
+        count.className = "student-count";
+        count.textContent = classStudents.length +
+            (classStudents.length === 1 ? " Student" : " Students");
+
+        const arrow = document.createElement("span");
+        arrow.className = "arrow";
+        arrow.textContent = "⌄";
+
+        right.append(count, arrow);
+        heading.append(titleArea, right);
+
+        const content = document.createElement("div");
+        content.className = "class-content";
+
+        const wrapper = document.createElement("div");
+        wrapper.className = "table-wrapper";
+
+        const table = document.createElement("table");
+
+        const thead = document.createElement("thead");
+        const headerRow = document.createElement("tr");
+
+        ["FULL NAME", "STUDENT NUMBER"].forEach(label => {
+            const th = document.createElement("th");
+            th.textContent = label;
+            headerRow.appendChild(th);
+        });
+
+        thead.appendChild(headerRow);
+
+        const tbody = document.createElement("tbody");
+
+        classStudents.forEach(student => {
+            const row = document.createElement("tr");
+
+            createCell(row, student.full_name, "student-name");
+            createCell(row, student.student_number, "student-number");
+
+            tbody.appendChild(row);
+        });
+
+        table.append(thead, tbody);
+        wrapper.appendChild(table);
+        content.appendChild(wrapper);
+
+        heading.addEventListener("click", () => {
+            card.classList.toggle("closed");
+
+            const expanded = !card.classList.contains("closed");
+            heading.setAttribute("aria-expanded", String(expanded));
+        });
+
+        card.append(heading, content);
+        container.appendChild(card);
     });
+}
+
+function filterStudents() {
+    const query = document.getElementById("search")
+        .value.toLowerCase().trim();
+
+    const filtered = students.filter(student => {
+        return [
+            student.full_name,
+            student.student_number,
+            student.class_name
+        ].some(value =>
+            String(value ?? "").toLowerCase().includes(query)
+        );
+    });
+
+    displayStudents(filtered);
 }
 
 async function loadStudents() {
     const message = document.getElementById("message");
+    const refreshButton = document.getElementById("refreshButton");
 
     message.textContent = "Loading student records...";
+    refreshButton.disabled = true;
+    refreshButton.textContent = "Loading...";
 
     try {
         const response = await fetch("/api/teacher/students");
@@ -509,8 +632,13 @@ async function loadStudents() {
             throw new Error("Unable to retrieve students.");
         }
 
-        students = await response.json();
+        const data = await response.json();
 
+        if (!Array.isArray(data)) {
+            throw new Error("Unexpected student data received.");
+        }
+
+        students = data;
         filterStudents();
 
     } catch (error) {
@@ -518,28 +646,18 @@ async function loadStudents() {
             "Unable to load student records. Please refresh the page.";
 
         console.error(error);
+
+    } finally {
+        refreshButton.disabled = false;
+        refreshButton.textContent = "↻ Refresh";
     }
-}
-
-function filterStudents() {
-    const query = document.getElementById("search")
-        .value.toLowerCase().trim();
-
-    const filtered = students.filter(student => {
-        return [
-            student.full_name,
-            student.student_number,
-            student.class_name
-        ].some(value =>
-            String(value).toLowerCase().includes(query)
-        );
-    });
-
-    displayStudents(filtered);
 }
 
 document.getElementById("search")
     .addEventListener("input", filterStudents);
+
+document.getElementById("refreshButton")
+    .addEventListener("click", loadStudents);
 
 loadStudents();
 </script>

@@ -1,0 +1,89 @@
+<!DOCTYPE html><html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monze Day Secondary School | Student Portal</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body><header>
+    <div class="logo">
+        <div class="logo-icon">MD</div>
+        <div>
+            <h2>MONZE DAY</h2>
+            <p>SECONDARY SCHOOL</p>
+        </div>
+    </div><nav>
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#services">Services</a>
+    <a href="#contact">Contact</a>
+</nav>
+
+<a href="login.html" class="login-btn">Student Login</a>
+
+</header><section class="hero" id="home">
+    <div class="hero-content">
+        <span class="tag">WELCOME TO MONZE DAY</span>
+        <h1>Learn. Grow.<br><span>Succeed.</span></h1>
+        <p>
+            Welcome to the official Monze Day Secondary School
+            Student Portal. Access your academic information,
+            examination results and school announcements.
+        </p>    <a href="login.html" class="primary-btn">Access Student Portal →</a>
+</div>
+
+<div class="hero-card">
+    <div class="school-icon">🎓</div>
+    <h2>MONZE DAY</h2>
+    <p>SECONDARY SCHOOL</p>
+    <div class="gold-line"></div>
+    <p class="motto">Knowledge • Discipline • Excellence</p>
+</div>
+
+</section><section class="services" id="services">
+    <span class="section-tag">OUR SERVICES</span>
+    <h2>Everything in One Place</h2>
+    <p class="section-description">
+        Access important school services through our student portal.
+    </p><div class="service-grid">
+    <div class="service-card">
+        <div>📊</div>
+        <h3>Academic Results</h3>
+        <p>View your examination results and academic performance.</p>
+    </div>
+
+    <div class="service-card">
+        <div>📚</div>
+        <h3>My Subjects</h3>
+        <p>Access information about your registered subjects.</p>
+    </div>
+
+    <div class="service-card">
+        <div>📢</div>
+        <h3>Announcements</h3>
+        <p>Stay updated with important school announcements.</p>
+    </div>
+
+    <div class="service-card">
+        <div>👨‍🎓</div>
+        <h3>Student Profile</h3>
+        <p>View your personal and academic information.</p>
+    </div>
+</div>
+
+</section><section class="about" id="about">
+    <span class="section-tag">ABOUT OUR PORTAL</span>
+    <h2>Education Meets Technology</h2>
+    <p>
+        The Monze Day Secondary School Student Portal is designed
+        to make academic information accessible, organized and secure
+        for students, teachers and school administrators.
+    </p>
+</section><footer id="contact">
+    <h3>MONZE DAY SECONDARY SCHOOL</h3>
+    <p>Student Portal</p>
+    <p>Knowledge • Discipline • Excellence</p>
+    <div class="footer-line"></div>
+    <small>© 2026 Monze Day Secondary School. All Rights Reserved.</small>
+</footer></body>
+</html>

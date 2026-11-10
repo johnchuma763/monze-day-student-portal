@@ -1,0 +1,67 @@
+[1mdiff --git a/server-postgres.js b/server-postgres.js[m
+[1mindex b135922..6871dd3 100644[m
+[1m--- a/server-postgres.js[m
+[1m+++ b/server-postgres.js[m
+[36m@@ -1206,7 +1206,7 @@[m [mapp.get("/api/public/teachers", async (req, res) => {[m
+ });[m
+ [m
+ [m
+[31m-// TEACHER: VIEW REGISTERED STUDENTS[m
+[32m+[m[32m// TEACHER: VIEW ONLY STUDENTS FROM ASSIGNED CLASSES[m
+ app.get("/api/teacher/students", async (req, res) => {[m
+     if (!req.session.teacherId) {[m
+         return res.status(401).json({[m
+[36m@@ -1215,13 +1215,48 @@[m [mapp.get("/api/teacher/students", async (req, res) => {[m
+     }[m
+ [m
+     try {[m
+[31m-        const result = await pool.query(`[m
+[31m-            SELECT full_name, student_number, class_name[m
+[31m-            FROM students[m
+[31m-            ORDER BY class_name ASC, full_name ASC[m
+[31m-        `);[m
+[32m+[m[32m        const teacherResult = await pool.query([m
+[32m+[m[32m            `SELECT classes, approved[m
+[32m+[m[32m             FROM teachers[m
+[32m+[m[32m             WHERE id = $1`,[m
+[32m+[m[32m            [req.session.teacherId][m
+[32m+[m[32m        );[m
+[32m+[m
+[32m+[m[32m        const teacher = teacherResult.rows[0];[m
+[32m+[m
+[32m+[m[32m        if (!teacher) {[m
+[32m+[m[32m            return res.status(404).json({[m
+[32m+[m[32m                message: "Teacher account not found."[m
+[32m+[m[32m            });[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m[32m        if (Number(teacher.approved) !== 1) {[m
+[32m+[m[32m            return res.status(403).json({[m
+[32m+[m[32m                message: "Your teacher account must be approved."[m
+[32m+[m[32m            });[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m[32m        const assignedClasses = (teacher.classes || "")[m
+[32m+[m[32m            .split(",")[m
+[32m+[m[32m            .map(value => {[m
+[32m+[m[32m                const match = value.trim().match(/^Form\s*([1-4])\s*([A-D])$/i);[m
+[32m+[m
+[32m+[m[32m                if (!match) return null;[m
+[32m+[m
+[32m+[m[32m                return `FORM ${match[1]}${match[2].toUpperCase()}`;[m
+[32m+[m[32m            })[m
+[32m+[m[32m            .filter(Boolean);[m
+[32m+[m
+[32m+[m[32m        const result = await pool.query([m
+[32m+[m[32m            `SELECT full_name, student_number, class_name[m
+[32m+[m[32m             FROM students[m
+[32m+[m[32m             WHERE UPPER(TRIM(class_name)) = ANY($1::text[])[m
+[32m+[m[32m             ORDER BY class_name ASC, full_name ASC`,[m
+[32m+[m[32m            [assignedClasses][m
+[32m+[m[32m        );[m
+ [m
+         res.json(result.rows);[m
+[32m+[m
+     } catch (error) {[m
+         console.error(error);[m
+         res.status(500).json({[m
