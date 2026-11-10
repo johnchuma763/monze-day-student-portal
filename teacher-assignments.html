@@ -658,12 +658,14 @@ function escapeHTML(value){
 
 function dateText(value){
  if(!value)return "Not specified";
-
  const d=new Date(value);
+ return Number.isNaN(d.getTime())?"Not specified":d.toLocaleString();
+}
 
- return Number.isNaN(d.getTime())
-  ?"Not specified"
-  :d.toLocaleString();
+function safeDrawingImage(value,alt){
+ const data=String(value||"");
+ if(data.length>1400000||!/^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/.test(data))return "";
+ return `<img src="${data}" alt="${alt}" style="display:block;max-width:100%;max-height:360px;object-fit:contain;background:#fff;border:1px solid #dce3ed;border-radius:8px;margin-top:10px">`;
 }
 
 function notice(id,message,type){
@@ -840,14 +842,21 @@ async function viewSubmissions(id,title){
       Status: ${escapeHTML(sub.status)}
      </div>
 
+     <div style="margin:15px 0;padding:14px;background:#fff8e8;border-radius:9px">
+      <h4>∑ Mathematical Formula</h4>
+      <div style="white-space:pre-wrap;line-height:1.8;font-family:Cambria,Georgia,serif">${escapeHTML(sub.formula_text||"No formula provided.")}</div>
+     </div>
+
      <div style="margin:15px 0;padding:14px;background:#eef3fa;border-radius:9px">
       <h4>🧮 Calculation & Working</h4>
       <div style="white-space:pre-wrap;line-height:1.7">${escapeHTML(sub.calculation_text||"No calculations provided.")}</div>
+      ${safeDrawingImage(sub.calculation_drawing,"Student calculation drawing")}
      </div>
 
      <div style="margin:15px 0;padding:14px;background:#f8f9fb;border-radius:9px">
       <h4>✍️ Written Answer</h4>
       <div style="white-space:pre-wrap;line-height:1.7">${escapeHTML(sub.answer_text||"No written answer provided.")}</div>
+      ${safeDrawingImage(sub.answer_drawing,"Student written answer drawing")}
      </div>
 
      ${file}

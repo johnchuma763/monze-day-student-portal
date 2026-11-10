@@ -525,7 +525,7 @@ button,input,select{font:inherit}
 .modal-box{
  background:white;
  width:100%;
- max-width:500px;
+ max-width:780px;
  padding:27px;
  border-radius:15px;
  box-shadow:0 20px 60px #0004;
@@ -579,6 +579,31 @@ button,input,select{font:inherit}
  border-radius:8px;
  font-size:13px;
 }
+.field textarea:focus,.formula-input:focus{
+ outline:none;border-color:var(--gold)!important;box-shadow:0 0 0 3px #d9ad5220;
+}
+.formula-toolbar{display:flex;flex-wrap:wrap;gap:7px;margin:9px 0}
+.formula-symbol{
+ border:1px solid #dce3ed;background:#f4f7fb;color:var(--navy);
+ border-radius:7px;padding:8px 12px;font-weight:bold;cursor:pointer
+}
+.formula-symbol:hover{background:var(--gold-light);border-color:var(--gold)}
+.formula-preview{
+ min-height:36px;padding:10px 12px;background:#f4f7fb;border-radius:8px;
+ color:var(--navy);font-family:Cambria,Georgia,serif;white-space:pre-wrap;
+ overflow-wrap:anywhere;margin-top:8px
+}
+.drawing-board{border:1px solid #dce3ed;border-radius:11px;background:#fff;padding:10px;margin-top:12px}
+.drawing-board canvas{
+ display:block;width:100%;height:auto;aspect-ratio:1000/260;
+ border:1px dashed #b9c5d5;border-radius:7px;background:#fff;touch-action:none;cursor:crosshair
+}
+.drawing-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}
+.drawing-actions button{
+ border:1px solid #dce3ed;background:#f4f7fb;color:var(--navy);
+ border-radius:7px;padding:8px 11px;font-size:12px;font-weight:bold;cursor:pointer
+}
+.drawing-help{display:block;color:var(--muted);font-size:11px;margin-top:7px;line-height:1.5}
 
 .file-help{
  background:#f4f7fb;
@@ -812,11 +837,43 @@ footer strong{color:var(--navy)}
    <input type="hidden" id="assignmentId">
 
    <div class="field">
+    <label for="formulaText">∑ MATHEMATICAL FORMULA EDITOR</label>
+    <textarea id="formulaText" class="formula-input" rows="2" maxlength="20000"
+     placeholder="Enter equations or mathematical expressions..."
+     style="width:100%;padding:13px;border:1px solid #dce3ed;border-radius:9px;font:inherit;resize:vertical"></textarea>
+    <div class="formula-toolbar" id="formulaToolbar" aria-label="Mathematical symbols">
+     <button class="formula-symbol" type="button" data-symbol=" × ">×</button>
+     <button class="formula-symbol" type="button" data-symbol=" ÷ ">÷</button>
+     <button class="formula-symbol" type="button" data-symbol=" ± ">±</button>
+     <button class="formula-symbol" type="button" data-symbol=" √()">√</button>
+     <button class="formula-symbol" type="button" data-symbol=" π ">π</button>
+     <button class="formula-symbol" type="button" data-symbol=" ² ">x²</button>
+     <button class="formula-symbol" type="button" data-symbol=" ³ ">x³</button>
+     <button class="formula-symbol" type="button" data-symbol=" ≤ ">≤</button>
+     <button class="formula-symbol" type="button" data-symbol=" ≥ ">≥</button>
+     <button class="formula-symbol" type="button" data-symbol=" ≠ ">≠</button>
+     <button class="formula-symbol" type="button" data-symbol=" → ">→</button>
+     <button class="formula-symbol" type="button" data-symbol=" ∞ ">∞</button>
+    </div>
+    <div class="formula-preview" id="formulaPreview">Formula preview will appear here.</div>
+    <small>Use the symbol buttons or type your formula directly.</small>
+   </div>
+
+   <div class="field">
     <label for="calculationText">🧮 CALCULATION & WORKING AREA</label>
     <textarea id="calculationText" rows="8" maxlength="50000"
      placeholder="Show your calculations, formulas and working steps here..."
      style="width:100%;min-height:180px;padding:14px;border:1px solid #ccd3df;border-radius:10px;font:inherit;resize:vertical;line-height:1.7"></textarea>
     <small>Use this section for mathematics and step-by-step working.</small>
+    <div class="drawing-board">
+     <strong>✏️ Calculation drawing canvas</strong>
+     <canvas id="calculationCanvas" width="1000" height="260" aria-label="Draw calculation steps"></canvas>
+     <div class="drawing-actions">
+      <button type="button" onclick="undoDrawing('calculation')">↶ Undo</button>
+      <button type="button" onclick="clearDrawing('calculation')">Clear canvas</button>
+     </div>
+     <small class="drawing-help">Draw with your finger, mouse or stylus. Use Undo or Clear to edit.</small>
+    </div>
    </div>
 
    <div class="field">
@@ -825,6 +882,15 @@ footer strong{color:var(--navy)}
      placeholder="Write your explanations and final answers here..."
      style="width:100%;min-height:180px;padding:14px;border:1px solid #ccd3df;border-radius:10px;font:inherit;resize:vertical;line-height:1.7"></textarea>
     <small>Use this section for written explanations and answers.</small>
+    <div class="drawing-board">
+     <strong>🖊️ Written answer drawing canvas</strong>
+     <canvas id="answerCanvas" width="1000" height="260" aria-label="Draw written answer"></canvas>
+     <div class="drawing-actions">
+      <button type="button" onclick="undoDrawing('answer')">↶ Undo</button>
+      <button type="button" onclick="clearDrawing('answer')">Clear canvas</button>
+     </div>
+     <small class="drawing-help">Use this canvas for diagrams, labels or handwritten answers.</small>
+    </div>
    </div>
 
    <div class="field">
@@ -848,7 +914,156 @@ footer strong{color:var(--navy)}
 
 <script>
 let assignments = [];
+let activeWorkspaceId = null;
+let autosaveTimer = null;
+let isRestoringWorkspace = false;
+let draftSaveRunning = false;
+let autosaveQueued = false;
+const drawingUndo = { calculation: [], answer: [] };
 
+function canvasFor(kind) {
+ return document.getElementById(kind === "calculation" ? "calculationCanvas" : "answerCanvas");
+}
+
+function resetCanvas(kind) {
+ const canvas = canvasFor(kind);
+ const ctx = canvas.getContext("2d");
+ ctx.clearRect(0, 0, canvas.width, canvas.height);
+ ctx.fillStyle = "#ffffff";
+ ctx.fillRect(0, 0, canvas.width, canvas.height);
+ drawingUndo[kind] = [];
+}
+
+function canvasIsBlank(kind) {
+ const canvas = canvasFor(kind);
+ const pixels = canvas.getContext("2d").getImageData(0, 0, canvas.width, canvas.height).data;
+ for (let i = 0; i < pixels.length; i += 4) {
+  if (pixels[i] < 245 || pixels[i + 1] < 245 || pixels[i + 2] < 245) return false;
+ }
+ return true;
+}
+
+function drawingValue(kind) {
+ return canvasIsBlank(kind) ? "" : canvasFor(kind).toDataURL("image/jpeg", 0.62);
+}
+
+function restoreDrawing(kind, data) {
+ resetCanvas(kind);
+ if (!data || !/^data:image\/(png|jpeg|webp);base64,/.test(data)) return Promise.resolve();
+ return new Promise(resolve => {
+  const img = new Image();
+  img.onload = () => {
+   const canvas = canvasFor(kind);
+   const ctx = canvas.getContext("2d");
+   ctx.fillStyle = "#ffffff";
+   ctx.fillRect(0, 0, canvas.width, canvas.height);
+   ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+   drawingUndo[kind] = [];
+   resolve();
+  };
+  img.onerror = resolve;
+  img.src = data;
+ });
+}
+
+function setupDrawing(kind) {
+ const canvas = canvasFor(kind);
+ const ctx = canvas.getContext("2d");
+ resetCanvas(kind);
+ let drawing = false;
+ let lastPoint = null;
+ function point(event) {
+  const rect = canvas.getBoundingClientRect();
+  return {x:(event.clientX-rect.left)*canvas.width/rect.width,
+          y:(event.clientY-rect.top)*canvas.height/rect.height};
+ }
+ canvas.addEventListener("pointerdown", event => {
+  event.preventDefault();
+  drawingUndo[kind].push(ctx.getImageData(0,0,canvas.width,canvas.height));
+  if (drawingUndo[kind].length > 15) drawingUndo[kind].shift();
+  drawing = true;
+  lastPoint = point(event);
+  canvas.setPointerCapture(event.pointerId);
+  ctx.beginPath();ctx.arc(lastPoint.x,lastPoint.y,1.8,0,Math.PI*2);
+  ctx.fillStyle="#102b50";ctx.fill();
+ });
+ canvas.addEventListener("pointermove", event => {
+  if (!drawing) return;
+  event.preventDefault();
+  const next=point(event);
+  ctx.beginPath();ctx.moveTo(lastPoint.x,lastPoint.y);ctx.lineTo(next.x,next.y);
+  ctx.strokeStyle="#102b50";ctx.lineWidth=4;ctx.lineCap="round";ctx.lineJoin="round";ctx.stroke();
+  lastPoint=next;
+ });
+ const stop=()=>{if(!drawing)return;drawing=false;lastPoint=null;queueDraftAutosave();};
+ canvas.addEventListener("pointerup",stop);
+ canvas.addEventListener("pointercancel",stop);
+ canvas.addEventListener("pointerleave",event=>{if(drawing&&event.buttons===0)stop();});
+}
+
+function undoDrawing(kind) {
+ const canvas=canvasFor(kind);
+ const previous=drawingUndo[kind].pop();
+ if(previous)canvas.getContext("2d").putImageData(previous,0,0);
+ queueDraftAutosave();
+}
+
+function clearDrawing(kind) {
+ resetCanvas(kind);
+ queueDraftAutosave();
+}
+
+function updateFormulaPreview() {
+ const value=document.getElementById("formulaText").value.trim();
+ document.getElementById("formulaPreview").textContent=value||"Formula preview will appear here.";
+}
+
+function insertFormulaSymbol(symbol) {
+ const input=document.getElementById("formulaText");
+ input.setRangeText(symbol,input.selectionStart,input.selectionEnd,"end");
+ input.focus();updateFormulaPreview();queueDraftAutosave();
+}
+
+function workspaceData() {
+ return {
+  answer_text:document.getElementById("answerText").value,
+  calculation_text:document.getElementById("calculationText").value,
+  formula_text:document.getElementById("formulaText").value,
+  calculation_drawing:drawingValue("calculation"),
+  answer_drawing:drawingValue("answer")
+ };
+}
+
+function queueDraftAutosave() {
+ if(isRestoringWorkspace||!activeWorkspaceId)return;
+ clearTimeout(autosaveTimer);
+ autosaveTimer=setTimeout(()=>saveDraft(true),1800);
+}
+
+async function saveDraft(silent=false) {
+ if(!activeWorkspaceId)return;
+ if(draftSaveRunning){autosaveQueued=true;return;}
+ const id=activeWorkspaceId;
+ const button=document.getElementById("saveDraftBtn");
+ const notice=document.getElementById("notice");
+ draftSaveRunning=true;
+ if(!silent){button.disabled=true;button.textContent="Saving...";}
+ try{
+  const result=await api("/api/student/assignments/"+encodeURIComponent(id)+"/draft",{
+   method:"POST",headers:{"Content-Type":"application/json"},
+   body:JSON.stringify(workspaceData())
+  });
+  notice.className="notice success";
+  notice.textContent=silent?"Draft saved automatically.":(result.message||"Draft saved successfully.");
+  await loadAssignments();
+ }catch(error){
+  if(!silent){notice.className="notice error";notice.textContent=error.message;}
+ }finally{
+  draftSaveRunning=false;
+  if(!silent){button.disabled=false;button.textContent="💾 Save Draft";}
+  if(autosaveQueued){autosaveQueued=false;queueDraftAutosave();}
+ }
+}
 
 async function api(url, options = {}) {
  const response = await fetch(url, {
@@ -1070,21 +1285,27 @@ function renderAssignments() {
  }).join("");
 }
 
-function openSubmit(id, title) {
- const assignment = assignments.find(a => String(a.id) === String(id));
-
- document.getElementById("assignmentId").value = id;
- document.getElementById("assignmentTitle").textContent = title;
- document.getElementById("submissionFile").value = "";
- document.getElementById("answerText").value = assignment?.answer_text || "";
- document.getElementById("calculationText").value = assignment?.calculation_text || "";
- document.getElementById("assignmentQuestion").textContent = assignment?.instructions || "No question provided.";
-
- const notice = document.getElementById("notice");
- notice.className = "notice";
- notice.textContent = "";
-
+async function openSubmit(id, title) {
+ const assignment=assignments.find(a=>String(a.id)===String(id));
+ clearTimeout(autosaveTimer);
+ isRestoringWorkspace=true;
+ activeWorkspaceId=id;
+ document.getElementById("assignmentId").value=id;
+ document.getElementById("assignmentTitle").textContent=title;
+ document.getElementById("submissionFile").value="";
+ document.getElementById("answerText").value=assignment?.answer_text||"";
+ document.getElementById("calculationText").value=assignment?.calculation_text||"";
+ document.getElementById("formulaText").value=assignment?.formula_text||"";
+ updateFormulaPreview();
+ document.getElementById("assignmentQuestion").textContent=assignment?.instructions||"No question provided.";
+ await Promise.all([
+  restoreDrawing("calculation",assignment?.calculation_drawing||""),
+  restoreDrawing("answer",assignment?.answer_drawing||"")
+ ]);
+ const notice=document.getElementById("notice");
+ notice.className="notice";notice.textContent="";
  document.getElementById("submitModal").classList.add("show");
+ isRestoringWorkspace=false;
 }
 
 document.getElementById("assignmentList").addEventListener("click", event => {
@@ -1095,50 +1316,18 @@ document.getElementById("assignmentList").addEventListener("click", event => {
 });
 
 function closeModal() {
+ clearTimeout(autosaveTimer);
  document.getElementById("submitModal").classList.remove("show");
+ activeWorkspaceId=null;
 }
 
 document.getElementById("submitModal").addEventListener("click", event => {
  if (event.target.id === "submitModal") closeModal();
 });
 
-document.getElementById("saveDraftBtn").addEventListener("click", async () => {
- const id = document.getElementById("assignmentId").value;
- const answer = document.getElementById("answerText").value;
- const calculation = document.getElementById("calculationText").value;
- const button = document.getElementById("saveDraftBtn");
- const notice = document.getElementById("notice");
-
- if (!answer.trim()) {
-  notice.className = "notice error";
-  notice.textContent = "Write something before saving your draft.";
-  return;
- }
-
- button.disabled = true;
- button.textContent = "Saving...";
-
- try {
-  const result = await api(
-   "/api/student/assignments/" + encodeURIComponent(id) + "/draft",
-   {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ answer_text: answer, calculation_text: calculation })
-   }
-  );
-
-  notice.className = "notice success";
-  notice.textContent = result.message || "Draft saved successfully.";
-  await loadAssignments();
-
- } catch (error) {
-  notice.className = "notice error";
-  notice.textContent = error.message;
- } finally {
-  button.disabled = false;
-  button.textContent = "💾 Save Draft";
- }
+document.getElementById("saveDraftBtn").addEventListener("click",()=>{
+ clearTimeout(autosaveTimer);
+ saveDraft(false);
 });
 
 document.getElementById("submissionForm").addEventListener("submit", async event => {
@@ -1147,19 +1336,25 @@ document.getElementById("submissionForm").addEventListener("submit", async event
  const id = document.getElementById("assignmentId").value;
  const answer = document.getElementById("answerText").value;
  const calculation = document.getElementById("calculationText").value;
+ const formula = document.getElementById("formulaText").value;
+ const calculationDrawing = drawingValue("calculation");
+ const answerDrawing = drawingValue("answer");
  const file = document.getElementById("submissionFile").files[0];
  const notice = document.getElementById("notice");
  const button = document.getElementById("submitAnswerBtn");
 
- if (!answer.trim() && !calculation.trim() && !file) {
+ if (!answer.trim() && !calculation.trim() && !formula.trim() && !calculationDrawing && !answerDrawing && !file) {
   notice.className = "notice error";
-  notice.textContent = "Write your answer or attach a file before submitting.";
+  notice.textContent = "Add written work, a formula, a drawing or attach a file before submitting.";
   return;
  }
 
  const form = new FormData();
  form.append("answer_text", answer);
  form.append("calculation_text", calculation);
+ form.append("formula_text", formula);
+ form.append("calculation_drawing", calculationDrawing);
+ form.append("answer_drawing", answerDrawing);
  if (file) form.append("submission", file);
 
  button.disabled = true;
@@ -1187,6 +1382,19 @@ document.getElementById("submissionForm").addEventListener("submit", async event
   button.textContent = "📤 Submit Answer";
  }
 });
+
+document.getElementById("formulaToolbar").addEventListener("click",event=>{
+ const button=event.target.closest("[data-symbol]");
+ if(button)insertFormulaSymbol(button.dataset.symbol);
+});
+["answerText","calculationText","formulaText"].forEach(id=>{
+ document.getElementById(id).addEventListener("input",()=>{
+  if(id==="formulaText")updateFormulaPreview();
+  queueDraftAutosave();
+ });
+});
+setupDrawing("calculation");
+setupDrawing("answer");
 
 function toggleMenu() {
  document.getElementById("sidebar").classList.toggle("open");

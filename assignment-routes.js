@@ -50,6 +50,7 @@ module.exports = function registerAssignmentRoutes(app, { pool }) {
         storage,
         limits: {
             fileSize: 10 * 1024 * 1024,
+            fieldSize: 1500000,
             files: 1
         },
         fileFilter: (req, file, callback) => {
