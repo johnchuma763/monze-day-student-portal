@@ -330,6 +330,39 @@ module.exports = function registerAssignmentRoutes(app, { pool }) {
                     ]
                 );
 
+                // Notify students in the assignment's class.
+                try {
+                    const notificationResult = await pool.query(`
+                        INSERT INTO notifications
+                            (recipient_type, recipient_id, title, message)
+                        SELECT
+                            'student',
+                            id,
+                            $1,
+                            $2
+                        FROM students
+                        WHERE LOWER(TRIM(class_name)) =
+                              LOWER(TRIM($3))
+                    `, [
+                        "New assignment: " + title,
+                        subjectName + " assignment for " +
+                            className + ". Due: " +
+                            dueAt.toLocaleString() +
+                            ". Open your Assignments page to view it.",
+                        className
+                    ]);
+
+                    console.log(
+                        "Assignment notifications sent:",
+                        notificationResult.rowCount
+                    );
+                } catch (notificationError) {
+                    console.error(
+                        "Assignment notification error:",
+                        notificationError
+                    );
+                }
+
                 res.status(201).json({
                     message: "Assignment published successfully.",
                     assignmentId: result.rows[0].id
@@ -397,6 +430,12 @@ module.exports = function registerAssignmentRoutes(app, { pool }) {
                         s.id AS submission_id,
                         s.submitted_at,
                         s.status AS submission_status,
+                        s.answer_text,
+                        s.calculation_text,
+                        s.formula_text,
+                        s.calculation_drawing,
+                        s.answer_drawing,
+                        s.draft_saved_at,
                         f.marks,
                         f.maximum_marks,
                         f.comments,
@@ -431,25 +470,41 @@ module.exports = function registerAssignmentRoutes(app, { pool }) {
         }
     );
 
-    // STUDENT: SUBMIT ASSIGNMENT
-    app.post(
-        "/api/student/assignments/:id/submit",
-        requireStudent,
-        handleUpload("submission"),
-        async (req, res) => {
-            const file = req.file;
 
+    // STUDENT: SAVE WRITTEN ASSIGNMENT DRAFT
+    app.post(
+        "/api/student/assignments/:id/draft",
+        requireStudent,
+        async (req, res) => {
             try {
-                if (!file) {
+                const answer = String(req.body.answer_text || "");
+                const calculation = String(req.body.calculation_text || "");
+                const formula = String(req.body.formula_text || "");
+                const calculationDrawing = String(req.body.calculation_drawing || "");
+                const answerDrawing = String(req.body.answer_drawing || "");
+
+                const validDrawing = value =>
+                    !value || (
+                        value.length <= 1400000 &&
+                        /^data:image\/(png|jpeg|webp);base64,/.test(value)
+                    );
+
+
+                if (
+                    answer.length > 50000 ||
+                    calculation.length > 50000 ||
+                    formula.length > 20000 ||
+                    !validDrawing(calculationDrawing) ||
+                    !validDrawing(answerDrawing)
+                ) {
                     return res.status(400).json({
-                        message: "Choose a document to submit."
+                        message: "Your answer is too long. Maximum 50,000 characters."
                     });
                 }
 
                 const assignmentResult = await pool.query(
                     `SELECT id, class_name, due_at, status
-                     FROM assignments
-                     WHERE id = $1`,
+                     FROM assignments WHERE id = $1`,
                     [req.params.id]
                 );
 
@@ -460,8 +515,6 @@ module.exports = function registerAssignmentRoutes(app, { pool }) {
                     normalizeClass(assignment.class_name) !==
                     normalizeClass(req.assignmentStudent.class_name)
                 ) {
-                    deleteFile(file.filename);
-
                     return res.status(404).json({
                         message: "Assignment not found."
                     });
@@ -471,8 +524,124 @@ module.exports = function registerAssignmentRoutes(app, { pool }) {
                     assignment.status !== "published" ||
                     new Date(assignment.due_at).getTime() <= Date.now()
                 ) {
-                    deleteFile(file.filename);
+                    return res.status(403).json({
+                        message: "The assignment deadline has passed or the assignment is closed."
+                    });
+                }
 
+                const result = await pool.query(
+                    `INSERT INTO assignment_submissions (
+                        assignment_id, student_id, answer_text, calculation_text,
+                        draft_saved_at, status, submitted_at
+                    )
+                    VALUES ($1,$2,$3,$4,CURRENT_TIMESTAMP,'draft',NULL)
+                    ON CONFLICT (assignment_id, student_id)
+                    DO UPDATE SET
+                        answer_text = EXCLUDED.answer_text,
+                        calculation_text = EXCLUDED.calculation_text,
+                        draft_saved_at = CURRENT_TIMESTAMP,
+                        status = 'draft',
+                        submitted_at = NULL
+                    RETURNING id`,
+                    [
+                        assignment.id,
+                        req.assignmentStudent.id,
+                        answer,
+                        calculation
+                    ]
+                );
+
+                await pool.query(
+                    `UPDATE assignment_submissions
+                     SET formula_text = $1,
+                         calculation_drawing = $2,
+                         answer_drawing = $3
+                     WHERE id = $4`,
+                    [formula, calculationDrawing, answerDrawing, result.rows[0].id]
+                );
+
+                res.json({
+                    message: "Your draft has been saved.",
+                    submissionId: result.rows[0].id
+                });
+
+            } catch (error) {
+                console.error("Save draft error:", error);
+                res.status(500).json({
+                    message: "Unable to save your draft."
+                });
+            }
+        }
+    );
+
+    // STUDENT: SUBMIT WRITTEN ANSWER AND/OR FILE
+    app.post(
+        "/api/student/assignments/:id/submit",
+        requireStudent,
+        handleUpload("submission"),
+        async (req, res) => {
+            const file = req.file;
+
+            try {
+                const answer = String(req.body.answer_text || "");
+                const calculation = String(req.body.calculation_text || "");
+                const formula = String(req.body.formula_text || "");
+                const calculationDrawing = String(req.body.calculation_drawing || "");
+                const answerDrawing = String(req.body.answer_drawing || "");
+
+                const validDrawing = value =>
+                    !value || (
+                        value.length <= 1400000 &&
+                        /^data:image\/(png|jpeg|webp);base64,/.test(value)
+                    );
+
+
+                if (
+                    answer.length > 50000 ||
+                    calculation.length > 50000 ||
+                    formula.length > 20000 ||
+                    !validDrawing(calculationDrawing) ||
+                    !validDrawing(answerDrawing)
+                ) {
+                    deleteFile(file?.filename);
+                    return res.status(400).json({
+                        message: "Your answer is too long. Maximum 50,000 characters."
+                    });
+                }
+
+                if (
+                    !file && !answer.trim() && !calculation.trim() &&
+                    !formula.trim() && !calculationDrawing && !answerDrawing
+                ) {
+                    return res.status(400).json({
+                        message: "Write an answer or choose a document to submit."
+                    });
+                }
+
+                const assignmentResult = await pool.query(
+                    `SELECT id, class_name, due_at, status
+                     FROM assignments WHERE id = $1`,
+                    [req.params.id]
+                );
+
+                const assignment = assignmentResult.rows[0];
+
+                if (
+                    !assignment ||
+                    normalizeClass(assignment.class_name) !==
+                    normalizeClass(req.assignmentStudent.class_name)
+                ) {
+                    deleteFile(file?.filename);
+                    return res.status(404).json({
+                        message: "Assignment not found."
+                    });
+                }
+
+                if (
+                    assignment.status !== "published" ||
+                    new Date(assignment.due_at).getTime() <= Date.now()
+                ) {
+                    deleteFile(file?.filename);
                     return res.status(403).json({
                         message: "The submission deadline has passed or the assignment is closed."
                     });
@@ -481,47 +650,54 @@ module.exports = function registerAssignmentRoutes(app, { pool }) {
                 const previous = await pool.query(
                     `SELECT file_name
                      FROM assignment_submissions
-                     WHERE assignment_id = $1
-                       AND student_id = $2`,
-                    [
-                        assignment.id,
-                        req.assignmentStudent.id
-                    ]
+                     WHERE assignment_id = $1 AND student_id = $2`,
+                    [assignment.id, req.assignmentStudent.id]
                 );
 
                 const result = await pool.query(
                     `INSERT INTO assignment_submissions (
-                        assignment_id,
-                        student_id,
-                        file_name,
-                        original_file_name,
-                        mime_type,
-                        file_size,
-                        submitted_at,
-                        status
+                        assignment_id, student_id, file_name,
+                        original_file_name, mime_type, file_size,
+                        answer_text, calculation_text, submitted_at, draft_saved_at, status
                     )
-                    VALUES ($1,$2,$3,$4,$5,$6,CURRENT_TIMESTAMP,'submitted')
+                    VALUES ($1,$2,$3,$4,$5,$6,$7,$8,CURRENT_TIMESTAMP,NULL,'submitted')
                     ON CONFLICT (assignment_id, student_id)
                     DO UPDATE SET
                         file_name = EXCLUDED.file_name,
                         original_file_name = EXCLUDED.original_file_name,
                         mime_type = EXCLUDED.mime_type,
                         file_size = EXCLUDED.file_size,
+                        answer_text = EXCLUDED.answer_text,
+                        calculation_text = EXCLUDED.calculation_text,
                         submitted_at = CURRENT_TIMESTAMP,
+                        draft_saved_at = NULL,
                         status = 'submitted'
                     RETURNING id`,
                     [
                         assignment.id,
                         req.assignmentStudent.id,
-                        file.filename,
-                        cleanFilename(file.originalname),
-                        file.mimetype,
-                        file.size
+                        file?.filename || null,
+                        file ? cleanFilename(file.originalname) : null,
+                        file?.mimetype || null,
+                        file?.size || null,
+                        answer,
+                        calculation
                     ]
                 );
 
-                if (previous.rows.length) {
-                    deleteFile(previous.rows[0].file_name);
+                await pool.query(
+                    `UPDATE assignment_submissions
+                     SET formula_text = $1,
+                         calculation_drawing = $2,
+                         answer_drawing = $3
+                     WHERE id = $4`,
+                    [formula, calculationDrawing, answerDrawing, result.rows[0].id]
+                );
+
+                if (previous.rows.length && previous.rows[0].file_name) {
+                    if (previous.rows[0].file_name !== file?.filename) {
+                        deleteFile(previous.rows[0].file_name);
+                    }
                 }
 
                 res.status(201).json({
@@ -531,9 +707,7 @@ module.exports = function registerAssignmentRoutes(app, { pool }) {
 
             } catch (error) {
                 deleteFile(file?.filename);
-
                 console.error("Assignment submission error:", error);
-
                 res.status(500).json({
                     message: "Unable to submit assignment."
                 });
@@ -552,6 +726,11 @@ module.exports = function registerAssignmentRoutes(app, { pool }) {
                         s.id,
                         s.original_file_name,
                         s.file_size,
+                        s.answer_text,
+                        s.calculation_text,
+                        s.formula_text,
+                        s.calculation_drawing,
+                        s.answer_drawing,
                         s.submitted_at,
                         s.status,
                         st.full_name,
@@ -569,6 +748,7 @@ module.exports = function registerAssignmentRoutes(app, { pool }) {
                         ON f.submission_id = s.id
                      WHERE a.id = $1
                        AND a.teacher_id = $2
+                       AND s.status <> 'draft'
                      ORDER BY s.submitted_at DESC`,
                     [
                         req.params.id,

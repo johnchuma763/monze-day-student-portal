@@ -169,7 +169,7 @@ const adminPhotoColumnReady = pool.query(
     "ALTER TABLE admins ADD COLUMN IF NOT EXISTS photo_url TEXT"
 );
 
-app.use(express.json());
+app.use(express.json({ limit: '5mb' }));
 app.use(express.urlencoded({ extended: true }));
 
 // Production-ready session settings
@@ -1206,7 +1206,7 @@ app.get("/api/public/teachers", async (req, res) => {
 });
 
 
-// TEACHER: VIEW REGISTERED STUDENTS
+// TEACHER: VIEW ONLY STUDENTS FROM ASSIGNED CLASSES
 app.get("/api/teacher/students", async (req, res) => {
     if (!req.session.teacherId) {
         return res.status(401).json({
@@ -1215,13 +1215,48 @@ app.get("/api/teacher/students", async (req, res) => {
     }
 
     try {
-        const result = await pool.query(`
-            SELECT full_name, student_number, class_name
-            FROM students
-            ORDER BY class_name ASC, full_name ASC
-        `);
+        const teacherResult = await pool.query(
+            `SELECT classes, approved
+             FROM teachers
+             WHERE id = $1`,
+            [req.session.teacherId]
+        );
+
+        const teacher = teacherResult.rows[0];
+
+        if (!teacher) {
+            return res.status(404).json({
+                message: "Teacher account not found."
+            });
+        }
+
+        if (Number(teacher.approved) !== 1) {
+            return res.status(403).json({
+                message: "Your teacher account must be approved."
+            });
+        }
+
+        const assignedClasses = (teacher.classes || "")
+            .split(",")
+            .map(value => {
+                const match = value.trim().match(/^Form\s*([1-4])\s*([A-D])$/i);
+
+                if (!match) return null;
+
+                return `FORM ${match[1]}${match[2].toUpperCase()}`;
+            })
+            .filter(Boolean);
+
+        const result = await pool.query(
+            `SELECT full_name, student_number, class_name
+             FROM students
+             WHERE UPPER(TRIM(class_name)) = ANY($1::text[])
+             ORDER BY class_name ASC, full_name ASC`,
+            [assignedClasses]
+        );
 
         res.json(result.rows);
+
     } catch (error) {
         console.error(error);
         res.status(500).json({

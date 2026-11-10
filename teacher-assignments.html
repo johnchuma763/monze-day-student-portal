@@ -748,6 +748,7 @@ async function loadAssignments(){
  }
 }
 
+
 function renderAssignments(){
  const target=document.getElementById("assignmentList");
  const search=document.getElementById("assignmentSearch").value.trim().toLowerCase();
@@ -768,7 +769,6 @@ function renderAssignments(){
 
  target.innerHTML=filtered.map(a=>`
   <article class="assignment-card">
-
    <h3>${escapeHTML(a.title)}</h3>
 
    <div class="meta">
@@ -782,192 +782,124 @@ function renderAssignments(){
    </div>
 
    <div class="card-actions">
-    <button class="btn gold small view-btn"
-     data-id="${escapeHTML(a.id)}"
-     data-title="${escapeHTML(a.title)}">
-     View submissions
+    <button
+     class="btn gold small"
+     type="button"
+     data-view-submissions="${escapeHTML(a.id)}"
+     data-assignment-title="${escapeHTML(a.title)}">
+     View Student Submissions
     </button>
-
-    ${a.attachment_name?`
-     <a class="btn light small"
-      href="/api/teacher/assignments/${encodeURIComponent(a.id)}/attachment">
-      ↓ Download attachment
-     </a>`:""}
    </div>
-
   </article>
  `).join("");
 }
 
-document.getElementById("assignmentSearch")
- .addEventListener("input",renderAssignments);
-
-document.getElementById("assignmentList")
- .addEventListener("click",event=>{
-  const button=event.target.closest(".view-btn");
-  if(!button)return;
-
-  viewSubmissions(button.dataset.id,button.dataset.title);
-});
-
-document.getElementById("createForm")
- .addEventListener("submit",async event=>{
-  event.preventDefault();
-
-  const button=document.getElementById("publishButton");
-
-  const form=new FormData();
-
-  form.append("title",document.getElementById("title").value.trim());
-  form.append("class_name",document.getElementById("className").value);
-  form.append("subject_name",document.getElementById("subjectName").value);
-  form.append("instructions",document.getElementById("instructions").value.trim());
-
-  const dueValue=document.getElementById("dueAt").value;
-
-  if(!dueValue){
-   notice("createNotice","Please select a submission deadline.","error");
-   return;
-  }
-
-  const dueDate=new Date(dueValue);
-
-  if(Number.isNaN(dueDate.getTime())){
-   notice("createNotice","Please enter a valid deadline.","error");
-   return;
-  }
-
-  if(dueDate<=new Date()){
-   notice("createNotice","The deadline must be in the future.","error");
-   return;
-  }
-
-  form.append("due_at",dueDate.toISOString());
-
-  const file=document.getElementById("attachment").files[0];
-
-  if(file){
-   form.append("attachment",file);
-  }
-
-  button.disabled=true;
-  button.textContent="Publishing...";
-
-  try{
-   const result=await api("/api/teacher/assignments",{
-    method:"POST",
-    body:form
-   });
-
-   notice(
-    "createNotice",
-    result.message||"Assignment published successfully.",
-    "success"
-   );
-
-   event.target.reset();
-   updateSubjects();
-
-   await loadAssignments();
-
-  }catch(error){
-   notice("createNotice",error.message,"error");
-
-  }finally{
-   button.disabled=false;
-   button.textContent="Publish Assignment";
-  }
- });
-
 async function viewSubmissions(id,title){
  currentAssignmentId=id;
+
+ const modal=document.getElementById("submissionsModal");
+ const target=document.getElementById("submissionsList");
 
  document.getElementById("submissionsTitle").textContent=
   "Submissions: "+title;
 
- document.getElementById("submissionsList").innerHTML=
-  '<div class="empty">Loading submissions...</div>';
+ document.getElementById("submissionNotice").textContent="";
+ modal.classList.add("show");
 
- document.getElementById("submissionNotice").className="notice";
-
- document.getElementById("submissionsModal").classList.add("show");
+ target.innerHTML='<div class="empty">Loading student submissions...</div>';
 
  try{
-  const rows=await api(
+  const submissions=await api(
    `/api/teacher/assignments/${encodeURIComponent(id)}/submissions`
   );
 
-  renderSubmissions(rows,id);
+  if(!Array.isArray(submissions)||!submissions.length){
+   target.innerHTML='<div class="empty">No student submissions yet.</div>';
+   return;
+  }
+
+  target.innerHTML=submissions.map(sub=>{
+   const file=sub.original_file_name
+    ? `<div class="card-actions">
+        <a class="btn light small"
+         href="/api/teacher/assignment-submissions/${encodeURIComponent(sub.id)}/download">
+         ↓ Download ${escapeHTML(sub.original_file_name)}
+        </a>
+       </div>`
+    : "";
+
+   return `
+    <article class="submission-card">
+     <h3>${escapeHTML(sub.full_name)}</h3>
+
+     <div class="meta">
+      Student number: ${escapeHTML(sub.student_number)}
+      <br>
+      Submitted: ${escapeHTML(dateText(sub.submitted_at))}
+      <br>
+      Status: ${escapeHTML(sub.status)}
+     </div>
+
+     <div style="margin:15px 0;padding:14px;background:#eef3fa;border-radius:9px">
+      <h4>🧮 Calculation & Working</h4>
+      <div style="white-space:pre-wrap;line-height:1.7">${escapeHTML(sub.calculation_text||"No calculations provided.")}</div>
+     </div>
+
+     <div style="margin:15px 0;padding:14px;background:#f8f9fb;border-radius:9px">
+      <h4>✍️ Written Answer</h4>
+      <div style="white-space:pre-wrap;line-height:1.7">${escapeHTML(sub.answer_text||"No written answer provided.")}</div>
+     </div>
+
+     ${file}
+
+     <form class="grade-form" data-submission-id="${escapeHTML(sub.id)}">
+      <div>
+       <label>Marks awarded</label>
+       <input type="number" name="marks" min="0" step="any"
+        required value="${sub.marks??""}" placeholder="e.g. 75">
+      </div>
+
+      <div>
+       <label>Maximum marks</label>
+       <input type="number" name="maximum_marks" min="0.01"
+        step="any" required value="${sub.maximum_marks??100}">
+      </div>
+
+      <div>
+       <label>Feedback</label>
+       <input type="text" name="comments" maxlength="4000"
+        value="${escapeHTML(sub.comments||"")}"
+        placeholder="Feedback for the student">
+      </div>
+
+      <button class="btn gold small" type="submit">Save grade</button>
+     </form>
+    </article>
+   `;
+  }).join("");
 
  }catch(error){
-  document.getElementById("submissionsList").innerHTML=`
-   <div class="empty">${escapeHTML(error.message)}</div>`;
- }
-}
-
-function renderSubmissions(rows,assignmentId){
- const target=document.getElementById("submissionsList");
-
- if(!Array.isArray(rows)||!rows.length){
   target.innerHTML=`
    <div class="empty">
-    <div class="empty-icon">📥</div>
-    No students have submitted this assignment yet.
+    ${escapeHTML(error.message)}
+    <br><br>
+    <button class="btn" onclick="viewSubmissions(${JSON.stringify(String(id))},${JSON.stringify(String(title))})">
+     Try again
+    </button>
    </div>`;
-  return;
  }
-
- target.innerHTML=rows.map(s=>`
-  <div class="submission-card">
-
-   <h3>${escapeHTML(s.full_name)}</h3>
-
-   <div class="meta">
-    Student number: ${escapeHTML(s.student_number)}
-    <br>
-    Submitted: ${escapeHTML(dateText(s.submitted_at))}
-    <br>
-    Status:
-    <span class="badge ${s.graded_at?"green":"orange"}">
-     ${s.graded_at?"Graded":"Awaiting review"}
-    </span>
-   </div>
-
-   <div class="card-actions">
-    <a class="btn light small"
-     href="/api/teacher/assignment-submissions/${encodeURIComponent(s.id)}/download">
-     ↓ Download submission
-    </a>
-   </div>
-
-   <form class="grade-form" data-submission-id="${escapeHTML(s.id)}">
-
-    <div>
-     <label>Marks awarded</label>
-     <input type="number" name="marks" min="0" step="any"
-      required value="${s.marks??""}" placeholder="e.g. 75">
-    </div>
-
-    <div>
-     <label>Maximum marks</label>
-     <input type="number" name="maximum_marks" min="0.01"
-      step="any" required value="${s.maximum_marks??100}">
-    </div>
-
-    <div>
-     <label>Feedback</label>
-     <input type="text" name="comments" maxlength="4000"
-      value="${escapeHTML(s.comments||"")}"
-      placeholder="Feedback for the student">
-    </div>
-
-    <button class="btn gold small" type="submit">Save grade</button>
-
-   </form>
-
-  </div>
- `).join("");
 }
+
+document.getElementById("assignmentList")
+ .addEventListener("click",event=>{
+  const button=event.target.closest("[data-view-submissions]");
+  if(!button)return;
+
+  viewSubmissions(
+   button.dataset.viewSubmissions,
+   button.dataset.assignmentTitle
+  );
+});
 
 document.getElementById("submissionsList")
  .addEventListener("submit",event=>{

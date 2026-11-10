@@ -796,46 +796,59 @@ footer strong{color:var(--navy)}
 
 <div class="modal" id="submitModal">
  <div class="modal-box">
-
   <div class="modal-head">
-   <h2>Submit Assignment</h2>
+   <h2>Assignment Workspace</h2>
    <button class="close" type="button" onclick="closeModal()">✕</button>
   </div>
 
-  <p id="assignmentTitle" style="font-size:13px;color:var(--muted);line-height:1.6"></p>
-
+  <h3 id="assignmentTitle"></h3>
+  <div style="background:#eef3fa;border-left:4px solid #d9ad45;padding:15px;border-radius:9px;margin:12px 0">
+   <strong>📖 ASSIGNMENT QUESTION</strong>
+   <div id="assignmentQuestion" style="white-space:pre-wrap;line-height:1.7;margin-top:8px"></div>
+  </div>
   <div id="notice" class="notice"></div>
 
   <form id="submissionForm">
    <input type="hidden" id="assignmentId">
 
    <div class="field">
-    <label for="submissionFile">SELECT YOUR COMPLETED WORK</label>
+    <label for="calculationText">🧮 CALCULATION & WORKING AREA</label>
+    <textarea id="calculationText" rows="8" maxlength="50000"
+     placeholder="Show your calculations, formulas and working steps here..."
+     style="width:100%;min-height:180px;padding:14px;border:1px solid #ccd3df;border-radius:10px;font:inherit;resize:vertical;line-height:1.7"></textarea>
+    <small>Use this section for mathematics and step-by-step working.</small>
+   </div>
+
+   <div class="field">
+    <label for="answerText">✍️ WRITTEN ANSWER AREA</label>
+    <textarea id="answerText" rows="8" maxlength="50000"
+     placeholder="Write your explanations and final answers here..."
+     style="width:100%;min-height:180px;padding:14px;border:1px solid #ccd3df;border-radius:10px;font:inherit;resize:vertical;line-height:1.7"></textarea>
+    <small>Use this section for written explanations and answers.</small>
+   </div>
+
+   <div class="field">
+    <label for="submissionFile">📎 OPTIONAL DOCUMENT OR PHOTO</label>
     <input
      id="submissionFile"
      type="file"
-     required
      accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.jpg,.jpeg,.png,.webp"
     >
+    <small>You can submit written answers, a file, or both.</small>
    </div>
 
-   <div class="file-help">
-    <strong>Accepted file formats</strong><br>
-    PDF, Word, Excel, PowerPoint, TXT, JPG and PNG.<br>
-    Make sure you select the correct completed assignment.
-   </div>
-
-   <div class="modal-actions">
-    <button class="btn gold" type="submit">↑ Submit Work</button>
+   <div class="modal-actions" style="display:flex;flex-wrap:wrap;gap:10px">
+    <button class="btn light" id="saveDraftBtn" type="button">💾 Save Draft</button>
+    <button class="btn gold" id="submitAnswerBtn" type="submit">📤 Submit Answer</button>
     <button class="btn light" type="button" onclick="closeModal()">Cancel</button>
    </div>
   </form>
-
  </div>
 </div>
 
 <script>
 let assignments = [];
+
 
 async function api(url, options = {}) {
  const response = await fetch(url, {
@@ -1058,12 +1071,16 @@ function renderAssignments() {
 }
 
 function openSubmit(id, title) {
+ const assignment = assignments.find(a => String(a.id) === String(id));
+
  document.getElementById("assignmentId").value = id;
  document.getElementById("assignmentTitle").textContent = title;
  document.getElementById("submissionFile").value = "";
+ document.getElementById("answerText").value = assignment?.answer_text || "";
+ document.getElementById("calculationText").value = assignment?.calculation_text || "";
+ document.getElementById("assignmentQuestion").textContent = assignment?.instructions || "No question provided.";
 
  const notice = document.getElementById("notice");
-
  notice.className = "notice";
  notice.textContent = "";
 
@@ -1072,7 +1089,6 @@ function openSubmit(id, title) {
 
 document.getElementById("assignmentList").addEventListener("click", event => {
  const button = event.target.closest(".submit-btn");
-
  if (!button) return;
 
  openSubmit(button.dataset.id, button.dataset.title);
@@ -1086,30 +1102,72 @@ document.getElementById("submitModal").addEventListener("click", event => {
  if (event.target.id === "submitModal") closeModal();
 });
 
+document.getElementById("saveDraftBtn").addEventListener("click", async () => {
+ const id = document.getElementById("assignmentId").value;
+ const answer = document.getElementById("answerText").value;
+ const calculation = document.getElementById("calculationText").value;
+ const button = document.getElementById("saveDraftBtn");
+ const notice = document.getElementById("notice");
+
+ if (!answer.trim()) {
+  notice.className = "notice error";
+  notice.textContent = "Write something before saving your draft.";
+  return;
+ }
+
+ button.disabled = true;
+ button.textContent = "Saving...";
+
+ try {
+  const result = await api(
+   "/api/student/assignments/" + encodeURIComponent(id) + "/draft",
+   {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ answer_text: answer, calculation_text: calculation })
+   }
+  );
+
+  notice.className = "notice success";
+  notice.textContent = result.message || "Draft saved successfully.";
+  await loadAssignments();
+
+ } catch (error) {
+  notice.className = "notice error";
+  notice.textContent = error.message;
+ } finally {
+  button.disabled = false;
+  button.textContent = "💾 Save Draft";
+ }
+});
+
 document.getElementById("submissionForm").addEventListener("submit", async event => {
  event.preventDefault();
 
+ const id = document.getElementById("assignmentId").value;
+ const answer = document.getElementById("answerText").value;
+ const calculation = document.getElementById("calculationText").value;
  const file = document.getElementById("submissionFile").files[0];
  const notice = document.getElementById("notice");
- const button = event.submitter;
+ const button = document.getElementById("submitAnswerBtn");
 
- if (!file) {
+ if (!answer.trim() && !calculation.trim() && !file) {
   notice.className = "notice error";
-  notice.textContent = "Please choose a file.";
+  notice.textContent = "Write your answer or attach a file before submitting.";
   return;
  }
 
  const form = new FormData();
- form.append("submission", file);
+ form.append("answer_text", answer);
+ form.append("calculation_text", calculation);
+ if (file) form.append("submission", file);
 
  button.disabled = true;
  button.textContent = "Submitting...";
 
  try {
   const result = await api(
-   "/api/student/assignments/" +
-   encodeURIComponent(document.getElementById("assignmentId").value) +
-   "/submit",
+   "/api/student/assignments/" + encodeURIComponent(id) + "/submit",
    {
     method: "POST",
     body: form
@@ -1118,18 +1176,15 @@ document.getElementById("submissionForm").addEventListener("submit", async event
 
   notice.className = "notice success";
   notice.textContent = result.message || "Assignment submitted successfully.";
-
   await loadAssignments();
-
   setTimeout(closeModal, 1200);
 
  } catch (error) {
   notice.className = "notice error";
   notice.textContent = error.message;
-
  } finally {
   button.disabled = false;
-  button.textContent = "↑ Submit Work";
+  button.textContent = "📤 Submit Answer";
  }
 });
 
